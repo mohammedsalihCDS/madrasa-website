@@ -3,77 +3,315 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Nadvathum Uloom Madrasa</title>
 
-<link rel="stylesheet" href="style.css">
+<style>
+body{margin:0;font-family:Segoe UI;background:#f4f6f5}
+
+/* NAV */
+.navbar{
+background:#0b3d2e;
+color:white;
+padding:15px;
+text-align:center;
+font-weight:bold;
+}
+
+/* HERO */
+.hero{
+background:linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.8)),
+url('https://images.unsplash.com/photo-1584551246679-0daf3d275d0f');
+color:white;
+text-align:center;
+padding:100px 20px;
+}
+
+.hero h1{color:#f4b400}
+
+/* SECTION */
+.section{padding:60px 20px;text-align:center}
+
+/* CARDS */
+.cards{display:flex;flex-wrap:wrap;justify-content:center}
+.card{
+background:white;
+padding:20px;
+margin:10px;
+border-radius:10px;
+width:220px;
+transition:.3s
+}
+.card:hover{transform:translateY(-8px)}
+
+/* BUTTON */
+.btn{
+padding:10px 20px;
+background:#0b3d2e;
+color:white;
+border:none;
+cursor:pointer;
+margin:5px;
+transition:.3s
+}
+.btn:hover{transform:scale(1.05)}
+
+/* OVERLAY */
+.overlay{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:#f5f5f5;
+z-index:999;
+display:none;
+padding:20px;
+overflow:auto;
+}
+
+/* BOARD */
+canvas{
+background:#111;
+border-radius:10px;
+cursor:crosshair;
+}
+
+/* QUIZ */
+.option{
+padding:10px;
+border:1px solid #ccc;
+margin:10px auto;
+width:200px;
+cursor:pointer;
+}
+.option:hover{background:#0b3d2e;color:white}
+
+/* MOBILE */
+@media(max-width:768px){
+.cards{flex-direction:column;align-items:center}
+}
+</style>
 </head>
 
 <body>
 
-<!-- TOP BAR -->
-<div class="topbar">
-  <div>📞 +91 XXXXX</div>
-  <div>📧 madrasa@email.com</div>
-</div>
-
-<!-- NAVBAR -->
-<header class="navbar">
-  <div class="logo">Nadvathum Uloom Madrasa</div>
-
-  <nav id="nav">
-    <a href="#">Home</a>
-    <a href="#">About</a>
-    <a href="#">Courses</a>
-    <a href="#">Admission</a>
-    <a href="#">Contact</a>
-  </nav>
-
-  <div class="menu-btn" onclick="toggleMenu()">☰</div>
-</header>
+<!-- NAV -->
+<div class="navbar">Nadvathum Uloom Madrasa</div>
 
 <!-- HERO -->
-<section class="hero">
-  <h1>مدرسة ندوة العلوم</h1>
-  <p>Nadvathum Uloom Madrasa</p>
-</section>
-
-<!-- QUICK LINKS -->
-<section class="quick">
-  <div class="box">📊 Results</div>
-  <div class="box">📅 Timetable</div>
-  <div class="box">📝 Admission</div>
-  <div class="box">📥 Downloads</div>
-</section>
-
-<!-- ABOUT -->
-<section class="section">
-  <h2>About</h2>
-  <p>Providing authentic Islamic education under Samastha system.</p>
-</section>
+<div class="hero">
+<h1>مدرسة ندوة العلوم</h1>
+<p>Islamic Digital Learning Platform</p>
+</div>
 
 <!-- COURSES -->
-<section class="section">
-  <h2>Courses</h2>
-  <div class="cards">
-    <div class="card">Qur'an & Tajweed</div>
-    <div class="card">Fiqh & Hadith</div>
-    <div class="card">Arabic</div>
-  </div>
-</section>
+<div class="section">
+<h2>Courses</h2>
+<div class="cards">
+<div class="card">Qur'an & Tajweed</div>
+<div class="card">Fiqh & Hadith</div>
+<div class="card">Arabic Language</div>
+</div>
+</div>
 
-<!-- ADMISSION -->
-<section class="section">
-  <h2>Admission</h2>
-  <button class="btn">Apply Now</button>
-</section>
+<!-- CLASSES -->
+<div class="section">
+<h2>Academic Classes</h2>
+<div class="cards">
+<div class="card">Class 1–5</div>
+<div class="card">Class 6–10</div>
+<div class="card">Class 11–12</div>
+</div>
+</div>
 
-<!-- FOOTER -->
-<footer class="footer">
-  © 2026 Nadvathum Uloom Madrasa
-</footer>
+<!-- TOOLS -->
+<div class="section">
+<h2>Student Tools</h2>
+<button class="btn" onclick="openBoard()">Blackboard</button>
+<button class="btn" onclick="openQuiz()">Quiz</button>
+</div>
 
-<script src="script.js"></script>
+<!-- ================= BLACKBOARD ================= -->
+<div id="boardOverlay" class="overlay" style="text-align:center;">
+
+<button class="btn" onclick="closeBoard()">Close</button>
+
+<h2>Digital Blackboard</h2>
+
+<!-- TOOLBAR -->
+<div>
+<input type="color" onchange="setColor(this.value)">
+<span id="colorPreview" style="display:inline-block;width:20px;height:20px;background:white;border-radius:50%;"></span>
+
+<select onchange="setSize(this.value)">
+<option value="2">Thin</option>
+<option value="5">Medium</option>
+<option value="10">Thick</option>
+</select>
+
+<button onclick="erase()">Eraser</button>
+<button onclick="clearBoard()">Clear</button>
+</div>
+
+<!-- ARABIC -->
+<select onchange="drawLetter(this.value)">
+<option>Select Arabic Letter</option>
+<option>ا</option><option>ب</option><option>ت</option><option>ث</option>
+<option>ج</option><option>ح</option><option>خ</option>
+<option>د</option><option>ذ</option><option>ر</option><option>ز</option>
+<option>س</option><option>ش</option><option>ص</option><option>ض</option>
+<option>ط</option><option>ظ</option><option>ع</option><option>غ</option>
+<option>ف</option><option>ق</option><option>ك</option><option>ل</option>
+<option>م</option><option>ن</option><option>ه</option><option>و</option><option>ي</option>
+</select>
+
+<br><br>
+
+<canvas id="board" width="500" height="350"></canvas>
+
+</div>
+
+<!-- ================= QUIZ ================= -->
+<div id="quizOverlay" class="overlay">
+
+<button class="btn" onclick="closeQuiz()">Close</button>
+
+<h2>Quiz System</h2>
+
+<select id="classSelect" onchange="loadQuiz()">
+<option>Select Class</option>
+<option value="1">Class 1</option>
+<option value="5">Class 5</option>
+<option value="10">Class 10</option>
+</select>
+
+<h3 id="timer"></h3>
+<p id="question"></p>
+<div id="options"></div>
+
+<h3 id="result"></h3>
+
+</div>
+
+<script>
+
+/* ================= BLACKBOARD ================= */
+let canvas=document.getElementById("board");
+let ctx=canvas.getContext("2d");
+
+let drawing=false;
+let color="#ffffff";
+let size=3;
+
+ctx.lineCap="round";
+
+canvas.addEventListener("mousedown",()=>drawing=true);
+canvas.addEventListener("mouseup",()=>drawing=false);
+canvas.addEventListener("mousemove",draw);
+
+function draw(e){
+if(!drawing)return;
+
+ctx.strokeStyle=color;
+ctx.lineWidth=size;
+
+ctx.lineTo(e.offsetX,e.offsetY);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(e.offsetX,e.offsetY);
+}
+
+function setColor(c){
+color=c;
+document.getElementById("colorPreview").style.background=c;
+}
+
+function setSize(s){size=s;}
+
+function erase(){color="#111";}
+
+function clearBoard(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+function drawLetter(l){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="rgba(255,255,255,0.2)";
+ctx.font="120px Arial";
+ctx.textAlign="center";
+ctx.fillText(l,canvas.width/2,canvas.height/2);
+}
+
+function openBoard(){document.getElementById("boardOverlay").style.display="block";}
+function closeBoard(){document.getElementById("boardOverlay").style.display="none";}
+
+/* ================= QUIZ ================= */
+let quizData={
+1:[
+{q:"Arabic letter for A?",opt:["ا","ب","ت"],ans:0},
+{q:"Next letter after ا?",opt:["ب","ت","ث"],ans:0}
+],
+5:[
+{q:"How many pillars of Islam?",opt:["3","5","7"],ans:1},
+{q:"Zakat is pillar number?",opt:["2","3","4"],ans:2}
+],
+10:[
+{q:"How many Surahs?",opt:["100","114","120"],ans:1},
+{q:"First Surah?",opt:["Baqarah","Fatiha","Ikhlas"],ans:1}
+]
+};
+
+let current=0,score=0,questions=[],time=10,timer;
+
+function openQuiz(){document.getElementById("quizOverlay").style.display="block";}
+function closeQuiz(){document.getElementById("quizOverlay").style.display="none";}
+
+function loadQuiz(){
+let c=document.getElementById("classSelect").value;
+questions=quizData[c];
+current=0;score=0;
+showQ();startTimer();
+}
+
+function showQ(){
+let q=questions[current];
+document.getElementById("question").innerText=q.q;
+
+let html="";
+q.opt.forEach((o,i)=>{
+html+=`<button class="btn" onclick="check(${i})">${o}</button><br>`;
+});
+document.getElementById("options").innerHTML=html;
+}
+
+function check(i){
+if(i===questions[current].ans)score++;
+setTimeout(nextQuestion,500);
+}
+
+function nextQuestion(){
+current++;
+if(current>=questions.length){
+document.getElementById("result").innerText="Final Score: "+score+"/"+questions.length;
+clearInterval(timer);
+return;
+}
+showQ();resetTimer();
+}
+
+function startTimer(){
+time=10;
+timer=setInterval(()=>{
+time--;
+document.getElementById("timer").innerText="Time: "+time;
+if(time<=0)nextQuestion();
+},1000);
+}
+
+function resetTimer(){
+clearInterval(timer);
+startTimer();
+}
+
+</script>
 
 </body>
 </html>
