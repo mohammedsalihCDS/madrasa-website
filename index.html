@@ -1,46 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Madrasa Website</title>
-    <script>
-        let wuduDuration = 5000; // Updated duration for wudu
-        let salahDuration = 5500; // Updated duration for salah
-        let currentStep = 0;
-        const steps = document.querySelectorAll('.step');
-
-        function startAnimation() {
-            currentStep = 0;
-            steps.forEach(step => step.style.display = 'none');
-            steps[currentStep].style.display = 'block';
-            scrollToActiveStep();
-            nextStep();
-        }
-
-        function nextStep() {
-            if (currentStep < steps.length - 1) {
-                setTimeout(() => {
-                    steps[currentStep].style.display = 'none';
-                    currentStep++;
-                    steps[currentStep].style.display = 'block';
-                    scrollToActiveStep();
-                    nextStep();
-                }, currentStep < 5 ? wuduDuration : salahDuration);
-            }
-        }
-
-        function scrollToActiveStep() {
-            const activeStep = steps[currentStep];
-            activeStep.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-    </script>
+    <style>
+        /* Your CSS styles here */
+    </style>
 </head>
 <body>
-    <button onclick="startAnimation()">Start</button>
-    <div class="scroll-wrapper">
-        <div class="step">Wudu Step 1</div>
-        <div class="step">Wudu Step 2</div>
-        <div class="step">Salah Step 1</div>
-        <div class="step">Salah Step 2</div>
-    </div>
+    <div id="wudu-step">Wudu Animation Step</div>
+    <div id="salah-step">Salah Animation Step</div>
+
+    <script>
+        function displayWuduStep() {
+            const wuduStep = document.getElementById('wudu-step');
+            wuduStep.style.display = 'block';
+            setTimeout(() => { wuduStep.style.display = 'none'; }, 5000);
+        }
+        function displaySalahStep() {
+            const salahStep = document.getElementById('salah-step');
+            salahStep.style.display = 'block';
+            setTimeout(() => { salahStep.style.display = 'none'; }, 5000);
+        }
+
+        // Call the functions with a 5-second interval
+        displayWuduStep();
+        setTimeout(displaySalahStep, 5000);
+    </script>
 </body>
 </html>
