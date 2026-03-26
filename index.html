@@ -109,48 +109,114 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .primary-btn:hover{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);}
 .primary-btn:disabled{opacity:.5;cursor:not-allowed;}
 
-/* ── PROGRAMMES SECTION ── */
-.prog-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;border-bottom:2px solid #f0f0f0;padding-bottom:10px;}
-.prog-tab{padding:8px 18px;border-radius:8px 8px 0 0;font-size:13px;cursor:pointer;font-family:'Outfit',sans-serif;transition:.2s;font-weight:600;border:2px solid transparent;background:#f9f9f9;}
-.prog-tab.active{background:var(--blue-royal);color:white;border-color:var(--blue-royal);}
-.prog-tab:hover:not(.active){background:#e8e8e8;}
+/* ── PROGRAMMES – TABS ── */
+.prog-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;background:#f4f6fb;border-radius:12px;padding:6px;}
+.prog-tab{padding:9px 16px;border-radius:8px;font-size:12px;cursor:pointer;font-family:'Outfit',sans-serif;transition:.25s;font-weight:600;border:none;background:transparent;color:var(--text-mid);}
+.prog-tab.active{background:white;color:var(--blue-royal);box-shadow:0 2px 10px rgba(26,58,138,.15);}
+.prog-tab:hover:not(.active){background:rgba(255,255,255,.6);}
 
-.team-card{background:linear-gradient(135deg,rgba(26,58,138,.05),rgba(8,145,178,.05));border:2px solid var(--blue-royal);border-radius:var(--radius-sm);padding:18px;margin-bottom:14px;position:relative;overflow:hidden;}
+/* ══ SCOREBOARD – PROFESSIONAL ══ */
+.sb-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 50%,var(--blue-royal) 100%);border-radius:14px;padding:20px 18px 16px;margin-bottom:18px;position:relative;overflow:hidden;}
+.sb-hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='20' cy='20' r='3'/%3E%3C/g%3E%3C/svg%3E");pointer-events:none;}
+.sb-hero-title{color:rgba(255,255,255,.5);font-size:10px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px;}
+.sb-leader-banner{display:flex;align-items:center;gap:12px;}
+.sb-leader-crown{font-size:32px;animation:float 2s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+.sb-leader-info{flex:1;}
+.sb-leader-name{font-size:20px;font-weight:700;color:var(--gold-light);line-height:1.1;}
+.sb-leader-sub{font-size:12px;color:rgba(255,255,255,.55);margin-top:3px;}
+.sb-leader-score-big{font-family:'Amiri',serif;font-size:42px;font-weight:700;color:white;line-height:1;}
+.sb-leader-score-lbl{font-size:10px;color:rgba(255,255,255,.45);text-align:center;letter-spacing:.5px;}
+.sb-stats-row{display:flex;gap:8px;margin-top:14px;}
+.sb-stat-chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:7px 12px;font-size:11px;color:rgba(255,255,255,.7);text-align:center;flex:1;}
+.sb-stat-chip strong{display:block;font-size:16px;color:white;font-weight:700;}
+
+/* Team rank cards */
+.sb-team-list{display:flex;flex-direction:column;gap:10px;}
+.sb-team-row{background:white;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:14px;border:1.5px solid #eef2ff;box-shadow:0 2px 10px rgba(26,58,138,.06);transition:.25s;position:relative;overflow:hidden;}
+.sb-team-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px;}
+.sb-team-row.rank-1::before{background:linear-gradient(to bottom,#ffd700,#f59e0b);}
+.sb-team-row.rank-2::before{background:linear-gradient(to bottom,#c0c0c0,#9ca3af);}
+.sb-team-row.rank-3::before{background:linear-gradient(to bottom,#cd7f32,#b45309);}
+.sb-team-row:not(.rank-1):not(.rank-2):not(.rank-3)::before{background:linear-gradient(to bottom,var(--blue-light),var(--blue-mid));}
+.sb-team-row:hover{transform:translateX(3px);box-shadow:0 4px 18px rgba(26,58,138,.12);}
+.sb-rank-medal{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;font-weight:700;}
+.sb-rank-medal.m1{background:linear-gradient(135deg,#ffd700,#f59e0b);color:white;box-shadow:0 3px 10px rgba(245,158,11,.4);}
+.sb-rank-medal.m2{background:linear-gradient(135deg,#c0c0c0,#9ca3af);color:white;box-shadow:0 3px 8px rgba(156,163,175,.4);}
+.sb-rank-medal.m3{background:linear-gradient(135deg,#cd7f32,#b45309);color:white;box-shadow:0 3px 8px rgba(180,83,9,.4);}
+.sb-rank-medal.mN{background:linear-gradient(135deg,var(--blue-royal),var(--blue-mid));color:white;}
+.sb-team-info{flex:1;min-width:0;}
+.sb-team-name{font-size:14px;font-weight:700;color:var(--text-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-team-leader{font-size:11px;color:var(--text-light);margin-top:2px;}
+.sb-score-col{text-align:right;flex-shrink:0;}
+.sb-score-num{font-size:22px;font-weight:700;color:var(--blue-royal);font-family:'Amiri',serif;line-height:1;}
+.sb-score-sub{font-size:10px;color:var(--text-light);}
+.sb-bar-wrap{margin-top:8px;height:4px;background:#eef2ff;border-radius:4px;overflow:hidden;}
+.sb-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--blue-royal),var(--gold));transition:width .8s cubic-bezier(.34,1,.64,1);}
+
+/* Individual scoreboard table */
+.sb-ind-table{width:100%;border-collapse:collapse;margin-top:4px;}
+.sb-ind-table th{background:var(--blue-royal);color:white;padding:10px 12px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.3px;}
+.sb-ind-table th:first-child{border-radius:8px 0 0 0;}
+.sb-ind-table th:last-child{border-radius:0 8px 0 0;}
+.sb-ind-table td{padding:9px 12px;border-bottom:1px solid #f0f2fa;font-size:12px;color:var(--text-mid);}
+.sb-ind-table tr:last-child td{border-bottom:none;}
+.sb-ind-table tr:hover td{background:#f8faff;}
+.sb-ind-table .del-score-btn{background:none;border:none;cursor:pointer;color:#ef4444;font-size:14px;padding:2px 6px;border-radius:6px;transition:.2s;}
+.sb-ind-table .del-score-btn:hover{background:#fef2f2;}
+.pts-badge{display:inline-block;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);border-radius:12px;padding:2px 9px;font-size:11px;font-weight:700;}
+
+/* Section title */
+.sb-section-title{font-size:13px;font-weight:700;color:var(--blue-royal);margin:18px 0 10px;display:flex;align-items:center;gap:7px;}
+.sb-section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(26,58,138,.2),transparent);}
+
+/* ── TEAM CARDS (Teams tab) ── */
+.team-card{background:linear-gradient(135deg,rgba(26,58,138,.05),rgba(8,145,178,.04));border:1.5px solid rgba(26,58,138,.15);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;position:relative;overflow:hidden;}
 .team-card::before{content:'';position:absolute;top:0;right:0;width:80px;height:80px;background:var(--gold);opacity:.06;border-radius:0 0 0 100%;}
-.team-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.team-name{font-size:16px;font-weight:700;color:var(--blue-royal);display:flex;align-items:center;gap:8px;}
-.team-score{font-size:28px;font-weight:700;color:var(--gold);font-family:'Amiri',serif;}
-.team-leader{background:rgba(26,58,138,.08);padding:8px 12px;border-radius:8px;font-size:12px;margin-bottom:8px;}
-.team-leader strong{color:var(--blue-royal);}
-.team-members{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
-.member-badge{background:white;border:1px solid #e0e0e0;padding:5px 12px;border-radius:16px;font-size:11px;font-weight:500;color:var(--text-mid);}
+.team-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.team-name-lbl{font-size:15px;font-weight:700;color:var(--blue-royal);}
+.team-actions{display:flex;gap:6px;}
+.team-act-btn{background:none;border:1px solid rgba(26,58,138,.2);color:var(--blue-royal);padding:5px 10px;border-radius:7px;font-size:11px;cursor:pointer;font-family:'Outfit',sans-serif;transition:.2s;font-weight:600;}
+.team-act-btn:hover{background:var(--blue-royal);color:white;}
+.team-act-btn.danger:hover{background:#ef4444;border-color:#ef4444;color:white;}
+.team-leader-row{background:rgba(26,58,138,.06);padding:7px 11px;border-radius:7px;font-size:12px;margin-bottom:9px;}
+.team-leader-row strong{color:var(--blue-royal);}
+.team-members{display:flex;flex-wrap:wrap;gap:6px;}
+.member-badge{background:white;border:1px solid #dde3f3;padding:4px 11px;border-radius:16px;font-size:11px;font-weight:500;color:var(--text-mid);display:flex;align-items:center;gap:5px;}
+.member-remove{background:none;border:none;cursor:pointer;color:#9ca3af;font-size:12px;padding:0 2px;line-height:1;transition:.15s;}
+.member-remove:hover{color:#ef4444;}
+.member-add-inline{display:flex;gap:6px;margin-top:10px;}
+.member-add-inline input{flex:1;border:1.5px solid #dde3f3;border-radius:7px;padding:7px 10px;font-size:12px;font-family:'Outfit',sans-serif;outline:none;}
+.member-add-inline input:focus{border-color:var(--blue-royal);}
+.member-add-inline button{background:var(--blue-royal);color:white;border:none;padding:7px 12px;border-radius:7px;font-size:12px;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:600;}
 
-.scoreboard-table{width:100%;border-collapse:collapse;margin-top:14px;background:white;border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow-sm);}
-.scoreboard-table th{background:var(--blue-royal);color:white;padding:12px;text-align:left;font-size:12px;font-weight:600;}
-.scoreboard-table td{padding:10px 12px;border-bottom:1px solid #f0f0f0;font-size:13px;}
-.scoreboard-table tr:hover td{background:#f9f9f9;}
-.rank-badge{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;}
-.rank-badge.silver{background:linear-gradient(135deg,#c0c0c0,#d9d9d9);}
-.rank-badge.bronze{background:linear-gradient(135deg,#cd7f32,#e69858);}
+/* Inline edit form */
+.team-edit-form{background:#f8faff;border:1.5px dashed var(--blue-light);border-radius:10px;padding:13px;margin-bottom:10px;display:none;}
+.team-edit-form.open{display:block;}
+.edit-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
 
-.admin-controls{background:linear-gradient(135deg,rgba(200,134,26,.1),rgba(200,134,26,.05));border:2px dashed var(--gold);border-radius:var(--radius-sm);padding:16px;margin-bottom:18px;}
-.admin-controls h4{font-size:14px;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+/* ── ADMIN CONTROLS ── */
+.admin-controls{background:linear-gradient(135deg,rgba(200,134,26,.08),rgba(200,134,26,.04));border:2px dashed var(--gold);border-radius:var(--radius-sm);padding:16px;margin-bottom:18px;}
+.admin-controls h4{font-size:13px;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:6px;font-weight:700;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
-.form-input{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:9px 12px;font-size:13px;font-family:'Outfit',sans-serif;transition:.2s;}
-.form-input:focus{outline:none;border-color:var(--gold);}
+.form-input{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:9px 12px;font-size:13px;font-family:'Outfit',sans-serif;transition:.2s;outline:none;}
+.form-input:focus{border-color:var(--gold);}
 .form-label{font-size:11px;font-weight:600;color:var(--text-mid);margin-bottom:4px;display:block;}
-.add-btn{background:var(--gold);color:var(--navy);border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:.2s;font-family:'Outfit',sans-serif;}
-.add-btn:hover{background:var(--gold-light);transform:translateY(-2px);}
+.add-btn{background:var(--gold);color:var(--navy);border:none;padding:9px 18px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:.2s;font-family:'Outfit',sans-serif;}
+.add-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
 
-.event-card{background:white;border:1px solid #e8e8e8;border-left:4px solid var(--teal);border-radius:var(--radius-sm);padding:14px;margin-bottom:12px;transition:.2s;}
-.event-card:hover{box-shadow:var(--shadow-sm);transform:translateX(4px);}
-.event-title{font-size:14px;font-weight:600;color:var(--text-dark);margin-bottom:4px;}
-.event-date{font-size:11px;color:var(--text-light);}
+/* ── EVENTS ── */
+.event-card{background:white;border:1px solid #e8e8e8;border-left:4px solid var(--teal);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px;transition:.2s;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.event-card:hover{box-shadow:var(--shadow-sm);}
+.event-title{font-size:13px;font-weight:600;color:var(--text-dark);}
+.event-date{font-size:11px;color:var(--text-light);margin-top:2px;}
+.ev-del-btn{background:none;border:none;cursor:pointer;color:#d1d5db;font-size:16px;transition:.2s;flex-shrink:0;}
+.ev-del-btn:hover{color:#ef4444;}
 
 /* ── LOGIN MODAL ── */
 .login-form{text-align:center;padding:20px 0;}
-.login-input{width:100%;max-width:240px;border:2px solid #e0e0e0;border-radius:10px;padding:12px 16px;font-size:14px;text-align:center;margin-bottom:14px;font-family:'Outfit',sans-serif;letter-spacing:3px;font-weight:600;}
-.login-input:focus{outline:none;border-color:var(--gold);}
+.login-input{width:100%;max-width:240px;border:2px solid #e0e0e0;border-radius:10px;padding:12px 16px;font-size:14px;text-align:center;margin-bottom:14px;font-family:'Outfit',sans-serif;letter-spacing:3px;font-weight:600;outline:none;}
+.login-input:focus{border-color:var(--gold);}
 .login-btn{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);border:none;padding:12px 32px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:.2s;font-family:'Outfit',sans-serif;}
 .login-btn:hover{transform:scale(1.05);box-shadow:0 6px 20px rgba(200,134,26,.3);}
 .login-error{color:#ef4444;font-size:12px;margin-top:8px;display:none;}
@@ -194,8 +260,8 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .quiz-category-select{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:18px;}
 
 /* ── RESULTS ── */
-.result-form input,.result-form select{width:100%;border:2px solid #e8e8e8;border-radius:var(--radius-sm);padding:11px 14px;font-size:13px;margin-bottom:12px;font-family:'Outfit',sans-serif;transition:.2s;background:#fafafa;}
-.result-form input:focus,.result-form select:focus{outline:none;border-color:var(--teal);}
+.result-form input,.result-form select{width:100%;border:2px solid #e8e8e8;border-radius:var(--radius-sm);padding:11px 14px;font-size:13px;margin-bottom:12px;font-family:'Outfit',sans-serif;transition:.2s;background:#fafafa;outline:none;}
+.result-form input:focus,.result-form select:focus{border-color:var(--teal);}
 .result-form label{font-size:12px;font-weight:600;color:var(--text-mid);display:block;margin-bottom:4px;}
 .result-table{width:100%;border-collapse:collapse;margin-top:14px;}
 .result-table th,.result-table td{padding:9px 13px;text-align:left;border-bottom:1px solid #f0f0f0;font-size:13px;}
@@ -226,8 +292,8 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .news-tag{display:inline-block;font-size:10px;padding:2px 8px;background:rgba(26,58,138,.09);color:var(--blue-royal);border-radius:10px;margin-top:5px;font-weight:500;}
 
 /* ── REG FORM ── */
-.reg-form input,.reg-form select,.reg-form textarea{width:100%;border:2px solid #e8e8e8;border-radius:var(--radius-sm);padding:10px 13px;font-size:13px;margin-bottom:11px;font-family:'Outfit',sans-serif;transition:.2s;background:#fafafa;}
-.reg-form input:focus,.reg-form select:focus{outline:none;border-color:var(--teal);}
+.reg-form input,.reg-form select,.reg-form textarea{width:100%;border:2px solid #e8e8e8;border-radius:var(--radius-sm);padding:10px 13px;font-size:13px;margin-bottom:11px;font-family:'Outfit',sans-serif;transition:.2s;background:#fafafa;outline:none;}
+.reg-form input:focus,.reg-form select:focus{border-color:var(--teal);}
 .reg-form label{font-size:12px;font-weight:600;color:var(--text-mid);display:block;margin-bottom:3px;}
 .success-msg{text-align:center;padding:20px;background:#eff6ff;border-radius:var(--radius-sm);color:var(--blue-royal);display:none;}
 
@@ -268,7 +334,7 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .dua-card .dua-meaning{font-size:12px;color:var(--text-light);}
 .dua-card .dua-label{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
 
-/* ── WUDU ANIMATION ── */
+/* ── WUDU / SALAH ── */
 .wudu-scroll-wrap{max-height:340px;overflow-y:auto;padding:4px 0;}
 .wudu-steps{display:flex;flex-direction:column;gap:0;}
 .wudu-step{display:flex;align-items:flex-start;gap:14px;padding:14px 12px;border-bottom:1px solid #f0f0f0;opacity:.35;transition:all .5s ease;border-radius:10px;}
@@ -281,8 +347,6 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .wudu-text .wudu-arabic{font-family:'Amiri',serif;font-size:17px;color:var(--blue-royal);margin-top:5px;direction:rtl;}
 .wudu-controls{display:flex;gap:9px;margin-top:16px;justify-content:center;flex-wrap:wrap;}
 .step-counter-bar{background:#f0f4fb;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--text-mid);text-align:center;min-height:38px;display:flex;align-items:center;justify-content:center;}
-
-/* ── SALAH STEPS ── */
 .salah-step{display:flex;align-items:flex-start;gap:13px;padding:13px 12px;border-bottom:1px solid #f0f0f0;opacity:.3;transition:all .5s ease;border-radius:10px;}
 .salah-step.active-step{opacity:1;background:linear-gradient(135deg,rgba(26,58,138,.06),rgba(200,134,26,.04));border-radius:10px;border-bottom:1px solid transparent;box-shadow:0 2px 12px rgba(26,58,138,.08);}
 .salah-icon{width:44px;height:44px;border-radius:50%;background:rgba(26,58,138,.07);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:2px solid transparent;transition:.4s;}
@@ -305,6 +369,10 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
 .footer-details span{display:flex;align-items:center;gap:5px;}
 .gold-divider{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:14px auto;max-width:200px;}
 
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:white;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:var(--shadow-md);z-index:9999;transform:translateY(60px);opacity:0;transition:.3s;pointer-events:none;border-left:3px solid var(--gold);}
+.toast.show{transform:translateY(0);opacity:1;}
+
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
   .grid{grid-template-columns:1fr 1fr;gap:11px;padding:0 13px 38px;}
@@ -313,6 +381,8 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   .nav-btn{display:none;}
   #board{height:240px;}
   .form-row{grid-template-columns:1fr;}
+  .edit-row{grid-template-columns:1fr;}
+  .sb-leader-score-big{font-size:30px;}
 }
 </style>
 </head>
@@ -403,7 +473,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
     <div class="modal-body">
       <div class="login-form">
         <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">Enter administrator access code</p>
-        <input type="password" class="login-input" id="adminCode" placeholder="••••" maxlength="4">
+        <input type="password" class="login-input" id="adminCode" placeholder="••••" maxlength="4" onkeydown="if(event.key==='Enter')adminLogin()">
         <br>
         <button class="login-btn" onclick="adminLogin()">Login</button>
         <p class="login-error" id="loginError">❌ Invalid code. Please try again.</p>
@@ -413,23 +483,27 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   </div>
 </div>
 
-<!-- PROGRAMMES -->
+<!-- ══ PROGRAMMES – WIDE MODAL ══ -->
 <div id="programmeModal" class="overlay">
-  <div class="modal" style="max-width:720px;">
+  <div class="modal" style="max-width:820px;width:100%;">
     <div class="modal-header"><h2>🏆 Programmes & Competitions</h2><button class="close-btn" onclick="closeModal('programmeModal')">✕</button></div>
     <div class="modal-body">
+
+      <!-- TABS -->
       <div class="prog-tabs">
-        <div class="prog-tab active" onclick="switchProgTab(this,'nabidhinan')">🎯 Nabidhinan</div>
-        <div class="prog-tab" onclick="switchProgTab(this,'quiz')">🧠 Quiz Results</div>
-        <div class="prog-tab" onclick="switchProgTab(this,'events')">📅 Events</div>
-        <div class="prog-tab" onclick="switchProgTab(this,'teams')">👥 Teams</div>
+        <button class="prog-tab active" onclick="switchProgTab(this,'nabidhinan')">🏅 Scoreboard</button>
+        <button class="prog-tab" onclick="switchProgTab(this,'quiz')">🧠 Quiz Results</button>
+        <button class="prog-tab" onclick="switchProgTab(this,'events')">📅 Events</button>
+        <button class="prog-tab" onclick="switchProgTab(this,'teams')">👥 Teams</button>
       </div>
 
-      <!-- NABIDHINAN TAB -->
+      <!-- ── NABIDHINAN TAB ── -->
       <div id="nabidhinanTab" class="prog-content">
+
+        <!-- ADMIN: Add Score -->
         <div id="adminNabidhinan" style="display:none;">
           <div class="admin-controls">
-            <h4>🔑 Admin: Add Score</h4>
+            <h4>🔑 Add Score</h4>
             <div class="form-row">
               <div>
                 <label class="form-label">Select Student</label>
@@ -437,24 +511,26 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
               </div>
               <div>
                 <label class="form-label">Points</label>
-                <input type="number" class="form-input" id="nabPoints" placeholder="0">
+                <input type="number" class="form-input" id="nabPoints" placeholder="e.g. 10" min="1">
               </div>
             </div>
             <div>
-              <label class="form-label">Event/Activity</label>
-              <input type="text" class="form-input" id="nabEvent" placeholder="e.g., Arabic Recitation">
+              <label class="form-label">Event / Activity</label>
+              <input type="text" class="form-input" id="nabEvent" placeholder="e.g. Arabic Recitation">
             </div>
             <button class="add-btn" onclick="addNabScore()">➕ Add Score</button>
           </div>
         </div>
+
+        <!-- Scoreboard output -->
         <div id="nabScoreboard"></div>
       </div>
 
-      <!-- QUIZ RESULTS TAB -->
+      <!-- ── QUIZ RESULTS TAB ── -->
       <div id="quizTab" class="prog-content" style="display:none;">
         <div id="adminQuiz" style="display:none;">
           <div class="admin-controls">
-            <h4>🔑 Admin: Add Quiz Score</h4>
+            <h4>🔑 Add Quiz Score</h4>
             <div class="form-row">
               <div>
                 <label class="form-label">Select Student</label>
@@ -462,13 +538,13 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
               </div>
               <div>
                 <label class="form-label">Score</label>
-                <input type="number" class="form-input" id="quizScore" placeholder="0">
+                <input type="number" class="form-input" id="quizScore" placeholder="0" min="0">
               </div>
             </div>
             <div class="form-row">
               <div>
                 <label class="form-label">Quiz Name</label>
-                <input type="text" class="form-input" id="quizName" placeholder="e.g., Fiqh Quiz">
+                <input type="text" class="form-input" id="quizName" placeholder="e.g. Fiqh Quiz">
               </div>
               <div>
                 <label class="form-label">Date</label>
@@ -481,14 +557,14 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
         <div id="quizScoreboard"></div>
       </div>
 
-      <!-- EVENTS TAB -->
+      <!-- ── EVENTS TAB ── -->
       <div id="eventsTab" class="prog-content" style="display:none;">
         <div id="adminEvents" style="display:none;">
           <div class="admin-controls">
-            <h4>🔑 Admin: Add Event</h4>
+            <h4>🔑 Add Event</h4>
             <div>
               <label class="form-label">Event Name</label>
-              <input type="text" class="form-input" id="eventName" placeholder="e.g., Annual Sports Day">
+              <input type="text" class="form-input" id="eventName" placeholder="e.g. Annual Sports Day" style="margin-bottom:10px;">
             </div>
             <div class="form-row">
               <div>
@@ -498,10 +574,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
               <div>
                 <label class="form-label">Category</label>
                 <select class="form-input" id="eventCategory">
-                  <option>Academic</option>
-                  <option>Sports</option>
-                  <option>Cultural</option>
-                  <option>Religious</option>
+                  <option>Academic</option><option>Sports</option><option>Cultural</option><option>Religious</option>
                 </select>
               </div>
             </div>
@@ -511,24 +584,24 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
         <div id="eventsList"></div>
       </div>
 
-      <!-- TEAMS TAB -->
+      <!-- ── TEAMS TAB ── -->
       <div id="teamsTab" class="prog-content" style="display:none;">
         <div id="adminTeams" style="display:none;">
           <div class="admin-controls">
-            <h4>🔑 Admin: Manage Teams</h4>
-            <div class="form-row">
+            <h4>🔑 Create New Team</h4>
+            <div class="edit-row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
               <div>
                 <label class="form-label">Team Name</label>
-                <input type="text" class="form-input" id="teamName" placeholder="e.g., Green Team">
+                <input type="text" class="form-input" id="teamName" placeholder="e.g. Green Team">
               </div>
               <div>
                 <label class="form-label">Team Leader</label>
-                <input type="text" class="form-input" id="teamLeader" placeholder="Student name">
+                <input type="text" class="form-input" id="teamLeader" placeholder="Leader's name">
               </div>
             </div>
             <div>
-              <label class="form-label">Team Members (comma-separated)</label>
-              <input type="text" class="form-input" id="teamMembers" placeholder="Ahmed, Fatima, Ibrahim...">
+              <label class="form-label">Members (comma-separated)</label>
+              <input type="text" class="form-input" id="teamMembers" placeholder="Ahmed, Fatima, Ibrahim…" style="margin-bottom:10px;">
             </div>
             <button class="add-btn" onclick="addTeam()">➕ Create Team</button>
           </div>
@@ -685,7 +758,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   </div>
 </div>
 
-<!-- FULL QURAN WITH AUDIO -->
+<!-- FULL QURAN -->
 <div id="quranModal" class="overlay">
   <div class="modal" style="max-width:560px;">
     <div class="modal-header"><h2>📖 Full Quran – All 114 Surahs</h2><button class="close-btn" onclick="closeModal('quranModal');stopAudio();">✕</button></div>
@@ -705,7 +778,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
           <div class="player-progress"><div class="player-bar-fill" id="playerBarFill"></div></div>
         </div>
       </div>
-      <p style="font-size:11px;color:var(--text-light);margin-top:8px;text-align:center;">⚠️ Audio requires internet connection · Mishary Alafasy recitation</p>
+      <p style="font-size:11px;color:var(--text-light);margin-top:8px;text-align:center;">⚠️ Audio requires internet · Mishary Alafasy recitation</p>
     </div>
   </div>
 </div>
@@ -728,15 +801,13 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   </div>
 </div>
 
-<!-- WUDU ANIMATION -->
+<!-- WUDU -->
 <div id="wuduModal" class="overlay">
   <div class="modal" style="max-width:500px;">
     <div class="modal-header"><h2>💧 Wudu Step-by-Step Guide</h2><button class="close-btn" onclick="closeModal('wuduModal');stopWudu();">✕</button></div>
     <div class="modal-body">
       <div class="step-counter-bar" id="wuduStatus">Press ▶ Start to begin the animated guide</div>
-      <div class="wudu-scroll-wrap" id="wuduScrollWrap">
-        <div class="wudu-steps" id="wuduSteps"></div>
-      </div>
+      <div class="wudu-scroll-wrap" id="wuduScrollWrap"><div class="wudu-steps" id="wuduSteps"></div></div>
       <div class="wudu-controls">
         <button class="primary-btn" id="wuduPlayBtn" onclick="startWudu()">▶ Start Guide</button>
         <button class="primary-btn" style="background:#e5e7eb;color:#374151;" onclick="resetWudu()">↺ Reset</button>
@@ -745,15 +816,13 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   </div>
 </div>
 
-<!-- SALAH GUIDE -->
+<!-- SALAH -->
 <div id="salahModal" class="overlay">
   <div class="modal" style="max-width:500px;">
     <div class="modal-header"><h2>🕌 Salah Step-by-Step Guide</h2><button class="close-btn" onclick="closeModal('salahModal');stopSalah();">✕</button></div>
     <div class="modal-body">
       <div class="step-counter-bar" id="salahStatus">Press ▶ Start to begin the animated guide</div>
-      <div class="wudu-scroll-wrap" id="salahScrollWrap">
-        <div id="salahSteps"></div>
-      </div>
+      <div class="wudu-scroll-wrap" id="salahScrollWrap"><div id="salahSteps"></div></div>
       <div class="wudu-controls">
         <button class="primary-btn" id="salahPlayBtn" onclick="startSalah()">▶ Start Guide</button>
         <button class="primary-btn" style="background:#e5e7eb;color:#374151;" onclick="resetSalah()">↺ Reset</button>
@@ -769,6 +838,9 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
     <div class="modal-body" id="staffBody"></div>
   </div>
 </div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <!-- FOOTER -->
 <footer>
@@ -791,343 +863,492 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   <p style="font-size:11px;opacity:.4;margin-top:8px;">© 2025 Nadvathum Uloom Madrasa. All rights reserved.</p>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-/* ══════════════════════════════════
-   GLOBAL STATE
-══════════════════════════════════ */
-let isAdmin = false;
-const ADMIN_CODE = '3291';
+/* ══════════════════════════════════════════════════
+   STORAGE HELPERS  (all data survives refresh)
+══════════════════════════════════════════════════ */
+const KEY_TEAMS       = 'num_teams_v2';
+const KEY_NAB_SCORES  = 'num_nab_scores_v2';
+const KEY_QUIZ_SCORES = 'num_quiz_scores_v2';
+const KEY_EVENTS      = 'num_events_v2';
 
-// Initialize localStorage data
-function initData(){
-  if(!localStorage.getItem('num_teams')){
-    localStorage.setItem('num_teams', JSON.stringify([
-      {id:1, name:'Green Team', leader:'Ahmed Ali', members:[''], score:0},
-      {id:2, name:'Blue Team', leader:'Aisha Rahman', members:[''], score:0}
-    ]));
+function load(key, def){ try{ const v=localStorage.getItem(key); return v?JSON.parse(v):def; }catch(e){ return def; } }
+function save(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
+
+/* ── Seed defaults only if truly empty ── */
+(function seedDefaults(){
+  if(!localStorage.getItem(KEY_TEAMS)){
+    save(KEY_TEAMS,[
+      {id:1, name:'Green Team',  color:'#22c55e', leader:'Ahmed Ali',   members:['Ahmed Ali','Ibrahim Hassan','Yusuf Malik'], score:0},
+      {id:2, name:'Blue Team',   color:'#3b82f6', leader:'Aisha Rahman',members:['Aisha Rahman','Fatima Zehra','Omar Said'],  score:0},
+    ]);
   }
-  if(!localStorage.getItem('num_nab_scores')){
-    localStorage.setItem('num_nab_scores', JSON.stringify([]));
+  if(!localStorage.getItem(KEY_NAB_SCORES))  save(KEY_NAB_SCORES,[]);
+  if(!localStorage.getItem(KEY_QUIZ_SCORES)) save(KEY_QUIZ_SCORES,[]);
+  if(!localStorage.getItem(KEY_EVENTS)){
+    save(KEY_EVENTS,[
+      {id:1, name:'Annual Sports Day',       date:'2025-04-15', category:'Sports'},
+      {id:2, name:'Quran Competition',       date:'2025-05-01', category:'Religious'},
+      {id:3, name:'Arabic Speech Contest',   date:'2025-05-20', category:'Academic'},
+    ]);
   }
-  if(!localStorage.getItem('num_quiz_scores')){
-    localStorage.setItem('num_quiz_scores', JSON.stringify([]));
-  }
-  if(!localStorage.getItem('num_events')){
-    localStorage.setItem('num_events', JSON.stringify([
-      {name:'Annual Sports Day', date:'2025-04-15', category:'Sports'},
-      {name:'Quran Competition', date:'2025-05-01', category:'Religious'},
-      {name:'Arabic Speech Contest', date:'2025-05-20', category:'Academic'}
-    ]));
-  }
+})();
+
+/* ══════════════════════════════════════════════════
+   TOAST HELPER
+══════════════════════════════════════════════════ */
+let toastTimeout;
+function showToast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimeout); toastTimeout=setTimeout(()=>t.classList.remove('show'),2800);
 }
-initData();
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    MODAL HELPERS
-══════════════════════════════════ */
+══════════════════════════════════════════════════ */
+let isAdmin=false;
+const ADMIN_CODE='3291';
+
 function openModal(id){
-  const el = document.getElementById(id);
-  el.style.display = 'flex';
-  if(id==='boardModal')   initBoard();
-  if(id==='quizModal')    initQuizUI();
-  if(id==='syllabusModal')buildSyllabus();
-  if(id==='newsModal')    buildNews();
-  if(id==='quranModal')   buildQuran();
-  if(id==='timetableModal') showDay(document.querySelector('.day-tab.active'),'sat');
-  if(id==='duaModal')     showDuas(document.querySelector('#duaTabs .q-tab.active'),'morning');
-  if(id==='wuduModal')  { buildWudu();  setTimeout(startWudu,  600); }
-  if(id==='salahModal') { buildSalah(); setTimeout(startSalah, 600); }
-  if(id==='staffModal')   buildStaff();
-  if(id==='programmeModal') { switchProgTab(document.querySelector('.prog-tab.active'), 'nabidhinan'); }
+  document.getElementById(id).style.display='flex';
+  if(id==='boardModal')      initBoard();
+  if(id==='quizModal')       initQuizUI();
+  if(id==='syllabusModal')   buildSyllabus();
+  if(id==='newsModal')       buildNews();
+  if(id==='quranModal')      buildQuran();
+  if(id==='timetableModal')  showDay(document.querySelector('.day-tab.active'),'sat');
+  if(id==='duaModal')        showDuas(document.querySelector('#duaTabs .q-tab.active'),'morning');
+  if(id==='wuduModal'){buildWudu();setTimeout(startWudu,600);}
+  if(id==='salahModal'){buildSalah();setTimeout(startSalah,600);}
+  if(id==='staffModal')      buildStaff();
+  if(id==='programmeModal')  switchProgTab(document.querySelector('.prog-tab.active'),'nabidhinan');
 }
 function closeModal(id){ document.getElementById(id).style.display='none'; }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    ADMIN LOGIN
-══════════════════════════════════ */
+══════════════════════════════════════════════════ */
 function adminLogin(){
-  const code = document.getElementById('adminCode').value.trim();
-  const errEl = document.getElementById('loginError');
-  const sucEl = document.getElementById('loginSuccess');
-  
-  if(code === ADMIN_CODE){
-    isAdmin = true;
-    sucEl.style.display = 'block';
-    errEl.style.display = 'none';
+  const code=document.getElementById('adminCode').value.trim();
+  if(code===ADMIN_CODE){
+    isAdmin=true;
+    document.getElementById('loginSuccess').style.display='block';
+    document.getElementById('loginError').style.display='none';
     document.getElementById('adminBadge').classList.add('show');
     setTimeout(()=>{
       closeModal('loginModal');
-      document.getElementById('adminCode').value = '';
-      sucEl.style.display = 'none';
-    }, 1500);
+      document.getElementById('adminCode').value='';
+      document.getElementById('loginSuccess').style.display='none';
+      showToast('✅ Admin mode activated');
+    },1200);
   } else {
-    errEl.style.display = 'block';
-    sucEl.style.display = 'none';
-    document.getElementById('adminCode').value = '';
+    document.getElementById('loginError').style.display='block';
+    document.getElementById('loginSuccess').style.display='none';
+    document.getElementById('adminCode').value='';
   }
 }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    PROGRAMMES SECTION
-══════════════════════════════════ */
-function switchProgTab(el, tab){
+══════════════════════════════════════════════════ */
+function switchProgTab(el,tab){
   document.querySelectorAll('.prog-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('.prog-content').forEach(c=>c.style.display='none');
-  
-  if(tab==='nabidhinan'){
-    document.getElementById('nabidhinanTab').style.display='block';
-    renderNabidhinan();
-  } else if(tab==='quiz'){
-    document.getElementById('quizTab').style.display='block';
-    renderQuizResults();
-  } else if(tab==='events'){
-    document.getElementById('eventsTab').style.display='block';
-    renderEvents();
-  } else if(tab==='teams'){
-    document.getElementById('teamsTab').style.display='block';
-    renderTeams();
-  }
+  if(tab==='nabidhinan'){ document.getElementById('nabidhinanTab').style.display='block'; renderNabidhinan(); }
+  else if(tab==='quiz'){  document.getElementById('quizTab').style.display='block';       renderQuizResults(); }
+  else if(tab==='events'){document.getElementById('eventsTab').style.display='block';     renderEvents(); }
+  else if(tab==='teams'){ document.getElementById('teamsTab').style.display='block';      renderTeams(); }
 }
 
-function renderNabidhinan(){
-  const adminDiv = document.getElementById('adminNabidhinan');
-  adminDiv.style.display = isAdmin ? 'block' : 'none';
-  
-  const teams = JSON.parse(localStorage.getItem('num_teams'));
-  const scores = JSON.parse(localStorage.getItem('num_nab_scores'));
-  
-  // Calculate team scores
+/* ── HELPER: compute scores ── */
+function computeTeamScores(){
+  const teams  = load(KEY_TEAMS,[]);
+  const scores = load(KEY_NAB_SCORES,[]);
   teams.forEach(team=>{
     team.score = scores
       .filter(s=>team.members.includes(s.student))
-      .reduce((sum,s)=>sum+s.points, 0);
+      .reduce((sum,s)=>sum+Number(s.points),0);
   });
-  
-  // Sort by score
   teams.sort((a,b)=>b.score-a.score);
-  
-  // Populate student select
-  if(isAdmin){
-    const allStudents = teams.flatMap(t=>t.members);
-    document.getElementById('nabStudentSelect').innerHTML = 
-      '<option value="">-- Select Student --</option>' +
-      allStudents.map(s=>`<option value="${s}">${s}</option>`).join('');
-  }
-  
-  // Render scoreboard
-  let html = '<h3 style="font-size:16px;font-weight:700;margin-bottom:14px;color:var(--blue-royal);">🏆 Team Standings</h3>';
-  teams.forEach((team,i)=>{
-    html += `
-      <div class="team-card">
-        <div class="team-header">
-          <div class="team-name">
-            ${i===0?'🥇':i===1?'🥈':'🥉'} ${team.name}
-          </div>
-          <div class="team-score">${team.score}</div>
+  return teams;
+}
+
+/* ── HELPER: populate student select ── */
+function populateStudentSelect(selId){
+  const teams=load(KEY_TEAMS,[]);
+  const students=[...new Set(teams.flatMap(t=>t.members).filter(m=>m.trim()))];
+  const el=document.getElementById(selId);
+  if(el) el.innerHTML='<option value="">-- Select Student --</option>'+students.map(s=>`<option>${s}</option>`).join('');
+}
+
+/* ──────────────────────────────
+   NABIDHINAN / SCOREBOARD
+────────────────────────────── */
+function renderNabidhinan(){
+  document.getElementById('adminNabidhinan').style.display=isAdmin?'block':'none';
+  if(isAdmin) populateStudentSelect('nabStudentSelect');
+
+  const teams  = computeTeamScores();
+  const scores = load(KEY_NAB_SCORES,[]);
+  const maxScore = teams.length? Math.max(...teams.map(t=>t.score),1) : 1;
+  const totalEvents = [...new Set(scores.map(s=>s.event))].length;
+  const totalStudents = [...new Set(load(KEY_TEAMS,[]).flatMap(t=>t.members).filter(m=>m.trim()))].length;
+
+  let html='';
+
+  /* ── Leader Banner ── */
+  if(teams.length && teams[0].score>0){
+    html+=`
+    <div class="sb-hero">
+      <div class="sb-hero-title">🔥 Currently Leading</div>
+      <div class="sb-leader-banner">
+        <div class="sb-leader-crown">👑</div>
+        <div class="sb-leader-info">
+          <div class="sb-leader-name">${teams[0].name}</div>
+          <div class="sb-leader-sub">Leader: ${teams[0].leader}</div>
         </div>
-        <div class="team-leader">👑 <strong>Leader:</strong> ${team.leader}</div>
-        <div class="team-members">
-          ${team.members.map(m=>`<span class="member-badge">${m}</span>`).join('')}
+        <div style="text-align:center;">
+          <div class="sb-leader-score-big">${teams[0].score}</div>
+          <div class="sb-leader-score-lbl">PTS</div>
         </div>
       </div>
-    `;
-  });
-  
-  // Individual scores table
-  if(scores.length > 0){
-    html += '<h3 style="font-size:16px;font-weight:700;margin:24px 0 14px;color:var(--blue-royal);">📋 Individual Scores</h3>';
-    html += '<table class="scoreboard-table"><thead><tr><th>Student</th><th>Event</th><th>Points</th></tr></thead><tbody>';
-    scores.slice().reverse().forEach(s=>{
-      html += `<tr><td>${s.student}</td><td>${s.event}</td><td><strong>${s.points}</strong></td></tr>`;
-    });
-    html += '</tbody></table>';
+      <div class="sb-stats-row">
+        <div class="sb-stat-chip"><strong>${teams.length}</strong>Teams</div>
+        <div class="sb-stat-chip"><strong>${totalStudents}</strong>Students</div>
+        <div class="sb-stat-chip"><strong>${scores.length}</strong>Entries</div>
+        <div class="sb-stat-chip"><strong>${totalEvents}</strong>Events</div>
+      </div>
+    </div>`;
+  } else {
+    html+=`<div style="background:linear-gradient(135deg,#f0f4fb,#e8eefb);border-radius:14px;padding:20px;text-align:center;margin-bottom:18px;border:1.5px dashed rgba(26,58,138,.15);">
+      <div style="font-size:32px;margin-bottom:8px;">🏆</div>
+      <div style="font-size:14px;font-weight:700;color:var(--blue-royal);">Nabidhinan Scoreboard</div>
+      <div style="font-size:12px;color:var(--text-light);margin-top:4px;">${isAdmin?'Add scores below to get started':'No scores recorded yet'}</div>
+    </div>`;
   }
-  
-  document.getElementById('nabScoreboard').innerHTML = html;
+
+  /* ── Team Rank Cards ── */
+  html+=`<div class="sb-section-title">📊 Team Rankings</div><div class="sb-team-list">`;
+  const medals=['m1','m2','m3'];
+  const trophies=['🥇','🥈','🥉'];
+  teams.forEach((team,i)=>{
+    const pct=maxScore>0?Math.round((team.score/maxScore)*100):0;
+    const rankClass=i<3?`rank-${i+1}`:'';
+    const medalClass=i<3?medals[i]:'mN';
+    const trophy=i<3?trophies[i]:`#${i+1}`;
+    html+=`
+    <div class="sb-team-row ${rankClass}">
+      <div class="sb-rank-medal ${medalClass}">${trophy}</div>
+      <div class="sb-team-info">
+        <div class="sb-team-name">${team.name}</div>
+        <div class="sb-team-leader">👤 ${team.leader} · ${team.members.length} members</div>
+        <div class="sb-bar-wrap"><div class="sb-bar-fill" style="width:0%" data-pct="${pct}"></div></div>
+      </div>
+      <div class="sb-score-col">
+        <div class="sb-score-num">${team.score}</div>
+        <div class="sb-score-sub">points</div>
+      </div>
+    </div>`;
+  });
+  html+='</div>';
+
+  /* ── Individual Scores ── */
+  if(scores.length>0){
+    html+=`<div class="sb-section-title">📋 Individual Score Log</div>
+    <table class="sb-ind-table"><thead><tr>
+      <th>Student</th><th>Event</th><th>Points</th><th>Team</th>${isAdmin?'<th></th>':''}
+    </tr></thead><tbody>`;
+    const teams2=load(KEY_TEAMS,[]);
+    scores.slice().reverse().forEach((s,ri)=>{
+      const realIdx=scores.length-1-ri;
+      const team=teams2.find(t=>t.members.includes(s.student));
+      html+=`<tr>
+        <td><strong>${s.student}</strong></td>
+        <td>${s.event}</td>
+        <td><span class="pts-badge">+${s.points}</span></td>
+        <td style="color:var(--text-light);">${team?team.name:'—'}</td>
+        ${isAdmin?`<td><button class="del-score-btn" onclick="deleteNabScore(${realIdx})" title="Delete">🗑</button></td>`:''}
+      </tr>`;
+    });
+    html+='</tbody></table>';
+  }
+
+  document.getElementById('nabScoreboard').innerHTML=html;
+
+  /* animate bars */
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.sb-bar-fill').forEach(bar=>{
+      setTimeout(()=>{ bar.style.width=bar.dataset.pct+'%'; },100);
+    });
+  });
 }
 
 function addNabScore(){
-  const student = document.getElementById('nabStudentSelect').value;
-  const points = parseInt(document.getElementById('nabPoints').value) || 0;
-  const event = document.getElementById('nabEvent').value.trim();
-  
-  if(!student || !event || points<=0){
-    alert('Please fill all fields correctly');
-    return;
-  }
-  
-  const scores = JSON.parse(localStorage.getItem('num_nab_scores'));
-  scores.push({student, event, points, date:new Date().toISOString()});
-  localStorage.setItem('num_nab_scores', JSON.stringify(scores));
-  
-  document.getElementById('nabStudentSelect').value = '';
-  document.getElementById('nabPoints').value = '';
-  document.getElementById('nabEvent').value = '';
-  
+  const student=document.getElementById('nabStudentSelect').value;
+  const points=parseInt(document.getElementById('nabPoints').value)||0;
+  const event=document.getElementById('nabEvent').value.trim();
+  if(!student||!event||points<=0){ showToast('⚠️ Please fill all fields correctly'); return; }
+  const scores=load(KEY_NAB_SCORES,[]);
+  scores.push({student,event,points,date:new Date().toISOString()});
+  save(KEY_NAB_SCORES,scores);
+  document.getElementById('nabStudentSelect').value='';
+  document.getElementById('nabPoints').value='';
+  document.getElementById('nabEvent').value='';
   renderNabidhinan();
-  alert('✅ Score added successfully!');
+  showToast('✅ Score added for '+student);
 }
 
+function deleteNabScore(idx){
+  if(!confirm('Delete this score entry?')) return;
+  const scores=load(KEY_NAB_SCORES,[]);
+  scores.splice(idx,1);
+  save(KEY_NAB_SCORES,scores);
+  renderNabidhinan();
+  showToast('🗑 Score removed');
+}
+
+/* ──────────────────────────────
+   QUIZ RESULTS
+────────────────────────────── */
 function renderQuizResults(){
-  const adminDiv = document.getElementById('adminQuiz');
-  adminDiv.style.display = isAdmin ? 'block' : 'none';
-  
-  const teams = JSON.parse(localStorage.getItem('num_teams'));
-  const scores = JSON.parse(localStorage.getItem('num_quiz_scores'));
-  
-  // Populate student select
-  if(isAdmin){
-    const allStudents = teams.flatMap(t=>t.members);
-    document.getElementById('quizStudentSelect').innerHTML = 
-      '<option value="">-- Select Student --</option>' +
-      allStudents.map(s=>`<option value="${s}">${s}</option>`).join('');
-  }
-  
-  let html = '<h3 style="font-size:16px;font-weight:700;margin-bottom:14px;color:var(--blue-royal);">🧠 Quiz Scoreboard</h3>';
-  
-  if(scores.length > 0){
-    // Sort by score
-    const sorted = scores.slice().sort((a,b)=>b.score-a.score);
-    
-    html += '<table class="scoreboard-table"><thead><tr><th>Rank</th><th>Student</th><th>Quiz</th><th>Score</th><th>Date</th></tr></thead><tbody>';
+  document.getElementById('adminQuiz').style.display=isAdmin?'block':'none';
+  if(isAdmin) populateStudentSelect('quizStudentSelect');
+  const scores=load(KEY_QUIZ_SCORES,[]);
+  let html=`<div class="sb-section-title">🧠 Quiz Scoreboard</div>`;
+  if(scores.length>0){
+    const sorted=scores.slice().sort((a,b)=>b.score-a.score);
+    const medals=['🥇','🥈','🥉'];
+    html+=`<table class="sb-ind-table"><thead><tr>
+      <th>Rank</th><th>Student</th><th>Quiz</th><th>Score</th><th>Date</th>${isAdmin?'<th></th>':''}
+    </tr></thead><tbody>`;
     sorted.forEach((s,i)=>{
-      const rankBadge = i===0?'<span class="rank-badge">1</span>':i===1?'<span class="rank-badge silver">2</span>':i===2?'<span class="rank-badge bronze">3</span>':(i+1);
-      html += `<tr><td>${rankBadge}</td><td>${s.student}</td><td>${s.quiz}</td><td><strong>${s.score}</strong></td><td>${new Date(s.date).toLocaleDateString()}</td></tr>`;
+      const origIdx=scores.indexOf(s);
+      html+=`<tr>
+        <td>${i<3?medals[i]:'#'+(i+1)}</td>
+        <td><strong>${s.student}</strong></td>
+        <td>${s.quiz}</td>
+        <td><span class="pts-badge">${s.score}</span></td>
+        <td style="color:var(--text-light);">${new Date(s.date).toLocaleDateString()}</td>
+        ${isAdmin?`<td><button class="del-score-btn" onclick="deleteQuizScore(${origIdx})">🗑</button></td>`:''}
+      </tr>`;
     });
-    html += '</tbody></table>';
+    html+='</tbody></table>';
   } else {
-    html += '<p style="text-align:center;color:var(--text-light);padding:40px 20px;">No quiz results yet. Admin can add scores.</p>';
+    html+=`<div style="text-align:center;color:var(--text-light);padding:40px 20px;font-size:13px;">No quiz results yet.</div>`;
   }
-  
-  document.getElementById('quizScoreboard').innerHTML = html;
+  document.getElementById('quizScoreboard').innerHTML=html;
 }
 
 function addQuizScore(){
-  const student = document.getElementById('quizStudentSelect').value;
-  const score = parseInt(document.getElementById('quizScore').value) || 0;
-  const quiz = document.getElementById('quizName').value.trim();
-  const date = document.getElementById('quizDate').value;
-  
-  if(!student || !quiz || score<=0 || !date){
-    alert('Please fill all fields correctly');
-    return;
-  }
-  
-  const scores = JSON.parse(localStorage.getItem('num_quiz_scores'));
-  scores.push({student, quiz, score, date});
-  localStorage.setItem('num_quiz_scores', JSON.stringify(scores));
-  
-  document.getElementById('quizStudentSelect').value = '';
-  document.getElementById('quizScore').value = '';
-  document.getElementById('quizName').value = '';
-  document.getElementById('quizDate').value = '';
-  
+  const student=document.getElementById('quizStudentSelect').value;
+  const score=parseInt(document.getElementById('quizScore').value)||0;
+  const quiz=document.getElementById('quizName').value.trim();
+  const date=document.getElementById('quizDate').value;
+  if(!student||!quiz||score<0||!date){ showToast('⚠️ Fill all fields'); return; }
+  const scores=load(KEY_QUIZ_SCORES,[]);
+  scores.push({student,quiz,score,date});
+  save(KEY_QUIZ_SCORES,scores);
+  document.getElementById('quizStudentSelect').value='';
+  document.getElementById('quizScore').value='';
+  document.getElementById('quizName').value='';
+  document.getElementById('quizDate').value='';
   renderQuizResults();
-  alert('✅ Quiz score added successfully!');
+  showToast('✅ Quiz score saved');
 }
 
+function deleteQuizScore(idx){
+  if(!confirm('Delete this quiz score?')) return;
+  const scores=load(KEY_QUIZ_SCORES,[]);
+  scores.splice(idx,1);
+  save(KEY_QUIZ_SCORES,scores);
+  renderQuizResults();
+  showToast('🗑 Removed');
+}
+
+/* ──────────────────────────────
+   EVENTS
+────────────────────────────── */
 function renderEvents(){
-  const adminDiv = document.getElementById('adminEvents');
-  adminDiv.style.display = isAdmin ? 'block' : 'none';
-  
-  const events = JSON.parse(localStorage.getItem('num_events'));
-  
-  let html = '<h3 style="font-size:16px;font-weight:700;margin-bottom:14px;color:var(--blue-royal);">📅 Upcoming Events</h3>';
-  
-  if(events.length > 0){
-    events.forEach(e=>{
-      html += `
-        <div class="event-card">
+  document.getElementById('adminEvents').style.display=isAdmin?'block':'none';
+  const events=load(KEY_EVENTS,[]);
+  let html=`<div class="sb-section-title">📅 Upcoming Events</div>`;
+  if(events.length){
+    events.sort((a,b)=>new Date(a.date)-new Date(b.date)).forEach(e=>{
+      const catColors={Academic:'#3b82f6',Sports:'#22c55e',Cultural:'#8b5cf6',Religious:'#f59e0b'};
+      const col=catColors[e.category]||'#6b7280';
+      html+=`<div class="event-card" style="border-left-color:${col};">
+        <div>
           <div class="event-title">${e.name}</div>
-          <div class="event-date">📅 ${new Date(e.date).toLocaleDateString()} · ${e.category}</div>
+          <div class="event-date">📅 ${new Date(e.date).toLocaleDateString('en-IN',{weekday:'short',year:'numeric',month:'short',day:'numeric'})} &nbsp;·&nbsp; <span style="color:${col};font-weight:600;">${e.category}</span></div>
         </div>
-      `;
+        ${isAdmin?`<button class="ev-del-btn" onclick="deleteEvent(${e.id})" title="Delete">🗑</button>`:''}
+      </div>`;
     });
   } else {
-    html += '<p style="text-align:center;color:var(--text-light);padding:40px 20px;">No events scheduled.</p>';
+    html+=`<div style="text-align:center;color:var(--text-light);padding:30px;font-size:13px;">No events scheduled.</div>`;
   }
-  
-  document.getElementById('eventsList').innerHTML = html;
+  document.getElementById('eventsList').innerHTML=html;
 }
 
 function addEvent(){
-  const name = document.getElementById('eventName').value.trim();
-  const date = document.getElementById('eventDate').value;
-  const category = document.getElementById('eventCategory').value;
-  
-  if(!name || !date){
-    alert('Please fill all fields');
-    return;
-  }
-  
-  const events = JSON.parse(localStorage.getItem('num_events'));
-  events.push({name, date, category});
-  localStorage.setItem('num_events', JSON.stringify(events));
-  
-  document.getElementById('eventName').value = '';
-  document.getElementById('eventDate').value = '';
-  
+  const name=document.getElementById('eventName').value.trim();
+  const date=document.getElementById('eventDate').value;
+  const category=document.getElementById('eventCategory').value;
+  if(!name||!date){ showToast('⚠️ Fill event name and date'); return; }
+  const events=load(KEY_EVENTS,[]);
+  const newId=Math.max(0,...events.map(e=>e.id))+1;
+  events.push({id:newId,name,date,category});
+  save(KEY_EVENTS,events);
+  document.getElementById('eventName').value='';
+  document.getElementById('eventDate').value='';
   renderEvents();
-  alert('✅ Event added successfully!');
+  showToast('✅ Event added');
 }
 
+function deleteEvent(id){
+  if(!confirm('Delete this event?')) return;
+  const events=load(KEY_EVENTS,[]).filter(e=>e.id!==id);
+  save(KEY_EVENTS,events);
+  renderEvents();
+  showToast('🗑 Event removed');
+}
+
+/* ──────────────────────────────
+   TEAMS (with edit & member mgmt)
+────────────────────────────── */
 function renderTeams(){
-  const adminDiv = document.getElementById('adminTeams');
-  adminDiv.style.display = isAdmin ? 'block' : 'none';
-  
-  const teams = JSON.parse(localStorage.getItem('num_teams'));
-  
-  let html = '<h3 style="font-size:16px;font-weight:700;margin-bottom:14px;color:var(--blue-royal);">👥 All Teams</h3>';
-  
-  teams.forEach(team=>{
-    html += `
-      <div class="team-card">
+  document.getElementById('adminTeams').style.display=isAdmin?'block':'none';
+  const teams=load(KEY_TEAMS,[]);
+  let html='';
+  if(teams.length){
+    teams.forEach(team=>{
+      const members=team.members.filter(m=>m.trim());
+      html+=`
+      <div class="team-card" id="tc-${team.id}">
+
+        <!-- Edit form (hidden by default) -->
+        <div class="team-edit-form" id="tef-${team.id}">
+          <div class="edit-row">
+            <div>
+              <label class="form-label">Team Name</label>
+              <input class="form-input" id="ten-${team.id}" value="${team.name}" placeholder="Team name">
+            </div>
+            <div>
+              <label class="form-label">Leader</label>
+              <input class="form-input" id="tel-${team.id}" value="${team.leader}" placeholder="Leader name">
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <button class="add-btn" onclick="saveTeamEdit(${team.id})">💾 Save</button>
+            <button class="team-act-btn" onclick="cancelTeamEdit(${team.id})">Cancel</button>
+          </div>
+        </div>
+
         <div class="team-header">
-          <div class="team-name">${team.name}</div>
-          <div style="font-size:12px;color:var(--text-light);">${team.members.length} members</div>
+          <div class="team-name-lbl">${team.name}</div>
+          ${isAdmin?`<div class="team-actions">
+            <button class="team-act-btn" onclick="toggleTeamEdit(${team.id})">✏️ Edit</button>
+            <button class="team-act-btn danger" onclick="deleteTeam(${team.id})">🗑 Delete</button>
+          </div>`:''}
         </div>
-        <div class="team-leader">👑 <strong>Leader:</strong> ${team.leader}</div>
-        <div class="team-members">
-          ${team.members.map(m=>`<span class="member-badge">${m}</span>`).join('')}
+        <div class="team-leader-row">👑 <strong>Leader:</strong> ${team.leader} &nbsp;·&nbsp; ${members.length} members</div>
+        <div class="team-members" id="tm-${team.id}">
+          ${members.map(m=>`
+            <span class="member-badge">${m}
+              ${isAdmin?`<button class="member-remove" onclick="removeMember(${team.id},'${m.replace(/'/g,"\\'")}')">✕</button>`:''}
+            </span>`).join('')}
         </div>
-      </div>
-    `;
-  });
-  
-  document.getElementById('teamsList').innerHTML = html;
+        ${isAdmin?`
+        <div class="member-add-inline">
+          <input type="text" id="newmem-${team.id}" placeholder="Add member name…" onkeydown="if(event.key==='Enter')addMember(${team.id})">
+          <button onclick="addMember(${team.id})">+ Add</button>
+        </div>`:''}
+      </div>`;
+    });
+  } else {
+    html=`<div style="text-align:center;color:var(--text-light);padding:30px;font-size:13px;">No teams created yet.</div>`;
+  }
+  document.getElementById('teamsList').innerHTML=html;
 }
 
 function addTeam(){
-  const name = document.getElementById('teamName').value.trim();
-  const leader = document.getElementById('teamLeader').value.trim();
-  const membersStr = document.getElementById('teamMembers').value.trim();
-  
-  if(!name || !leader || !membersStr){
-    alert('Please fill all fields');
-    return;
-  }
-  
-  const members = membersStr.split(',').map(m=>m.trim()).filter(m=>m);
-  if(!members.includes(leader)) members.unshift(leader);
-  
-  const teams = JSON.parse(localStorage.getItem('num_teams'));
-  const newId = Math.max(...teams.map(t=>t.id), 0) + 1;
-  teams.push({id:newId, name, leader, members, score:0});
-  localStorage.setItem('num_teams', JSON.stringify(teams));
-  
-  document.getElementById('teamName').value = '';
-  document.getElementById('teamLeader').value = '';
-  document.getElementById('teamMembers').value = '';
-  
+  const name=document.getElementById('teamName').value.trim();
+  const leader=document.getElementById('teamLeader').value.trim();
+  const raw=document.getElementById('teamMembers').value.trim();
+  if(!name||!leader){ showToast('⚠️ Team name and leader are required'); return; }
+  const members=[...new Set([leader,...(raw?raw.split(',').map(m=>m.trim()).filter(m=>m):[])])];
+  const teams=load(KEY_TEAMS,[]);
+  const newId=Math.max(0,...teams.map(t=>t.id))+1;
+  teams.push({id:newId,name,leader,members,score:0});
+  save(KEY_TEAMS,teams);
+  document.getElementById('teamName').value='';
+  document.getElementById('teamLeader').value='';
+  document.getElementById('teamMembers').value='';
   renderTeams();
-  alert('✅ Team created successfully!');
+  showToast('✅ Team "'+name+'" created');
 }
 
-/* ══════════════════════════════════
+function deleteTeam(id){
+  if(!confirm('Delete this team? This will not delete score entries.')) return;
+  const teams=load(KEY_TEAMS,[]).filter(t=>t.id!==id);
+  save(KEY_TEAMS,teams);
+  renderTeams();
+  showToast('🗑 Team removed');
+}
+
+function toggleTeamEdit(id){
+  const form=document.getElementById('tef-'+id);
+  form.classList.toggle('open');
+}
+function cancelTeamEdit(id){
+  document.getElementById('tef-'+id).classList.remove('open');
+}
+function saveTeamEdit(id){
+  const name=(document.getElementById('ten-'+id).value||'').trim();
+  const leader=(document.getElementById('tel-'+id).value||'').trim();
+  if(!name||!leader){ showToast('⚠️ Name and leader cannot be empty'); return; }
+  const teams=load(KEY_TEAMS,[]);
+  const team=teams.find(t=>t.id===id);
+  if(!team) return;
+  team.name=name;
+  team.leader=leader;
+  /* ensure leader is in members */
+  if(!team.members.includes(leader)) team.members.unshift(leader);
+  save(KEY_TEAMS,teams);
+  renderTeams();
+  showToast('✅ Team updated');
+}
+
+function addMember(id){
+  const inp=document.getElementById('newmem-'+id);
+  const name=(inp.value||'').trim();
+  if(!name){ showToast('⚠️ Enter a member name'); return; }
+  const teams=load(KEY_TEAMS,[]);
+  const team=teams.find(t=>t.id===id);
+  if(!team) return;
+  if(team.members.includes(name)){ showToast('ℹ️ '+name+' is already in this team'); inp.value=''; return; }
+  team.members.push(name);
+  save(KEY_TEAMS,teams);
+  inp.value='';
+  renderTeams();
+  showToast('✅ '+name+' added to '+team.name);
+}
+
+function removeMember(id, name){
+  if(!confirm('Remove '+name+' from this team?')) return;
+  const teams=load(KEY_TEAMS,[]);
+  const team=teams.find(t=>t.id===id);
+  if(!team) return;
+  team.members=team.members.filter(m=>m!==name);
+  save(KEY_TEAMS,teams);
+  renderTeams();
+  showToast('🗑 '+name+' removed');
+}
+
+/* ══════════════════════════════════════════════════
    BLACKBOARD
-══════════════════════════════════ */
+══════════════════════════════════════════════════ */
 let bCanvas,bCtx,bDrawing=false,bColor='#ffffff',bSize=3,bTool='pen';
 let bHistory=[],bCurrent=[],bCurrentLetter='',bInited=false;
 function initBoard(){
@@ -1155,10 +1376,7 @@ function doDraw(e){
 }
 function endDraw(){ if(!bDrawing)return; bDrawing=false; bHistory.push({color:bTool==='eraser'?'#030810':bColor,size:bTool==='eraser'?bSize*6:bSize,points:[...bCurrent]}); bCurrent=[]; }
 function drawBg(){ if(!bCtx)return; bCtx.fillStyle='#030810'; bCtx.fillRect(0,0,bCanvas.width,bCanvas.height); }
-function redrawAll(){
-  drawBg(); drawLetterOverlay();
-  bHistory.forEach(s=>{ if(s.points.length<2)return; bCtx.beginPath();bCtx.strokeStyle=s.color;bCtx.lineWidth=s.size;bCtx.lineCap='round';bCtx.lineJoin='round';bCtx.moveTo(s.points[0].x,s.points[0].y);s.points.forEach(p=>{bCtx.lineTo(p.x,p.y);bCtx.stroke();bCtx.beginPath();bCtx.moveTo(p.x,p.y);}); });
-}
+function redrawAll(){ drawBg(); drawLetterOverlay(); bHistory.forEach(s=>{ if(s.points.length<2)return; bCtx.beginPath();bCtx.strokeStyle=s.color;bCtx.lineWidth=s.size;bCtx.lineCap='round';bCtx.lineJoin='round';bCtx.moveTo(s.points[0].x,s.points[0].y);s.points.forEach(p=>{bCtx.lineTo(p.x,p.y);bCtx.stroke();bCtx.beginPath();bCtx.moveTo(p.x,p.y);}); }); }
 function drawLetterOverlay(){ if(!bCurrentLetter||!bCtx)return; bCtx.save();bCtx.font=Math.min(bCanvas.height*.65,160)+'px Amiri';bCtx.textAlign='center';bCtx.textBaseline='middle';bCtx.fillStyle='rgba(200,134,26,0.1)';bCtx.fillText(bCurrentLetter,bCanvas.width/2,bCanvas.height/2);bCtx.restore(); }
 function setTool(t){ bTool=t; document.getElementById('penBtn').classList.toggle('active',t==='pen'); document.getElementById('eraserBtn').classList.toggle('active',t==='eraser'); }
 function setDrawColor(c,el){ bColor=c; setTool('pen'); document.querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('active')); el.classList.add('active'); }
@@ -1169,9 +1387,9 @@ function undoDraw(){ bHistory.pop(); redrawAll(); }
 function saveBoard(){ const a=document.createElement('a'); a.download='arabic-practice.png'; a.href=bCanvas.toDataURL(); a.click(); }
 window.addEventListener('resize',()=>{ if(bCanvas){fitCanvas();redrawAll();} });
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    QUIZ
-══════════════════════════════════ */
+══════════════════════════════════════════════════ */
 const allQuestions=[
   {cat:'pillars',q:"How many pillars of Islam are there?",opts:["Five","Four","Six","Seven"],ans:0},
   {cat:'pillars',q:"Which pillar of Islam involves fasting?",opts:["Sawm","Salah","Zakat","Hajj"],ans:0},
@@ -1189,559 +1407,90 @@ const allQuestions=[
 let quizQuestions=[],qIdx=0,qScore=0,quizTimer,qTimeLeft=10,answered=false,selectedCat='all';
 function selectCat(el,cat){ selectedCat=cat; document.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('active')); el.classList.add('active'); }
 function initQuizUI(){ document.getElementById('quizStart').style.display='block'; document.getElementById('quizPlay').style.display='none'; document.getElementById('quizEnd').style.display='none'; document.getElementById('quizFooter').style.display='none'; document.getElementById('quizBar').style.width='0%'; }
-function startQuiz(){
-  quizQuestions=selectedCat==='all'?[...allQuestions]:allQuestions.filter(q=>q.cat===selectedCat);
-  quizQuestions.sort(()=>Math.random()-.5);
-  qIdx=0; qScore=0;
-  document.getElementById('quizStart').style.display='none';
-  document.getElementById('quizPlay').style.display='block';
-  document.getElementById('quizFooter').style.display='flex';
-  showQQuestion();
-}
-function showQQuestion(){
-  if(qIdx>=quizQuestions.length)return showQuizResult();
-  answered=false;
-  document.getElementById('nextBtn').disabled=true;
-  const q=quizQuestions[qIdx];
-  document.getElementById('qNum').textContent='Question '+(qIdx+1)+' of '+quizQuestions.length;
-  document.getElementById('quizQuestion').textContent=q.q;
-  document.getElementById('quizBar').style.width=(qIdx/quizQuestions.length*100)+'%';
-  const L=['A','B','C','D'];
-  document.getElementById('quizOptions').innerHTML=q.opts.map((o,i)=>'<div class="q-option" id="opt'+i+'" onclick="selectAnswer('+i+')"><span class="opt-letter">'+L[i]+'</span>'+o+'</div>').join('');
-  startQTimer();
-}
-function startQTimer(){
-  clearInterval(quizTimer); qTimeLeft=10;
-  document.getElementById('timerRing').textContent=qTimeLeft;
-  document.getElementById('timerRing').style.background='';
-  quizTimer=setInterval(()=>{ qTimeLeft--; document.getElementById('timerRing').textContent=qTimeLeft; if(qTimeLeft<=3)document.getElementById('timerRing').style.background='#dc2626'; if(qTimeLeft<=0){clearInterval(quizTimer);autoNext();} },1000);
-}
-function selectAnswer(i){
-  if(answered)return; answered=true; clearInterval(quizTimer);
-  const q=quizQuestions[qIdx];
-  document.querySelectorAll('.q-option').forEach((el,idx)=>{ el.classList.add('disabled'); if(idx===q.ans)el.classList.add('correct'); else if(idx===i)el.classList.add('wrong'); });
-  if(i===q.ans)qScore++;
-  document.getElementById('nextBtn').disabled=false;
-}
+function startQuiz(){ quizQuestions=selectedCat==='all'?[...allQuestions]:allQuestions.filter(q=>q.cat===selectedCat); quizQuestions.sort(()=>Math.random()-.5); qIdx=0; qScore=0; document.getElementById('quizStart').style.display='none'; document.getElementById('quizPlay').style.display='block'; document.getElementById('quizFooter').style.display='flex'; showQQuestion(); }
+function showQQuestion(){ if(qIdx>=quizQuestions.length)return showQuizResult(); answered=false; document.getElementById('nextBtn').disabled=true; const q=quizQuestions[qIdx]; document.getElementById('qNum').textContent='Question '+(qIdx+1)+' of '+quizQuestions.length; document.getElementById('quizQuestion').textContent=q.q; document.getElementById('quizBar').style.width=(qIdx/quizQuestions.length*100)+'%'; const L=['A','B','C','D']; document.getElementById('quizOptions').innerHTML=q.opts.map((o,i)=>'<div class="q-option" id="opt'+i+'" onclick="selectAnswer('+i+')"><span class="opt-letter">'+L[i]+'</span>'+o+'</div>').join(''); startQTimer(); }
+function startQTimer(){ clearInterval(quizTimer); qTimeLeft=10; document.getElementById('timerRing').textContent=qTimeLeft; document.getElementById('timerRing').style.background=''; quizTimer=setInterval(()=>{ qTimeLeft--; document.getElementById('timerRing').textContent=qTimeLeft; if(qTimeLeft<=3)document.getElementById('timerRing').style.background='#dc2626'; if(qTimeLeft<=0){clearInterval(quizTimer);autoNext();} },1000); }
+function selectAnswer(i){ if(answered)return; answered=true; clearInterval(quizTimer); const q=quizQuestions[qIdx]; document.querySelectorAll('.q-option').forEach((el,idx)=>{ el.classList.add('disabled'); if(idx===q.ans)el.classList.add('correct'); else if(idx===i)el.classList.add('wrong'); }); if(i===q.ans)qScore++; document.getElementById('nextBtn').disabled=false; }
 function autoNext(){ selectAnswer(-1); }
 function nextQuestion(){ if(!answered)return; qIdx++; showQQuestion(); }
-function showQuizResult(){
-  document.getElementById('quizPlay').style.display='none'; document.getElementById('quizFooter').style.display='none'; document.getElementById('quizEnd').style.display='block'; document.getElementById('quizBar').style.width='100%';
-  document.getElementById('finalScore').textContent=qScore+'/'+quizQuestions.length;
-  const p=qScore/quizQuestions.length;
-  document.getElementById('finalMsg').textContent=p>=.8?'🌟 Excellent! Masha Allah!':p>=.5?'👍 Good effort! Keep learning.':'📖 Keep studying. You can do it!';
-}
+function showQuizResult(){ document.getElementById('quizPlay').style.display='none'; document.getElementById('quizFooter').style.display='none'; document.getElementById('quizEnd').style.display='block'; document.getElementById('quizBar').style.width='100%'; document.getElementById('finalScore').textContent=qScore+'/'+quizQuestions.length; const p=qScore/quizQuestions.length; document.getElementById('finalMsg').textContent=p>=.8?'🌟 Excellent! Masha Allah!':p>=.5?'👍 Good effort! Keep learning.':'📖 Keep studying. You can do it!'; }
 function restartQuiz(){ initQuizUI(); }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    RESULTS
-══════════════════════════════════ */
-const mockResults={
-  'NM-2025-001':{name:'Ahmed Ali',class:'Thanawiyyah 1',subjects:[{sub:'Fiqh',marks:88,grade:'A'},{sub:'Arabic',marks:76,grade:'B'},{sub:'Hadith',marks:91,grade:'A'},{sub:'Tafsir',marks:83,grade:'A'},{sub:'History',marks:69,grade:'B'}]},
-  'NM-2025-042':{name:'Fatima Zehra',class:'Mutawassitah 2',subjects:[{sub:'Fiqh',marks:95,grade:'A'},{sub:'Arabic',marks:90,grade:'A'},{sub:'Hadith',marks:87,grade:'A'},{sub:'Tafsir',marks:92,grade:'A'}]}
-};
-function searchResult(){
-  const roll=document.getElementById('rollInput').value.trim().toUpperCase();
-  const out=document.getElementById('resultOutput');
-  const r=mockResults[roll];
-  if(!r){out.innerHTML='<p style="color:#ef4444;margin-top:13px;font-size:13px;">❌ No record found. Try: NM-2025-001</p>';return;}
-  const total=r.subjects.reduce((s,x)=>s+x.marks,0);
-  const avg=(total/r.subjects.length).toFixed(1);
-  out.innerHTML='<div style="background:#eff6ff;border-radius:10px;padding:13px;margin-top:13px;border-left:3px solid var(--blue-royal)"><strong>'+r.name+'</strong> &nbsp;·&nbsp; <span style="color:#666;font-size:12px;">'+r.class+'</span></div><table class="result-table"><thead><tr><th>Subject</th><th>Marks</th><th>Grade</th></tr></thead><tbody>'+r.subjects.map(s=>'<tr><td>'+s.sub+'</td><td>'+s.marks+'/100</td><td><span class="grade-pill grade-'+s.grade+'">'+s.grade+'</span></td></tr>').join('')+'<tr style="background:#f9fafb"><td><strong>Average</strong></td><td><strong>'+avg+'%</strong></td><td></td></tr></tbody></table>';
-}
+══════════════════════════════════════════════════ */
+const mockResults={'NM-2025-001':{name:'Ahmed Ali',class:'Thanawiyyah 1',subjects:[{sub:'Fiqh',marks:88,grade:'A'},{sub:'Arabic',marks:76,grade:'B'},{sub:'Hadith',marks:91,grade:'A'},{sub:'Tafsir',marks:83,grade:'A'},{sub:'History',marks:69,grade:'B'}]},'NM-2025-042':{name:'Fatima Zehra',class:'Mutawassitah 2',subjects:[{sub:'Fiqh',marks:95,grade:'A'},{sub:'Arabic',marks:90,grade:'A'},{sub:'Hadith',marks:87,grade:'A'},{sub:'Tafsir',marks:92,grade:'A'}]}};
+function searchResult(){ const roll=document.getElementById('rollInput').value.trim().toUpperCase(); const out=document.getElementById('resultOutput'); const r=mockResults[roll]; if(!r){out.innerHTML='<p style="color:#ef4444;margin-top:13px;font-size:13px;">❌ No record found. Try: NM-2025-001</p>';return;} const total=r.subjects.reduce((s,x)=>s+x.marks,0); const avg=(total/r.subjects.length).toFixed(1); out.innerHTML='<div style="background:#eff6ff;border-radius:10px;padding:13px;margin-top:13px;border-left:3px solid var(--blue-royal)"><strong>'+r.name+'</strong> &nbsp;·&nbsp; <span style="color:#666;font-size:12px;">'+r.class+'</span></div><table class="result-table"><thead><tr><th>Subject</th><th>Marks</th><th>Grade</th></tr></thead><tbody>'+r.subjects.map(s=>'<tr><td>'+s.sub+'</td><td>'+s.marks+'/100</td><td><span class="grade-pill grade-'+s.grade+'">'+s.grade+'</span></td></tr>').join('')+'<tr style="background:#f9fafb"><td><strong>Average</strong></td><td><strong>'+avg+'%</strong></td><td></td></tr></tbody></table>'; }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    TIMETABLE
-══════════════════════════════════ */
-const ttData={
-  sat:[{time:'6:00 AM',label:'Quran Recitation & Hifz',type:'cyan'},{time:'6:45 AM',label:'Arabic Grammar (Nahw)',type:'blue'},{time:'7:30 AM',label:'Short Break',type:'break'},{time:'7:45 AM',label:'Fiqh – Thanawiyyah',type:'blue'},{time:'8:30 AM',label:'Dua & Closing Assembly',type:'cyan'},{time:'9:00 AM',label:'🏁 End of Day',type:'break'}],
-  sun:[{time:'6:00 AM',label:'Quran Memorization (Hifz)',type:'cyan'},{time:'6:45 AM',label:'Tafsir ul Quran',type:'blue'},{time:'7:30 AM',label:'Short Break',type:'break'},{time:'7:45 AM',label:'Islamic History & Seerah',type:'blue'},{time:'8:30 AM',label:'Dua & Closing Assembly',type:'cyan'},{time:'9:00 AM',label:'🏁 End of Day',type:'break'}],
-  mon:[{time:'6:00 AM',label:'Quran Recitation',type:'cyan'},{time:'6:45 AM',label:'Hadith Studies',type:'blue'},{time:'7:30 AM',label:'Short Break',type:'break'},{time:'7:45 AM',label:'Aqeedah & Fiqh',type:'blue'},{time:'8:30 AM',label:'Arabic Composition',type:'cyan'},{time:'9:00 AM',label:'🏁 End of Day',type:'break'}],
-  tue:[{time:'6:00 AM',label:'Hifz Revision',type:'cyan'},{time:'6:45 AM',label:'Nahw & Sarf (Morphology)',type:'blue'},{time:'7:30 AM',label:'Short Break',type:'break'},{time:'7:45 AM',label:'Calligraphy & Arabic Writing',type:'blue'},{time:'8:30 AM',label:'Dua & Closing Assembly',type:'cyan'},{time:'9:00 AM',label:'🏁 End of Day',type:'break'}],
-};
-function showDay(el,day){
-  document.querySelectorAll('.day-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active');
-  document.getElementById('timetable-content').innerHTML='<div class="timetable-grid">'+ttData[day].map(r=>'<div class="tt-time">'+r.time+'</div><div class="tt-class'+(r.type==='cyan'?' cyan-class':r.type==='break'?' break':'')+'">'+r.label+'</div>').join('')+'</div>';
-}
+══════════════════════════════════════════════════ */
+const ttData={sat:[{time:'6:00 AM',label:'Quran Recitation & Hifz',type:'cyan'},{time:'6:45 AM',label:'Arabic Grammar (Nahw)',type:'blue'},{time:'7:30 AM',label:'Short Break',type:'break'},{time:'7:45 AM',label:'Fiqh – Thanawiyyah',type:'blue'},{time:'8:30 AM',label:'Dua & Closing Assembly',type:'cyan'},{time:'9:00 AM',label:'🏁 End of Day',type:'break'}],sun:[{time:'6:00 AM',label:'Quran Memorization (Hifz)',type:'cyan'},{time:'6:45 AM',label:'Tafsir ul Quran',type:'blue'},{time:'7:30 AM',label:'Short Break',type:'break'},{time:'7:45 AM',label:'Islamic History & Seerah',type:'blue'},{time:'8:30 AM',label:'Dua & Closing Assembly',type:'cyan'},{time:'9:00 AM',label:'🏁 End of Day',type:'break'}],mon:[{time:'6:00 AM',label:'Quran Recitation',type:'cyan'},{time:'6:45 AM',label:'Hadith Studies',type:'blue'},{time:'7:30 AM',label:'Short Break',type:'break'},{time:'7:45 AM',label:'Aqeedah & Fiqh',type:'blue'},{time:'8:30 AM',label:'Arabic Composition',type:'cyan'},{time:'9:00 AM',label:'🏁 End of Day',type:'break'}],tue:[{time:'6:00 AM',label:'Hifz Revision',type:'cyan'},{time:'6:45 AM',label:'Nahw & Sarf (Morphology)',type:'blue'},{time:'7:30 AM',label:'Short Break',type:'break'},{time:'7:45 AM',label:'Calligraphy & Arabic Writing',type:'blue'},{time:'8:30 AM',label:'Dua & Closing Assembly',type:'cyan'},{time:'9:00 AM',label:'🏁 End of Day',type:'break'}]};
+function showDay(el,day){ document.querySelectorAll('.day-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); document.getElementById('timetable-content').innerHTML='<div class="timetable-grid">'+ttData[day].map(r=>'<div class="tt-time">'+r.time+'</div><div class="tt-class'+(r.type==='cyan'?' cyan-class':r.type==='break'?' break':'')+'">'+r.label+'</div>').join('')+'</div>'; }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    REGISTRATION
-══════════════════════════════════ */
+══════════════════════════════════════════════════ */
 function submitReg(){ document.getElementById('regForm').style.display='none'; document.getElementById('regSuccess').style.display='block'; }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    SYLLABUS
-══════════════════════════════════ */
-const syllabusData=[
-  {title:'Ibtidaiyyah – Foundation',items:['Basic Arabic Letters & Harakat','Quran Recitation (Qaida)','Basic Duas & Short Surahs','Islamic Manners (Adab)'],badge:'Years 1–2'},
-  {title:'Mutawassitah – Intermediate',items:['Nahw (Arabic Grammar)','Sarf (Morphology)','Fiqh – Hanafi Madhab','Forty Hadith (Nawawi)','Tafsir of Juz Amma'],badge:'Years 3–4'},
-  {title:'Thanawiyyah – Secondary',items:['Advanced Fiqh & Fatawa','Usool ul Fiqh','Hadith Studies – Mishkat','Aqeedah – Tahawiyyah','Islamic History & Seerah'],badge:'Years 5–6'},
-  {title:'Examinations & Assessment',items:['Monthly Unit Tests','Half-Yearly Exams (Samastha)','Annual Board Examination','Oral Assessment (Shafahi)'],badge:'All Years'},
-];
-function buildSyllabus(){
-  document.getElementById('syllabusAccordion').innerHTML=syllabusData.map((s,i)=>'<div class="s-item'+(i===0?' open':'')+'"><div class="s-header" onclick="this.parentElement.classList.toggle(\'open\')">'+s.title+'<span>'+s.badge+'</span></div><div class="s-body"><ul style="padding-left:16px;line-height:2.1;">'+s.items.map(x=>'<li>'+x+'</li>').join('')+'</ul></div></div>').join('');
-}
+══════════════════════════════════════════════════ */
+const syllabusData=[{title:'Ibtidaiyyah – Foundation',items:['Basic Arabic Letters & Harakat','Quran Recitation (Qaida)','Basic Duas & Short Surahs','Islamic Manners (Adab)'],badge:'Years 1–2'},{title:'Mutawassitah – Intermediate',items:['Nahw (Arabic Grammar)','Sarf (Morphology)','Fiqh – Hanafi Madhab','Forty Hadith (Nawawi)','Tafsir of Juz Amma'],badge:'Years 3–4'},{title:'Thanawiyyah – Secondary',items:['Advanced Fiqh & Fatawa','Usool ul Fiqh','Hadith Studies – Mishkat','Aqeedah – Tahawiyyah','Islamic History & Seerah'],badge:'Years 5–6'},{title:'Examinations & Assessment',items:['Monthly Unit Tests','Half-Yearly Exams (Samastha)','Annual Board Examination','Oral Assessment (Shafahi)'],badge:'All Years'}];
+function buildSyllabus(){ document.getElementById('syllabusAccordion').innerHTML=syllabusData.map((s,i)=>'<div class="s-item'+(i===0?' open':'')+'"><div class="s-header" onclick="this.parentElement.classList.toggle(\'open\')">'+s.title+'<span>'+s.badge+'</span></div><div class="s-body"><ul style="padding-left:16px;line-height:2.1;">'+s.items.map(x=>'<li>'+x+'</li>').join('')+'</ul></div></div>').join(''); }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    NEWS
-══════════════════════════════════ */
-const newsItems=[
-  {day:'24',mon:'Mar',title:'Annual Exam 2025 Registration Open',tag:'Exams',body:'Registration for the Samastha Annual Examination 2025 is now open. Last date: 15 April 2025.'},
-  {day:'18',mon:'Mar',title:'New Hadith Course Launched',tag:'Academics',body:'Advanced Hadith Studies course launched for Thanawiyyah by Ustadh Muhammed Shafi.'},
-  {day:'10',mon:'Mar',title:'Ramadan Special Dars Programme',tag:'Events',body:'Daily Tafsir sessions after Fajr throughout Ramadan. All students and community welcome.'},
-  {day:'01',mon:'Mar',title:'2024-25 Half-Yearly Results Published',tag:'Results',body:'Half-yearly results are now available. Check via the results portal with your roll number.'},
-  {day:'20',mon:'Feb',title:'Admissions Open for 2025-26',tag:'Admissions',body:'New admissions for 2025-26 are open. Visit NUM 268 Pattarkulam office or apply online.'},
-];
+══════════════════════════════════════════════════ */
+const newsItems=[{day:'24',mon:'Mar',title:'Annual Exam 2025 Registration Open',tag:'Exams',body:'Registration for the Samastha Annual Examination 2025 is now open. Last date: 15 April 2025.'},{day:'18',mon:'Mar',title:'New Hadith Course Launched',tag:'Academics',body:'Advanced Hadith Studies course launched for Thanawiyyah by Ustadh Muhammed Shafi.'},{day:'10',mon:'Mar',title:'Ramadan Special Dars Programme',tag:'Events',body:'Daily Tafsir sessions after Fajr throughout Ramadan. All students and community welcome.'},{day:'01',mon:'Mar',title:'2024-25 Half-Yearly Results Published',tag:'Results',body:'Half-yearly results are now available. Check via the results portal with your roll number.'},{day:'20',mon:'Feb',title:'Admissions Open for 2025-26',tag:'Admissions',body:'New admissions for 2025-26 are open. Visit NUM 268 Pattarkulam office or apply online.'}];
 function buildNews(){ document.getElementById('newsBody').innerHTML=newsItems.map(n=>'<div class="news-item"><div class="news-date"><div class="day">'+n.day+'</div><div class="mon">'+n.mon+'</div></div><div class="news-content"><h4>'+n.title+'</h4><p>'+n.body+'</p><span class="news-tag">'+n.tag+'</span></div></div>').join(''); }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    QURAN AUDIO PLAYER
-══════════════════════════════════ */
-const allSurahs=[
-  {num:1,name:'Al-Fatiha',arabic:'الفاتحة',verses:7,type:'Meccan'},
-  {num:2,name:'Al-Baqarah',arabic:'البقرة',verses:286,type:'Medinan'},
-  {num:3,name:'Ali Imran',arabic:'آل عمران',verses:200,type:'Medinan'},
-  {num:4,name:"An-Nisa",arabic:'النساء',verses:176,type:'Medinan'},
-  {num:5,name:'Al-Maidah',arabic:'المائدة',verses:120,type:'Medinan'},
-  {num:6,name:"Al-An'am",arabic:'الأنعام',verses:165,type:'Meccan'},
-  {num:7,name:"Al-A'raf",arabic:'الأعراف',verses:206,type:'Meccan'},
-  {num:8,name:'Al-Anfal',arabic:'الأنفال',verses:75,type:'Medinan'},
-  {num:9,name:'At-Tawbah',arabic:'التوبة',verses:129,type:'Medinan'},
-  {num:10,name:'Yunus',arabic:'يونس',verses:109,type:'Meccan'},
-  {num:11,name:'Hud',arabic:'هود',verses:123,type:'Meccan'},
-  {num:12,name:'Yusuf',arabic:'يوسف',verses:111,type:'Meccan'},
-  {num:13,name:"Ar-Ra'd",arabic:'الرعد',verses:43,type:'Medinan'},
-  {num:14,name:'Ibrahim',arabic:'إبراهيم',verses:52,type:'Meccan'},
-  {num:15,name:'Al-Hijr',arabic:'الحجر',verses:99,type:'Meccan'},
-  {num:16,name:'An-Nahl',arabic:'النحل',verses:128,type:'Meccan'},
-  {num:17,name:'Al-Isra',arabic:'الإسراء',verses:111,type:'Meccan'},
-  {num:18,name:'Al-Kahf',arabic:'الكهف',verses:110,type:'Meccan'},
-  {num:19,name:'Maryam',arabic:'مريم',verses:98,type:'Meccan'},
-  {num:20,name:'Ta-Ha',arabic:'طه',verses:135,type:'Meccan'},
-  {num:21,name:'Al-Anbiya',arabic:'الأنبياء',verses:112,type:'Meccan'},
-  {num:22,name:'Al-Hajj',arabic:'الحج',verses:78,type:'Medinan'},
-  {num:23,name:"Al-Mu'minun",arabic:'المؤمنون',verses:118,type:'Meccan'},
-  {num:24,name:'An-Nur',arabic:'النور',verses:64,type:'Medinan'},
-  {num:25,name:'Al-Furqan',arabic:'الفرقان',verses:77,type:'Meccan'},
-  {num:26,name:"Ash-Shu'ara",arabic:'الشعراء',verses:227,type:'Meccan'},
-  {num:27,name:'An-Naml',arabic:'النمل',verses:93,type:'Meccan'},
-  {num:28,name:'Al-Qasas',arabic:'القصص',verses:88,type:'Meccan'},
-  {num:29,name:"Al-'Ankabut",arabic:'العنكبوت',verses:69,type:'Meccan'},
-  {num:30,name:'Ar-Rum',arabic:'الروم',verses:60,type:'Meccan'},
-  {num:31,name:'Luqman',arabic:'لقمان',verses:34,type:'Meccan'},
-  {num:32,name:'As-Sajdah',arabic:'السجدة',verses:30,type:'Meccan'},
-  {num:33,name:'Al-Ahzab',arabic:'الأحزاب',verses:73,type:'Medinan'},
-  {num:34,name:"Saba'",arabic:'سبأ',verses:54,type:'Meccan'},
-  {num:35,name:'Fatir',arabic:'فاطر',verses:45,type:'Meccan'},
-  {num:36,name:'Ya-Sin',arabic:'يس',verses:83,type:'Meccan'},
-  {num:37,name:'As-Saffat',arabic:'الصافات',verses:182,type:'Meccan'},
-  {num:38,name:'Sad',arabic:'ص',verses:88,type:'Meccan'},
-  {num:39,name:'Az-Zumar',arabic:'الزمر',verses:75,type:'Meccan'},
-  {num:40,name:'Ghafir',arabic:'غافر',verses:85,type:'Meccan'},
-  {num:41,name:'Fussilat',arabic:'فصلت',verses:54,type:'Meccan'},
-  {num:42,name:'Ash-Shura',arabic:'الشورى',verses:53,type:'Meccan'},
-  {num:43,name:'Az-Zukhruf',arabic:'الزخرف',verses:89,type:'Meccan'},
-  {num:44,name:'Ad-Dukhan',arabic:'الدخان',verses:59,type:'Meccan'},
-  {num:45,name:'Al-Jathiyah',arabic:'الجاثية',verses:37,type:'Meccan'},
-  {num:46,name:'Al-Ahqaf',arabic:'الأحقاف',verses:35,type:'Meccan'},
-  {num:47,name:'Muhammad',arabic:'محمد',verses:38,type:'Medinan'},
-  {num:48,name:'Al-Fath',arabic:'الفتح',verses:29,type:'Medinan'},
-  {num:49,name:'Al-Hujurat',arabic:'الحجرات',verses:18,type:'Medinan'},
-  {num:50,name:'Qaf',arabic:'ق',verses:45,type:'Meccan'},
-  {num:51,name:'Adh-Dhariyat',arabic:'الذاريات',verses:60,type:'Meccan'},
-  {num:52,name:'At-Tur',arabic:'الطور',verses:49,type:'Meccan'},
-  {num:53,name:'An-Najm',arabic:'النجم',verses:62,type:'Meccan'},
-  {num:54,name:'Al-Qamar',arabic:'القمر',verses:55,type:'Meccan'},
-  {num:55,name:'Ar-Rahman',arabic:'الرحمن',verses:78,type:'Medinan'},
-  {num:56,name:"Al-Waqi'ah",arabic:'الواقعة',verses:96,type:'Meccan'},
-  {num:57,name:'Al-Hadid',arabic:'الحديد',verses:29,type:'Medinan'},
-  {num:58,name:'Al-Mujadila',arabic:'المجادلة',verses:22,type:'Medinan'},
-  {num:59,name:'Al-Hashr',arabic:'الحشر',verses:24,type:'Medinan'},
-  {num:60,name:'Al-Mumtahanah',arabic:'الممتحنة',verses:13,type:'Medinan'},
-  {num:61,name:'As-Saf',arabic:'الصف',verses:14,type:'Medinan'},
-  {num:62,name:"Al-Jumu'ah",arabic:'الجمعة',verses:11,type:'Medinan'},
-  {num:63,name:'Al-Munafiqun',arabic:'المنافقون',verses:11,type:'Medinan'},
-  {num:64,name:'At-Taghabun',arabic:'التغابن',verses:18,type:'Medinan'},
-  {num:65,name:'At-Talaq',arabic:'الطلاق',verses:12,type:'Medinan'},
-  {num:66,name:'At-Tahrim',arabic:'التحريم',verses:12,type:'Medinan'},
-  {num:67,name:'Al-Mulk',arabic:'الملك',verses:30,type:'Meccan'},
-  {num:68,name:'Al-Qalam',arabic:'القلم',verses:52,type:'Meccan'},
-  {num:69,name:'Al-Haqqah',arabic:'الحاقة',verses:52,type:'Meccan'},
-  {num:70,name:"Al-Ma'arij",arabic:'المعارج',verses:44,type:'Meccan'},
-  {num:71,name:'Nuh',arabic:'نوح',verses:28,type:'Meccan'},
-  {num:72,name:'Al-Jinn',arabic:'الجن',verses:28,type:'Meccan'},
-  {num:73,name:'Al-Muzzammil',arabic:'المزمل',verses:20,type:'Meccan'},
-  {num:74,name:'Al-Muddaththir',arabic:'المدثر',verses:56,type:'Meccan'},
-  {num:75,name:'Al-Qiyamah',arabic:'القيامة',verses:40,type:'Meccan'},
-  {num:76,name:'Al-Insan',arabic:'الإنسان',verses:31,type:'Medinan'},
-  {num:77,name:'Al-Mursalat',arabic:'المرسلات',verses:50,type:'Meccan'},
-  {num:78,name:"An-Naba'",arabic:'النبأ',verses:40,type:'Meccan'},
-  {num:79,name:"An-Nazi'at",arabic:'النازعات',verses:46,type:'Meccan'},
-  {num:80,name:"'Abasa",arabic:'عبس',verses:42,type:'Meccan'},
-  {num:81,name:'At-Takwir',arabic:'التكوير',verses:29,type:'Meccan'},
-  {num:82,name:'Al-Infitar',arabic:'الانفطار',verses:19,type:'Meccan'},
-  {num:83,name:'Al-Mutaffifin',arabic:'المطففين',verses:36,type:'Meccan'},
-  {num:84,name:'Al-Inshiqaq',arabic:'الانشقاق',verses:25,type:'Meccan'},
-  {num:85,name:'Al-Buruj',arabic:'البروج',verses:22,type:'Meccan'},
-  {num:86,name:'At-Tariq',arabic:'الطارق',verses:17,type:'Meccan'},
-  {num:87,name:"Al-A'la",arabic:'الأعلى',verses:19,type:'Meccan'},
-  {num:88,name:'Al-Ghashiyah',arabic:'الغاشية',verses:26,type:'Meccan'},
-  {num:89,name:'Al-Fajr',arabic:'الفجر',verses:30,type:'Meccan'},
-  {num:90,name:'Al-Balad',arabic:'البلد',verses:20,type:'Meccan'},
-  {num:91,name:'Ash-Shams',arabic:'الشمس',verses:15,type:'Meccan'},
-  {num:92,name:'Al-Layl',arabic:'الليل',verses:21,type:'Meccan'},
-  {num:93,name:'Ad-Duha',arabic:'الضحى',verses:11,type:'Meccan'},
-  {num:94,name:'Ash-Sharh',arabic:'الشرح',verses:8,type:'Meccan'},
-  {num:95,name:'At-Tin',arabic:'التين',verses:8,type:'Meccan'},
-  {num:96,name:"Al-'Alaq",arabic:'العلق',verses:19,type:'Meccan'},
-  {num:97,name:'Al-Qadr',arabic:'القدر',verses:5,type:'Meccan'},
-  {num:98,name:'Al-Bayyinah',arabic:'البينة',verses:8,type:'Medinan'},
-  {num:99,name:'Az-Zalzalah',arabic:'الزلزلة',verses:8,type:'Medinan'},
-  {num:100,name:"Al-'Adiyat",arabic:'العاديات',verses:11,type:'Meccan'},
-  {num:101,name:"Al-Qari'ah",arabic:'القارعة',verses:11,type:'Meccan'},
-  {num:102,name:'At-Takathur',arabic:'التكاثر',verses:8,type:'Meccan'},
-  {num:103,name:"Al-'Asr",arabic:'العصر',verses:3,type:'Meccan'},
-  {num:104,name:'Al-Humazah',arabic:'الهمزة',verses:9,type:'Meccan'},
-  {num:105,name:'Al-Fil',arabic:'الفيل',verses:5,type:'Meccan'},
-  {num:106,name:'Quraysh',arabic:'قريش',verses:4,type:'Meccan'},
-  {num:107,name:"Al-Ma'un",arabic:'الماعون',verses:7,type:'Meccan'},
-  {num:108,name:'Al-Kawthar',arabic:'الكوثر',verses:3,type:'Meccan'},
-  {num:109,name:'Al-Kafirun',arabic:'الكافرون',verses:6,type:'Meccan'},
-  {num:110,name:'An-Nasr',arabic:'النصر',verses:3,type:'Medinan'},
-  {num:111,name:'Al-Masad',arabic:'المسد',verses:5,type:'Meccan'},
-  {num:112,name:'Al-Ikhlas',arabic:'الإخلاص',verses:4,type:'Meccan'},
-  {num:113,name:'Al-Falaq',arabic:'الفلق',verses:5,type:'Meccan'},
-  {num:114,name:'An-Nas',arabic:'الناس',verses:6,type:'Meccan'},
-];
-
-let audioEl = null;
-let currentSurahNum = null;
-let audioProgressTimer = null;
-let surahTypeFilter = 'all';
-
+══════════════════════════════════════════════════ */
+const allSurahs=[{num:1,name:'Al-Fatiha',arabic:'الفاتحة',verses:7,type:'Meccan'},{num:2,name:'Al-Baqarah',arabic:'البقرة',verses:286,type:'Medinan'},{num:3,name:'Ali Imran',arabic:'آل عمران',verses:200,type:'Medinan'},{num:4,name:"An-Nisa",arabic:'النساء',verses:176,type:'Medinan'},{num:5,name:'Al-Maidah',arabic:'المائدة',verses:120,type:'Medinan'},{num:6,name:"Al-An'am",arabic:'الأنعام',verses:165,type:'Meccan'},{num:7,name:"Al-A'raf",arabic:'الأعراف',verses:206,type:'Meccan'},{num:8,name:'Al-Anfal',arabic:'الأنفال',verses:75,type:'Medinan'},{num:9,name:'At-Tawbah',arabic:'التوبة',verses:129,type:'Medinan'},{num:10,name:'Yunus',arabic:'يونس',verses:109,type:'Meccan'},{num:11,name:'Hud',arabic:'هود',verses:123,type:'Meccan'},{num:12,name:'Yusuf',arabic:'يوسف',verses:111,type:'Meccan'},{num:13,name:"Ar-Ra'd",arabic:'الرعد',verses:43,type:'Medinan'},{num:14,name:'Ibrahim',arabic:'إبراهيم',verses:52,type:'Meccan'},{num:15,name:'Al-Hijr',arabic:'الحجر',verses:99,type:'Meccan'},{num:16,name:'An-Nahl',arabic:'النحل',verses:128,type:'Meccan'},{num:17,name:'Al-Isra',arabic:'الإسراء',verses:111,type:'Meccan'},{num:18,name:'Al-Kahf',arabic:'الكهف',verses:110,type:'Meccan'},{num:19,name:'Maryam',arabic:'مريم',verses:98,type:'Meccan'},{num:20,name:'Ta-Ha',arabic:'طه',verses:135,type:'Meccan'},{num:21,name:'Al-Anbiya',arabic:'الأنبياء',verses:112,type:'Meccan'},{num:22,name:'Al-Hajj',arabic:'الحج',verses:78,type:'Medinan'},{num:23,name:"Al-Mu'minun",arabic:'المؤمنون',verses:118,type:'Meccan'},{num:24,name:'An-Nur',arabic:'النور',verses:64,type:'Medinan'},{num:25,name:'Al-Furqan',arabic:'الفرقان',verses:77,type:'Meccan'},{num:26,name:"Ash-Shu'ara",arabic:'الشعراء',verses:227,type:'Meccan'},{num:27,name:'An-Naml',arabic:'النمل',verses:93,type:'Meccan'},{num:28,name:'Al-Qasas',arabic:'القصص',verses:88,type:'Meccan'},{num:29,name:"Al-'Ankabut",arabic:'العنكبوت',verses:69,type:'Meccan'},{num:30,name:'Ar-Rum',arabic:'الروم',verses:60,type:'Meccan'},{num:31,name:'Luqman',arabic:'لقمان',verses:34,type:'Meccan'},{num:32,name:'As-Sajdah',arabic:'السجدة',verses:30,type:'Meccan'},{num:33,name:'Al-Ahzab',arabic:'الأحزاب',verses:73,type:'Medinan'},{num:34,name:"Saba'",arabic:'سبأ',verses:54,type:'Meccan'},{num:35,name:'Fatir',arabic:'فاطر',verses:45,type:'Meccan'},{num:36,name:'Ya-Sin',arabic:'يس',verses:83,type:'Meccan'},{num:37,name:'As-Saffat',arabic:'الصافات',verses:182,type:'Meccan'},{num:38,name:'Sad',arabic:'ص',verses:88,type:'Meccan'},{num:39,name:'Az-Zumar',arabic:'الزمر',verses:75,type:'Meccan'},{num:40,name:'Ghafir',arabic:'غافر',verses:85,type:'Meccan'},{num:41,name:'Fussilat',arabic:'فصلت',verses:54,type:'Meccan'},{num:42,name:'Ash-Shura',arabic:'الشورى',verses:53,type:'Meccan'},{num:43,name:'Az-Zukhruf',arabic:'الزخرف',verses:89,type:'Meccan'},{num:44,name:'Ad-Dukhan',arabic:'الدخان',verses:59,type:'Meccan'},{num:45,name:'Al-Jathiyah',arabic:'الجاثية',verses:37,type:'Meccan'},{num:46,name:'Al-Ahqaf',arabic:'الأحقاف',verses:35,type:'Meccan'},{num:47,name:'Muhammad',arabic:'محمد',verses:38,type:'Medinan'},{num:48,name:'Al-Fath',arabic:'الفتح',verses:29,type:'Medinan'},{num:49,name:'Al-Hujurat',arabic:'الحجرات',verses:18,type:'Medinan'},{num:50,name:'Qaf',arabic:'ق',verses:45,type:'Meccan'},{num:51,name:'Adh-Dhariyat',arabic:'الذاريات',verses:60,type:'Meccan'},{num:52,name:'At-Tur',arabic:'الطور',verses:49,type:'Meccan'},{num:53,name:'An-Najm',arabic:'النجم',verses:62,type:'Meccan'},{num:54,name:'Al-Qamar',arabic:'القمر',verses:55,type:'Meccan'},{num:55,name:'Ar-Rahman',arabic:'الرحمن',verses:78,type:'Medinan'},{num:56,name:"Al-Waqi'ah",arabic:'الواقعة',verses:96,type:'Meccan'},{num:57,name:'Al-Hadid',arabic:'الحديد',verses:29,type:'Medinan'},{num:58,name:'Al-Mujadila',arabic:'المجادلة',verses:22,type:'Medinan'},{num:59,name:'Al-Hashr',arabic:'الحشر',verses:24,type:'Medinan'},{num:60,name:'Al-Mumtahanah',arabic:'الممتحنة',verses:13,type:'Medinan'},{num:61,name:'As-Saf',arabic:'الصف',verses:14,type:'Medinan'},{num:62,name:"Al-Jumu'ah",arabic:'الجمعة',verses:11,type:'Medinan'},{num:63,name:'Al-Munafiqun',arabic:'المنافقون',verses:11,type:'Medinan'},{num:64,name:'At-Taghabun',arabic:'التغابن',verses:18,type:'Medinan'},{num:65,name:'At-Talaq',arabic:'الطلاق',verses:12,type:'Medinan'},{num:66,name:'At-Tahrim',arabic:'التحريم',verses:12,type:'Medinan'},{num:67,name:'Al-Mulk',arabic:'الملك',verses:30,type:'Meccan'},{num:68,name:'Al-Qalam',arabic:'القلم',verses:52,type:'Meccan'},{num:69,name:'Al-Haqqah',arabic:'الحاقة',verses:52,type:'Meccan'},{num:70,name:"Al-Ma'arij",arabic:'المعارج',verses:44,type:'Meccan'},{num:71,name:'Nuh',arabic:'نوح',verses:28,type:'Meccan'},{num:72,name:'Al-Jinn',arabic:'الجن',verses:28,type:'Meccan'},{num:73,name:'Al-Muzzammil',arabic:'المزمل',verses:20,type:'Meccan'},{num:74,name:'Al-Muddaththir',arabic:'المدثر',verses:56,type:'Meccan'},{num:75,name:'Al-Qiyamah',arabic:'القيامة',verses:40,type:'Meccan'},{num:76,name:'Al-Insan',arabic:'الإنسان',verses:31,type:'Medinan'},{num:77,name:'Al-Mursalat',arabic:'المرسلات',verses:50,type:'Meccan'},{num:78,name:"An-Naba'",arabic:'النبأ',verses:40,type:'Meccan'},{num:79,name:"An-Nazi'at",arabic:'النازعات',verses:46,type:'Meccan'},{num:80,name:"'Abasa",arabic:'عبس',verses:42,type:'Meccan'},{num:81,name:'At-Takwir',arabic:'التكوير',verses:29,type:'Meccan'},{num:82,name:'Al-Infitar',arabic:'الانفطار',verses:19,type:'Meccan'},{num:83,name:'Al-Mutaffifin',arabic:'المطففين',verses:36,type:'Meccan'},{num:84,name:'Al-Inshiqaq',arabic:'الانشقاق',verses:25,type:'Meccan'},{num:85,name:'Al-Buruj',arabic:'البروج',verses:22,type:'Meccan'},{num:86,name:'At-Tariq',arabic:'الطارق',verses:17,type:'Meccan'},{num:87,name:"Al-A'la",arabic:'الأعلى',verses:19,type:'Meccan'},{num:88,name:'Al-Ghashiyah',arabic:'الغاشية',verses:26,type:'Meccan'},{num:89,name:'Al-Fajr',arabic:'الفجر',verses:30,type:'Meccan'},{num:90,name:'Al-Balad',arabic:'البلد',verses:20,type:'Meccan'},{num:91,name:'Ash-Shams',arabic:'الشمس',verses:15,type:'Meccan'},{num:92,name:'Al-Layl',arabic:'الليل',verses:21,type:'Meccan'},{num:93,name:'Ad-Duha',arabic:'الضحى',verses:11,type:'Meccan'},{num:94,name:'Ash-Sharh',arabic:'الشرح',verses:8,type:'Meccan'},{num:95,name:'At-Tin',arabic:'التين',verses:8,type:'Meccan'},{num:96,name:"Al-'Alaq",arabic:'العلق',verses:19,type:'Meccan'},{num:97,name:'Al-Qadr',arabic:'القدر',verses:5,type:'Meccan'},{num:98,name:'Al-Bayyinah',arabic:'البينة',verses:8,type:'Medinan'},{num:99,name:'Az-Zalzalah',arabic:'الزلزلة',verses:8,type:'Medinan'},{num:100,name:"Al-'Adiyat",arabic:'العاديات',verses:11,type:'Meccan'},{num:101,name:"Al-Qari'ah",arabic:'القارعة',verses:11,type:'Meccan'},{num:102,name:'At-Takathur',arabic:'التكاثر',verses:8,type:'Meccan'},{num:103,name:"Al-'Asr",arabic:'العصر',verses:3,type:'Meccan'},{num:104,name:'Al-Humazah',arabic:'الهمزة',verses:9,type:'Meccan'},{num:105,name:'Al-Fil',arabic:'الفيل',verses:5,type:'Meccan'},{num:106,name:'Quraysh',arabic:'قريش',verses:4,type:'Meccan'},{num:107,name:"Al-Ma'un",arabic:'الماعون',verses:7,type:'Meccan'},{num:108,name:'Al-Kawthar',arabic:'الكوثر',verses:3,type:'Meccan'},{num:109,name:'Al-Kafirun',arabic:'الكافرون',verses:6,type:'Meccan'},{num:110,name:'An-Nasr',arabic:'النصر',verses:3,type:'Medinan'},{num:111,name:'Al-Masad',arabic:'المسد',verses:5,type:'Meccan'},{num:112,name:'Al-Ikhlas',arabic:'الإخلاص',verses:4,type:'Meccan'},{num:113,name:'Al-Falaq',arabic:'الفلق',verses:5,type:'Meccan'},{num:114,name:'An-Nas',arabic:'الناس',verses:6,type:'Meccan'}];
+let audioEl=null,currentSurahNum=null,audioProgressTimer=null,surahTypeFilter='all';
 function buildQuran(){ renderSurahs(); }
-
-function renderSurahs(){
-  const search = (document.getElementById('surahSearch')||{}).value || '';
-  const q = search.toLowerCase();
-  const filtered = allSurahs.filter(s=>{
-    const matchType = surahTypeFilter==='all' || s.type===surahTypeFilter;
-    const matchSearch = s.name.toLowerCase().includes(q) || s.arabic.includes(q) || String(s.num).includes(q);
-    return matchType && matchSearch;
-  });
-  document.getElementById('surahList').innerHTML = filtered.map(s=>
-    '<div class="surah-item'+(currentSurahNum===s.num?' playing':'')+'" id="si'+s.num+'" onclick="playSurah('+s.num+',\''+s.name+'\')">'+
-    '<div class="surah-num">'+s.num+'</div>'+
-    '<div class="surah-info"><h4>'+s.name+'</h4><p>'+s.verses+' Verses · '+s.type+(currentSurahNum===s.num?' 🎵':'')+'</p></div>'+
-    '<div class="surah-arabic">'+s.arabic+'</div>'+
-    '</div>'
-  ).join('');
-}
-
+function renderSurahs(){ const search=(document.getElementById('surahSearch')||{}).value||''; const q=search.toLowerCase(); const filtered=allSurahs.filter(s=>{ const matchType=surahTypeFilter==='all'||s.type===surahTypeFilter; const matchSearch=s.name.toLowerCase().includes(q)||s.arabic.includes(q)||String(s.num).includes(q); return matchType&&matchSearch; }); document.getElementById('surahList').innerHTML=filtered.map(s=>'<div class="surah-item'+(currentSurahNum===s.num?' playing':'')+'" id="si'+s.num+'" onclick="playSurah('+s.num+',\''+s.name+'\')"><div class="surah-num">'+s.num+'</div><div class="surah-info"><h4>'+s.name+'</h4><p>'+s.verses+' Verses · '+s.type+(currentSurahNum===s.num?' 🎵':'')+'</p></div><div class="surah-arabic">'+s.arabic+'</div></div>').join(''); }
 function filterSurahs(){ renderSurahs(); }
+function filterByType(el,type){ surahTypeFilter=type; document.querySelectorAll('.q-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); renderSurahs(); }
+function playSurah(num,name){ if(audioEl){audioEl.pause();audioEl.src='';audioEl=null;} clearInterval(audioProgressTimer); currentSurahNum=num; renderSurahs(); const playerBar=document.getElementById('playerBar'); const playBtn=document.getElementById('playPauseBtn'); const pName=document.getElementById('playerName'); const pSub=document.getElementById('playerSubtitle'); const pFill=document.getElementById('playerBarFill'); playerBar.style.display='flex'; pName.textContent='Surah '+name; pSub.textContent='Loading…'; playBtn.textContent='⏳'; pFill.style.width='0%'; audioEl=new Audio(); audioEl.crossOrigin='anonymous'; audioEl.src='https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/'+num+'.mp3'; audioEl.addEventListener('canplaythrough',()=>{ audioEl.play().then(()=>{ playBtn.textContent='⏸'; pSub.textContent='Mishary Alafasy · Playing'; audioProgressTimer=setInterval(()=>{ if(audioEl&&audioEl.duration){ const pct=(audioEl.currentTime/audioEl.duration)*100; pFill.style.width=pct+'%'; }},500); }).catch(()=>{playBtn.textContent='▶';pSub.textContent='Tap ▶ to play';}); },{once:true}); audioEl.addEventListener('ended',()=>{ playBtn.textContent='▶'; pSub.textContent='Mishary Alafasy · Completed ✓'; pFill.style.width='100%'; clearInterval(audioProgressTimer); }); audioEl.addEventListener('error',()=>{ playBtn.textContent='⚠️'; pSub.textContent='Audio unavailable – check internet'; currentSurahNum=null; renderSurahs(); }); audioEl.load(); }
+function togglePlay(){ if(!audioEl)return; const btn=document.getElementById('playPauseBtn'); if(audioEl.paused){audioEl.play().then(()=>btn.textContent='⏸');}else{audioEl.pause();btn.textContent='▶';document.getElementById('playerSubtitle').textContent='Mishary Alafasy · Paused';} }
+function stopAudio(){ if(audioEl){audioEl.pause();audioEl.src='';audioEl=null;} clearInterval(audioProgressTimer); currentSurahNum=null; }
 
-function filterByType(el, type){
-  surahTypeFilter = type;
-  document.querySelectorAll('.q-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  renderSurahs();
-}
-
-function playSurah(num, name){
-  if(audioEl){ audioEl.pause(); audioEl.src=''; audioEl=null; }
-  clearInterval(audioProgressTimer);
-
-  currentSurahNum = num;
-  renderSurahs();
-
-  const playerBar = document.getElementById('playerBar');
-  const playBtn   = document.getElementById('playPauseBtn');
-  const pName     = document.getElementById('playerName');
-  const pSub      = document.getElementById('playerSubtitle');
-  const pFill     = document.getElementById('playerBarFill');
-
-  playerBar.style.display = 'flex';
-  pName.textContent = 'Surah ' + name;
-  pSub.textContent  = 'Loading…';
-  playBtn.textContent = '⏳';
-  pFill.style.width   = '0%';
-
-  audioEl = new Audio();
-  audioEl.crossOrigin = 'anonymous';
-  audioEl.src = 'https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/' + num + '.mp3';
-
-  audioEl.addEventListener('canplaythrough', ()=>{
-    audioEl.play().then(()=>{
-      playBtn.textContent = '⏸';
-      pSub.textContent    = 'Mishary Alafasy · Playing';
-      audioProgressTimer = setInterval(()=>{
-        if(audioEl && audioEl.duration){
-          const pct = (audioEl.currentTime / audioEl.duration)*100;
-          pFill.style.width = pct + '%';
-        }
-      }, 500);
-    }).catch(()=>{ playBtn.textContent='▶'; pSub.textContent='Tap ▶ to play'; });
-  }, {once:true});
-
-  audioEl.addEventListener('ended', ()=>{
-    playBtn.textContent = '▶';
-    pSub.textContent    = 'Mishary Alafasy · Completed ✓';
-    pFill.style.width   = '100%';
-    clearInterval(audioProgressTimer);
-  });
-
-  audioEl.addEventListener('error', ()=>{
-    playBtn.textContent = '⚠️';
-    pSub.textContent    = 'Audio unavailable – check internet connection';
-    currentSurahNum = null;
-    renderSurahs();
-  });
-
-  audioEl.load();
-}
-
-function togglePlay(){
-  if(!audioEl) return;
-  const btn = document.getElementById('playPauseBtn');
-  if(audioEl.paused){
-    audioEl.play().then(()=>btn.textContent='⏸');
-  } else {
-    audioEl.pause();
-    btn.textContent = '▶';
-    document.getElementById('playerSubtitle').textContent = 'Mishary Alafasy · Paused';
-  }
-}
-
-function stopAudio(){
-  if(audioEl){ audioEl.pause(); audioEl.src=''; audioEl=null; }
-  clearInterval(audioProgressTimer);
-  currentSurahNum = null;
-}
-
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    DUAS
-══════════════════════════════════ */
-const duaData={
-  morning:[
-    {label:'Upon Waking',arabic:'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ',trans:"Alhamdulillahil-ladhi ahyana ba'da ma amatana wa ilayhin-nushur",meaning:'All praise is for Allah who gave us life after death and to Him is the resurrection.'},
-    {label:'Morning Dhikr',arabic:'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ',trans:'Asbahna wa asbahal-mulku lillah',meaning:'We have entered the morning and at this very time all dominion belongs to Allah.'},
-    {label:'Protection',arabic:'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ',trans:"Bismillahil-ladhi la yadurru ma'as-mihi shay'",meaning:'In the name of Allah, with Whose name nothing is harmed on earth or in the heavens.'},
-  ],
-  evening:[
-    {label:'At Evening',arabic:'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ',trans:'Amsayna wa amsal-mulku lillah',meaning:'We have entered the evening and at this very time all dominion belongs to Allah.'},
-    {label:"Sayyidul Istighfar",arabic:'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ',trans:'Allahumma anta rabbi la ilaha illa ant, khalaqtani wa ana abduk',meaning:'O Allah! You are my Lord. None has the right to be worshipped except You. You created me and I am Your servant.'},
-  ],
-  meals:[
-    {label:'Before Eating',arabic:'بِسْمِ اللَّهِ',trans:'Bismillah',meaning:'In the name of Allah.'},
-    {label:'After Eating',arabic:'الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ',trans:"Alhamdulillahil-ladhi at'amana wa saqana wa ja'alana muslimin",meaning:'All praise is to Allah who fed us and gave us drink and made us Muslims.'},
-  ],
-  sleep:[
-    {label:'Before Sleeping',arabic:'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا',trans:'Bismika Allahumma amutu wa ahya',meaning:'In Your name O Allah I die and I live.'},
-    {label:'Seeking Protection',arabic:'اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ',trans:"Allahumma qini adhabaka yawma tab'athu 'ibadak",meaning:"O Allah, protect me from Your punishment on the Day You resurrect Your servants."},
-  ],
-  travel:[
-    {label:'Dua for Travel',arabic:'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ',trans:"Subhanal-ladhi sakhkhara lana hadha wa ma kunna lahu muqrinin, wa inna ila rabbina lamunqalibun",meaning:'Glory be to He who has subjected this for us, and we were not able to do it, and indeed we to our Lord will be returning.'},
-  ],
-  study:[
-    {label:'Before Studying',arabic:'رَبِّ زِدْنِي عِلْمًا',trans:"Rabbi zidni 'ilma",meaning:'O my Lord, increase me in knowledge.'},
-    {label:'For Understanding',arabic:'سُبْحَانَكَ لَا عِلْمَ لَنَا إِلَّا مَا عَلَّمْتَنَا إِنَّكَ أَنْتَ الْعَلِيمُ الْحَكِيمُ',trans:"Subhanaka la 'ilma lana illa ma 'allamtana innaka antal-'alimul-hakim",meaning:'Glory be to You, we have no knowledge except what You have taught us. Indeed it is You who is the All-Knowing, the All-Wise.'},
-    {label:'For Good Memory',arabic:'اللَّهُمَّ افْتَحْ عَلَيْنَا حِكْمَتَكَ وَانْشُرْ عَلَيْنَا رَحْمَتَكَ',trans:"Allahumma iftah 'alayna hikmataka wanshur 'alayna rahmataka",meaning:'O Allah, open upon us Your wisdom and spread upon us Your mercy.'},
-  ],
-};
-function showDuas(el, cat){
-  document.querySelectorAll('#duaTabs .q-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active');
-  const duas = duaData[cat] || [];
-  document.getElementById('duaContent').innerHTML = duas.map(d=>
-    '<div class="dua-card">'+
-    '<div class="dua-label">'+d.label+'</div>'+
-    '<div class="dua-arabic">'+d.arabic+'</div>'+
-    '<div class="dua-trans">'+d.trans+'</div>'+
-    '<div class="dua-meaning">'+d.meaning+'</div>'+
-    '</div>'
-  ).join('');
-}
+══════════════════════════════════════════════════ */
+const duaData={morning:[{label:'Upon Waking',arabic:'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ',trans:"Alhamdulillahil-ladhi ahyana ba'da ma amatana wa ilayhin-nushur",meaning:'All praise is for Allah who gave us life after death and to Him is the resurrection.'},{label:'Morning Dhikr',arabic:'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ',trans:'Asbahna wa asbahal-mulku lillah',meaning:'We have entered the morning and at this very time all dominion belongs to Allah.'},{label:'Protection',arabic:'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ',trans:"Bismillahil-ladhi la yadurru ma'as-mihi shay'",meaning:'In the name of Allah, with Whose name nothing is harmed on earth or in the heavens.'}],evening:[{label:'At Evening',arabic:'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ',trans:'Amsayna wa amsal-mulku lillah',meaning:'We have entered the evening and at this very time all dominion belongs to Allah.'},{label:"Sayyidul Istighfar",arabic:'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ',trans:'Allahumma anta rabbi la ilaha illa ant, khalaqtani wa ana abduk',meaning:'O Allah! You are my Lord. None has the right to be worshipped except You. You created me and I am Your servant.'}],meals:[{label:'Before Eating',arabic:'بِسْمِ اللَّهِ',trans:'Bismillah',meaning:'In the name of Allah.'},{label:'After Eating',arabic:'الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ',trans:"Alhamdulillahil-ladhi at'amana wa saqana wa ja'alana muslimin",meaning:'All praise is to Allah who fed us and gave us drink and made us Muslims.'}],sleep:[{label:'Before Sleeping',arabic:'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا',trans:'Bismika Allahumma amutu wa ahya',meaning:'In Your name O Allah I die and I live.'},{label:'Seeking Protection',arabic:'اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ',trans:"Allahumma qini adhabaka yawma tab'athu 'ibadak",meaning:"O Allah, protect me from Your punishment on the Day You resurrect Your servants."}],travel:[{label:'Dua for Travel',arabic:'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ',trans:"Subhanal-ladhi sakhkhara lana hadha wa ma kunna lahu muqrinin, wa inna ila rabbina lamunqalibun",meaning:'Glory be to He who has subjected this for us, and we were not able to do it, and indeed we to our Lord will be returning.'}],study:[{label:'Before Studying',arabic:'رَبِّ زِدْنِي عِلْمًا',trans:"Rabbi zidni 'ilma",meaning:'O my Lord, increase me in knowledge.'},{label:'For Understanding',arabic:'سُبْحَانَكَ لَا عِلْمَ لَنَا إِلَّا مَا عَلَّمْتَنَا إِنَّكَ أَنْتَ الْعَلِيمُ الْحَكِيمُ',trans:"Subhanaka la 'ilma lana illa ma 'allamtana innaka antal-'alimul-hakim",meaning:'Glory be to You, we have no knowledge except what You have taught us. Indeed it is You who is the All-Knowing, the All-Wise.'},{label:'For Good Memory',arabic:'اللَّهُمَّ افْتَحْ عَلَيْنَا حِكْمَتَكَ وَانْشُرْ عَلَيْنَا رَحْمَتَكَ',trans:"Allahumma iftah 'alayna hikmataka wanshur 'alayna rahmataka",meaning:'O Allah, open upon us Your wisdom and spread upon us Your mercy.'}]};
+function showDuas(el,cat){ document.querySelectorAll('#duaTabs .q-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); const duas=duaData[cat]||[]; document.getElementById('duaContent').innerHTML=duas.map(d=>'<div class="dua-card"><div class="dua-label">'+d.label+'</div><div class="dua-arabic">'+d.arabic+'</div><div class="dua-trans">'+d.trans+'</div><div class="dua-meaning">'+d.meaning+'</div></div>').join(''); }
 
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    WUDU ANIMATION
-══════════════════════════════════ */
-const wuduStepsData=[
-  {icon:'🤲',title:'1. Make Intention (Niyyah)',desc:'Form the intention in your heart to perform Wudu for purification and Salah.',arabic:'نَوَيْتُ الْوُضُوءَ لِرَفْعِ الْحَدَثِ'},
-  {icon:'🙏',title:'2. Say Bismillah',desc:'Begin with Bismillah before starting Wudu.',arabic:'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ'},
-  {icon:'🤲',title:'3. Wash Both Hands',desc:'Wash both hands up to the wrists three times, making sure water reaches between the fingers.',arabic:'غَسْلُ الْيَدَيْنِ ثَلَاثًا'},
-  {icon:'💧',title:'4. Rinse the Mouth (Madmadah)',desc:'Take water into the mouth, swish it around thoroughly, and spit it out. Repeat three times.',arabic:'اَلْمَضْمَضَةُ ثَلَاثًا'},
-  {icon:'👃',title:'5. Clean the Nose (Istinshaq)',desc:'Sniff water into the nostrils with the right hand and blow out with the left hand. Repeat three times.',arabic:'اَلِاسْتِنْشَاقُ ثَلَاثًا'},
-  {icon:'😊',title:'6. Wash the Face',desc:'Wash the entire face from the hairline to the chin and from ear to ear. Repeat three times.',arabic:'غَسْلُ الْوَجْهِ ثَلَاثًا'},
-  {icon:'💪',title:'7. Wash Right Arm',desc:'Wash the right arm from fingertips up to and including the elbow. Repeat three times.',arabic:'غَسْلُ الْيَدِ الْيُمْنَى إِلَى الْمِرْفَقِ'},
-  {icon:'💪',title:'8. Wash Left Arm',desc:'Wash the left arm from fingertips up to and including the elbow. Repeat three times.',arabic:'غَسْلُ الْيَدِ الْيُسْرَى إِلَى الْمِرْفَقِ'},
-  {icon:'👆',title:'9. Wipe the Head (Masah)',desc:'Wet both hands and wipe over the entire head from front to back and return to the front once.',arabic:'مَسْحُ الرَّأْسِ كَامِلًا مَرَّةً'},
-  {icon:'👂',title:'10. Wipe the Ears',desc:'Use the index fingers to wipe inside the ears and thumbs for the outside. Once.',arabic:'مَسْحُ الْأُذُنَيْنِ بِالسَّبَّابَتَيْنِ وَالْإِبْهَامَيْنِ'},
-  {icon:'🦶',title:'11. Wash Right Foot',desc:'Wash the right foot including the ankle and between the toes. Repeat three times.',arabic:'غَسْلُ الْقَدَمِ الْيُمْنَى إِلَى الْكَعْبِ'},
-  {icon:'🦶',title:'12. Wash Left Foot',desc:'Wash the left foot including the ankle and between the toes. Repeat three times.',arabic:'غَسْلُ الْقَدَمِ الْيُسْرَى إِلَى الْكَعْبِ'},
-];
-let wuduTimer=null, wuduActive=false, wuduIdx=0;
+══════════════════════════════════════════════════ */
+const wuduStepsData=[{icon:'🤲',title:'1. Make Intention (Niyyah)',desc:'Form the intention in your heart to perform Wudu for purification and Salah.',arabic:'نَوَيْتُ الْوُضُوءَ لِرَفْعِ الْحَدَثِ'},{icon:'🙏',title:'2. Say Bismillah',desc:'Begin with Bismillah before starting Wudu.',arabic:'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ'},{icon:'🤲',title:'3. Wash Both Hands',desc:'Wash both hands up to the wrists three times, making sure water reaches between the fingers.',arabic:'غَسْلُ الْيَدَيْنِ ثَلَاثًا'},{icon:'💧',title:'4. Rinse the Mouth (Madmadah)',desc:'Take water into the mouth, swish it around thoroughly, and spit it out. Repeat three times.',arabic:'اَلْمَضْمَضَةُ ثَلَاثًا'},{icon:'👃',title:'5. Clean the Nose (Istinshaq)',desc:'Sniff water into the nostrils with the right hand and blow out with the left hand. Repeat three times.',arabic:'اَلِاسْتِنْشَاقُ ثَلَاثًا'},{icon:'😊',title:'6. Wash the Face',desc:'Wash the entire face from the hairline to the chin and from ear to ear. Repeat three times.',arabic:'غَسْلُ الْوَجْهِ ثَلَاثًا'},{icon:'💪',title:'7. Wash Right Arm',desc:'Wash the right arm from fingertips up to and including the elbow. Repeat three times.',arabic:'غَسْلُ الْيَدِ الْيُمْنَى إِلَى الْمِرْفَقِ'},{icon:'💪',title:'8. Wash Left Arm',desc:'Wash the left arm from fingertips up to and including the elbow. Repeat three times.',arabic:'غَسْلُ الْيَدِ الْيُسْرَى إِلَى الْمِرْفَقِ'},{icon:'👆',title:'9. Wipe the Head (Masah)',desc:'Wet both hands and wipe over the entire head from front to back and return to the front once.',arabic:'مَسْحُ الرَّأْسِ كَامِلًا مَرَّةً'},{icon:'👂',title:'10. Wipe the Ears',desc:'Use the index fingers to wipe inside the ears and thumbs for the outside. Once.',arabic:'مَسْحُ الْأُذُنَيْنِ بِالسَّبَّابَتَيْنِ وَالْإِبْهَامَيْنِ'},{icon:'🦶',title:'11. Wash Right Foot',desc:'Wash the right foot including the ankle and between the toes. Repeat three times.',arabic:'غَسْلُ الْقَدَمِ الْيُمْنَى إِلَى الْكَعْبِ'},{icon:'🦶',title:'12. Wash Left Foot',desc:'Wash the left foot including the ankle and between the toes. Repeat three times.',arabic:'غَسْلُ الْقَدَمِ الْيُسْرَى إِلَى الْكَعْبِ'}];
+let wuduTimer=null,wuduActive=false,wuduIdx=0;
+function buildWudu(){ document.getElementById('wuduSteps').innerHTML=wuduStepsData.map((s,i)=>'<div class="wudu-step" id="ws'+i+'"><div class="wudu-icon">'+s.icon+'</div><div class="wudu-text"><h4>'+s.title+'</h4><p>'+s.desc+'</p><div class="wudu-arabic">'+s.arabic+'</div></div></div>').join(''); document.getElementById('wuduStatus').textContent='Ready · Press ▶ Start Guide to begin'; document.getElementById('wuduPlayBtn').textContent='▶ Start Guide'; wuduActive=false; wuduIdx=0; }
+function startWudu(){ if(wuduActive)return; wuduActive=true; wuduIdx=0; document.getElementById('wuduPlayBtn').textContent='⏳ Running…'; runWuduStep(); }
+function runWuduStep(){ document.querySelectorAll('.wudu-step').forEach(e=>e.classList.remove('active-step')); if(wuduIdx>=wuduStepsData.length){ document.getElementById('wuduStatus').textContent='✅ Wudu complete! May Allah accept it. آمين'; document.getElementById('wuduPlayBtn').textContent='✅ Complete'; wuduActive=false; return; } const el=document.getElementById('ws'+wuduIdx); if(el){ el.classList.add('active-step'); const wrap=document.getElementById('wuduScrollWrap'); if(wrap){ const target=el.offsetTop-(wrap.clientHeight/2)+(el.clientHeight/2); wrap.scrollTo({top:Math.max(0,target),behavior:'smooth'}); } document.getElementById('wuduStatus').textContent='🔵 Step '+(wuduIdx+1)+' / '+wuduStepsData.length+' — '+wuduStepsData[wuduIdx].title; } wuduTimer=setTimeout(()=>{wuduIdx++;runWuduStep();},2800); }
+function stopWudu(){ clearTimeout(wuduTimer); wuduActive=false; }
+function resetWudu(){ stopWudu(); document.querySelectorAll('.wudu-step').forEach(e=>e.classList.remove('active-step')); document.getElementById('wuduStatus').textContent='Ready · Press ▶ Start Guide to begin'; document.getElementById('wuduPlayBtn').textContent='▶ Start Guide'; wuduIdx=0; const wrap=document.getElementById('wuduScrollWrap'); if(wrap) wrap.scrollTop=0; }
 
-function buildWudu(){
-  document.getElementById('wuduSteps').innerHTML = wuduStepsData.map((s,i)=>
-    '<div class="wudu-step" id="ws'+i+'">'+
-    '<div class="wudu-icon">'+s.icon+'</div>'+
-    '<div class="wudu-text"><h4>'+s.title+'</h4><p>'+s.desc+'</p><div class="wudu-arabic">'+s.arabic+'</div></div>'+
-    '</div>'
-  ).join('');
-  document.getElementById('wuduStatus').textContent = 'Ready · Press ▶ Start Guide to begin';
-  document.getElementById('wuduPlayBtn').textContent = '▶ Start Guide';
-  wuduActive = false; wuduIdx = 0;
-}
-
-function startWudu(){
-  if(wuduActive) return;
-  wuduActive = true;
-  wuduIdx = 0;
-  document.getElementById('wuduPlayBtn').textContent = '⏳ Running…';
-  runWuduStep();
-}
-
-function runWuduStep(){
-  document.querySelectorAll('.wudu-step').forEach(e=>e.classList.remove('active-step'));
-
-  if(wuduIdx >= wuduStepsData.length){
-    document.getElementById('wuduStatus').textContent = '✅ Wudu complete! May Allah accept it. آمين';
-    document.getElementById('wuduPlayBtn').textContent = '✅ Complete';
-    wuduActive = false;
-    return;
-  }
-
-  const el = document.getElementById('ws'+wuduIdx);
-  if(el){
-    el.classList.add('active-step');
-    const wrap = document.getElementById('wuduScrollWrap');
-    if(wrap){
-      const target = el.offsetTop - (wrap.clientHeight/2) + (el.clientHeight/2);
-      wrap.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
-    }
-    document.getElementById('wuduStatus').textContent =
-      '🔵 Step '+(wuduIdx+1)+' / '+wuduStepsData.length+' — '+wuduStepsData[wuduIdx].title;
-  }
-
-  wuduTimer = setTimeout(()=>{ wuduIdx++; runWuduStep(); }, 2800);
-}
-
-function stopWudu(){
-  clearTimeout(wuduTimer);
-  wuduActive = false;
-}
-
-function resetWudu(){
-  stopWudu();
-  document.querySelectorAll('.wudu-step').forEach(e=>e.classList.remove('active-step'));
-  document.getElementById('wuduStatus').textContent = 'Ready · Press ▶ Start Guide to begin';
-  document.getElementById('wuduPlayBtn').textContent = '▶ Start Guide';
-  wuduIdx = 0;
-  const wrap = document.getElementById('wuduScrollWrap');
-  if(wrap) wrap.scrollTop = 0;
-}
-
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    SALAH ANIMATION
-══════════════════════════════════ */
-const salahStepsData=[
-  {icon:'🕴',title:'Qiyam – Standing',desc:'Stand upright facing the Qibla. Feet shoulder-width apart. Eyes focused on the place of Sujud.',arabic:'اَلْقِيَامُ مُسْتَقِيمًا'},
-  {icon:'🙌',title:'Takbiratul Ihram',desc:'Raise both hands to earlobes with palms facing forward. Say "Allahu Akbar" to enter the prayer.',arabic:'اَللَّهُ أَكْبَرُ'},
-  {icon:'🤲',title:'Qira\'ah – Recitation',desc:'Place right hand over left on chest. Recite Al-Fatiha silently or aloud, then a surah.',arabic:'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ'},
-  {icon:'🙇',title:'Ruku\' – Bowing',desc:'Say "Allahu Akbar", bow with hands on knees, back straight. Say "Subhana Rabbiyal Azeem" 3 times.',arabic:'سُبْحَانَ رَبِّيَ الْعَظِيمِ'},
-  {icon:'🕴',title:"I'tidal – Rising from Ruku",desc:"Rise saying 'Sami Allahu liman hamidah', then say 'Rabbana lakal hamd' while standing upright.",arabic:'سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ'},
-  {icon:'🛐',title:'Sujud – First Prostration',desc:'Say "Allahu Akbar", prostrate with 7 body parts touching the ground. Say "Subhana Rabbiyal A\'la" 3 times.',arabic:"سُبْحَانَ رَبِّيَ الْأَعْلَى"},
-  {icon:'🧎',title:'Jalsa – Sitting between Sujud',desc:"Sit up saying 'Allahu Akbar'. Sit on left foot with right foot upright. Say 'Rabbighfir li'.",arabic:'رَبِّ اغْفِرْ لِي وَارْحَمْنِي'},
-  {icon:'🛐',title:'Sujud – Second Prostration',desc:'Say "Allahu Akbar" and perform the second prostration exactly like the first.',arabic:"سُبْحَانَ رَبِّيَ الْأَعْلَى"},
-  {icon:'🧎',title:'Tashahud – Sitting',desc:"After completing 2 rak'ahs, sit and recite At-Tahiyyat. Raise index finger during Ash-hadu.",arabic:'اَلتَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ'},
-  {icon:'🙏',title:'Salawat – Durood Ibrahim',desc:"After Tashahud, recite Durood Ibrahim (Allahumma salli 'ala Muhammad…).",arabic:'اَللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ'},
-  {icon:'👈',title:'Tasleem – Right Side',desc:'Turn head to the right and say "As-Salamu Alaykum wa Rahmatullah".',arabic:'اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ'},
-  {icon:'👉',title:'Tasleem – Left Side',desc:'Turn head to the left and say "As-Salamu Alaykum wa Rahmatullah".',arabic:'اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ'},
-];
-let salahTimer=null, salahActive=false, salahIdx=0;
+══════════════════════════════════════════════════ */
+const salahStepsData=[{icon:'🕴',title:'Qiyam – Standing',desc:'Stand upright facing the Qibla. Feet shoulder-width apart. Eyes focused on the place of Sujud.',arabic:'اَلْقِيَامُ مُسْتَقِيمًا'},{icon:'🙌',title:'Takbiratul Ihram',desc:'Raise both hands to earlobes with palms facing forward. Say "Allahu Akbar" to enter the prayer.',arabic:'اَللَّهُ أَكْبَرُ'},{icon:'🤲',title:"Qira'ah – Recitation",desc:"Place right hand over left on chest. Recite Al-Fatiha silently or aloud, then a surah.",arabic:'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ'},{icon:'🙇',title:"Ruku' – Bowing",desc:"Say 'Allahu Akbar', bow with hands on knees, back straight. Say 'Subhana Rabbiyal Azeem' 3 times.",arabic:'سُبْحَانَ رَبِّيَ الْعَظِيمِ'},{icon:'🕴',title:"I'tidal – Rising from Ruku",desc:"Rise saying 'Sami Allahu liman hamidah', then say 'Rabbana lakal hamd' while standing upright.",arabic:'سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ'},{icon:'🛐',title:'Sujud – First Prostration',desc:"Say 'Allahu Akbar', prostrate with 7 body parts touching the ground. Say 'Subhana Rabbiyal A'la' 3 times.",arabic:"سُبْحَانَ رَبِّيَ الْأَعْلَى"},{icon:'🧎',title:'Jalsa – Sitting between Sujud',desc:"Sit up saying 'Allahu Akbar'. Sit on left foot with right foot upright. Say 'Rabbighfir li'.",arabic:'رَبِّ اغْفِرْ لِي وَارْحَمْنِي'},{icon:'🛐',title:'Sujud – Second Prostration',desc:"Say 'Allahu Akbar' and perform the second prostration exactly like the first.",arabic:"سُبْحَانَ رَبِّيَ الْأَعْلَى"},{icon:'🧎',title:'Tashahud – Sitting',desc:"After completing 2 rak'ahs, sit and recite At-Tahiyyat. Raise index finger during Ash-hadu.",arabic:'اَلتَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ'},{icon:'🙏',title:'Salawat – Durood Ibrahim',desc:"After Tashahud, recite Durood Ibrahim (Allahumma salli 'ala Muhammad…).",arabic:'اَللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ'},{icon:'👈',title:'Tasleem – Right Side',desc:"Turn head to the right and say 'As-Salamu Alaykum wa Rahmatullah'.",arabic:'اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ'},{icon:'👉',title:'Tasleem – Left Side',desc:"Turn head to the left and say 'As-Salamu Alaykum wa Rahmatullah'.",arabic:'اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ'}];
+let salahTimer=null,salahActive=false,salahIdx=0;
+function buildSalah(){ document.getElementById('salahSteps').innerHTML=salahStepsData.map((s,i)=>'<div class="salah-step" id="ss'+i+'"><span class="step-num-badge">'+(i+1)+'</span><div class="salah-icon">'+s.icon+'</div><div class="wudu-text"><h4>'+s.title+'</h4><p>'+s.desc+'</p><div class="wudu-arabic">'+s.arabic+'</div></div></div>').join(''); document.getElementById('salahStatus').textContent='Ready · Press ▶ Start Guide to begin'; document.getElementById('salahPlayBtn').textContent='▶ Start Guide'; salahActive=false; salahIdx=0; }
+function startSalah(){ if(salahActive)return; salahActive=true; salahIdx=0; document.getElementById('salahPlayBtn').textContent='⏳ Running…'; runSalahStep(); }
+function runSalahStep(){ document.querySelectorAll('.salah-step').forEach(e=>e.classList.remove('active-step')); if(salahIdx>=salahStepsData.length){ document.getElementById('salahStatus').textContent='✅ Salah complete! Alhamdulillah. آمين'; document.getElementById('salahPlayBtn').textContent='✅ Complete'; salahActive=false; return; } const el=document.getElementById('ss'+salahIdx); if(el){ el.classList.add('active-step'); const wrap=document.getElementById('salahScrollWrap'); if(wrap){ const target=el.offsetTop-(wrap.clientHeight/2)+(el.clientHeight/2); wrap.scrollTo({top:Math.max(0,target),behavior:'smooth'}); } document.getElementById('salahStatus').textContent='🔵 Step '+(salahIdx+1)+' / '+salahStepsData.length+' — '+salahStepsData[salahIdx].title; } salahTimer=setTimeout(()=>{salahIdx++;runSalahStep();},3000); }
+function stopSalah(){ clearTimeout(salahTimer); salahActive=false; }
+function resetSalah(){ stopSalah(); document.querySelectorAll('.salah-step').forEach(e=>e.classList.remove('active-step')); document.getElementById('salahStatus').textContent='Ready · Press ▶ Start Guide to begin'; document.getElementById('salahPlayBtn').textContent='▶ Start Guide'; salahIdx=0; const wrap=document.getElementById('salahScrollWrap'); if(wrap) wrap.scrollTop=0; }
 
-function buildSalah(){
-  document.getElementById('salahSteps').innerHTML = salahStepsData.map((s,i)=>
-    '<div class="salah-step" id="ss'+i+'">'+
-    '<span class="step-num-badge">'+(i+1)+'</span>'+
-    '<div class="salah-icon">'+s.icon+'</div>'+
-    '<div class="wudu-text"><h4>'+s.title+'</h4><p>'+s.desc+'</p><div class="wudu-arabic">'+s.arabic+'</div></div>'+
-    '</div>'
-  ).join('');
-  document.getElementById('salahStatus').textContent = 'Ready · Press ▶ Start Guide to begin';
-  document.getElementById('salahPlayBtn').textContent = '▶ Start Guide';
-  salahActive = false; salahIdx = 0;
-}
-
-function startSalah(){
-  if(salahActive) return;
-  salahActive = true;
-  salahIdx = 0;
-  document.getElementById('salahPlayBtn').textContent = '⏳ Running…';
-  runSalahStep();
-}
-
-function runSalahStep(){
-  document.querySelectorAll('.salah-step').forEach(e=>e.classList.remove('active-step'));
-
-  if(salahIdx >= salahStepsData.length){
-    document.getElementById('salahStatus').textContent = '✅ Salah complete! Alhamdulillah. آمين';
-    document.getElementById('salahPlayBtn').textContent = '✅ Complete';
-    salahActive = false;
-    return;
-  }
-
-  const el = document.getElementById('ss'+salahIdx);
-  if(el){
-    el.classList.add('active-step');
-    const wrap = document.getElementById('salahScrollWrap');
-    if(wrap){
-      const target = el.offsetTop - (wrap.clientHeight/2) + (el.clientHeight/2);
-      wrap.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
-    }
-    document.getElementById('salahStatus').textContent =
-      '🔵 Step '+(salahIdx+1)+' / '+salahStepsData.length+' — '+salahStepsData[salahIdx].title;
-  }
-
-  salahTimer = setTimeout(()=>{ salahIdx++; runSalahStep(); }, 3000);
-}
-
-function stopSalah(){
-  clearTimeout(salahTimer);
-  salahActive = false;
-}
-
-function resetSalah(){
-  stopSalah();
-  document.querySelectorAll('.salah-step').forEach(e=>e.classList.remove('active-step'));
-  document.getElementById('salahStatus').textContent = 'Ready · Press ▶ Start Guide to begin';
-  document.getElementById('salahPlayBtn').textContent = '▶ Start Guide';
-  salahIdx = 0;
-  const wrap = document.getElementById('salahScrollWrap');
-  if(wrap) wrap.scrollTop = 0;
-}
-
-/* ══════════════════════════════════
+/* ══════════════════════════════════════════════════
    STAFF
-══════════════════════════════════ */
-const staffData=[
-  {name:'Ustadh Abdul Rahman',role:'Head Teacher – Fiqh & Hadith',icon:'👨‍🏫'},
-  {name:'Ustadh Muhammed Shafi',role:'Senior Teacher – Quran & Tafsir',icon:'👨‍🏫'},
-  {name:'Ustadha Fathima Beevi',role:'Teacher – Arabic & Nahw',icon:'👩‍🏫'},
-  {name:'Ustadh Ibrahim Khalil',role:'Teacher – Islamic History',icon:'👨‍🏫'},
-  {name:'Ustadha Mariyam Siddiqui',role:'Teacher – Ibtidaiyyah',icon:'👩‍🏫'},
-  {name:'Br. Aslam Pattarkulam',role:'Administrative Manager',icon:'👨‍💼'},
-  {name:'Sr. Khadeeja Noor',role:'Student Affairs Coordinator',icon:'👩‍💼'},
-];
-function buildStaff(){
-  document.getElementById('staffBody').innerHTML =
-    '<p style="font-size:12px;color:var(--text-light);margin-bottom:16px;">Dedicated educators of NUM 268, Pattarkulam</p>'+
-    staffData.map(s=>
-      '<div class="staff-card">'+
-      '<div class="staff-avatar">'+s.icon+'</div>'+
-      '<div><div class="staff-name">'+s.name+'</div><div class="staff-role">'+s.role+'</div></div>'+
-      '</div>'
-    ).join('');
-}
+══════════════════════════════════════════════════ */
+const staffData=[{name:'Ustadh Abdul Rahman',role:'Head Teacher – Fiqh & Hadith',icon:'👨‍🏫'},{name:'Ustadh Muhammed Shafi',role:'Senior Teacher – Quran & Tafsir',icon:'👨‍🏫'},{name:'Ustadha Fathima Beevi',role:'Teacher – Arabic & Nahw',icon:'👩‍🏫'},{name:'Ustadh Ibrahim Khalil',role:'Teacher – Islamic History',icon:'👨‍🏫'},{name:'Ustadha Mariyam Siddiqui',role:'Teacher – Ibtidaiyyah',icon:'👩‍🏫'},{name:'Br. Aslam Pattarkulam',role:'Administrative Manager',icon:'👨‍💼'},{name:'Sr. Khadeeja Noor',role:'Student Affairs Coordinator',icon:'👩‍💼'}];
+function buildStaff(){ document.getElementById('staffBody').innerHTML='<p style="font-size:12px;color:var(--text-light);margin-bottom:16px;">Dedicated educators of NUM 268, Pattarkulam</p>'+staffData.map(s=>'<div class="staff-card"><div class="staff-avatar">'+s.icon+'</div><div><div class="staff-name">'+s.name+'</div><div class="staff-role">'+s.role+'</div></div></div>').join(''); }
 </script>
 </body>
 </html>
