@@ -1116,12 +1116,9 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   </div>
 </div>
 
-<!-- ══ FIREBASE LOADING SCREEN ══ -->
-<div id="fbLoadScreen">
-  <div class="fb-load-logo">🕌</div>
-  <div class="fb-load-title">Nadvathum Uloom Madrasa</div>
-  <div class="fb-spinner"></div>
-  <div class="fb-load-sub" id="fbLoadMsg">Connecting to NUM 268 database…</div>
+<!-- Firebase loads in background — no blocking screen -->
+<div id="fbLoadScreen" style="display:none;">
+  <div class="fb-load-sub" id="fbLoadMsg"></div>
 </div>
 
 <!-- ══ FIREBASE SETUP MODAL ══ -->
@@ -1227,49 +1224,7 @@ function initFirebase(apiKey,databaseURL,projectId){
   }catch(e){console.error('Firebase error:',e);return false;}
 }
 
-function setupFirebaseListeners(){
-  const loaded=new Set();
-  document.getElementById('fbLoadMsg').textContent='Loading data…';
-
-  // Per-listener timeout: if Firebase doesn't respond in 6s, load from localStorage
-  const fbTimeout=setTimeout(()=>{
-    if(loaded.size<ALL_KEYS.length){
-      console.warn('Firebase listeners timed out, loading from cache');
-      // Fill any missing keys from localStorage/defaults
-      ALL_KEYS.forEach(key=>{
-        if(!loaded.has(key)){
-          const lv=localStorage.getItem(key);
-          if(lv) try{dbCache[key]=JSON.parse(lv);}catch(e){}
-        }
-      });
-      seedDefaults();
-      hideLoadingScreen();
-      setSyncStatus('offline');
-    }
-  },6000);
-
-  ALL_KEYS.forEach(key=>{
-    firebaseDb.ref('num268/'+key).on('value',snap=>{
-      const val=snap.val();
-      if(val!==null&&val!==undefined){dbCache[key]=val;try{localStorage.setItem(key,JSON.stringify(val));}catch(e){}}
-      else{const lv=load(key,null);if(lv!==null){firebaseDb.ref('num268/'+key).set(lv);dbCache[key]=lv;}}
-      if(!loaded.has(key)){
-        loaded.add(key);
-        if(loaded.size===ALL_KEYS.length){
-          clearTimeout(fbTimeout);
-          hideLoadingScreen();
-          setSyncStatus('synced');
-        }
-      } else {
-        setSyncStatus('synced');
-        rerenderIfOpen();
-      }
-    },()=>{
-      loaded.add(key);
-      if(loaded.size===ALL_KEYS.length){clearTimeout(fbTimeout);hideLoadingScreen();}
-    });
-  });
-}
+/* setupFirebaseListeners replaced by loadAllFromFirebase above */
 
 function hideLoadingScreen(){const s=document.getElementById('fbLoadScreen');s.style.transition='opacity .5s';s.style.opacity='0';setTimeout(()=>s.style.display='none',500);}
 
@@ -1307,44 +1262,94 @@ const HARDCODED_FB = {
   measurementId:     'G-8C705M328G'
 };
 
-/* ── App startup — auto-connects to Firebase on every device ── */
+/* ──────────────────────────────────────────────────
+   NON-BLOCKING STARTUP
+   1. Site loads immediately from localStorage/defaults
+   2. Firebase connects silently in the background
+   3. When Firebase data arrives, UI updates live
+────────────────────────────────────────────────── */
 (function startApp(){
-  document.getElementById('fbSetupModal').style.display='none';
-  document.getElementById('fbLoadScreen').style.display='flex';
+  // STEP 1: Load site immediately — no waiting
+  seedDefaults();
+  setSyncStatus('local');
 
-  // If opened as a local file (file://) Firebase won't work — load instantly from localStorage
-  const isLocalFile = location.protocol === 'file:';
-  if(isLocalFile){
-    console.warn('Running from local file — Firebase disabled. Host on a web server for cross-device sync.');
-    seedDefaults();
-    hideLoadingScreen();
+  // STEP 2: If local file, Firebase won't work — stay local
+  if(location.protocol === 'file:'){
     setSyncStatus('local');
     return;
   }
 
-  // Safety timeout — if Firebase takes too long, load anyway
-  const safetyTimer = setTimeout(()=>{
-    console.warn('Firebase timeout — loading from localStorage');
-    seedDefaults();
-    hideLoadingScreen();
-    setSyncStatus('offline');
-  }, 7000);
-
+  // STEP 3: Connect Firebase silently in background
   try {
     if(!firebase.apps.length) firebase.initializeApp(HARDCODED_FB);
     firebaseDb = firebase.database();
     firebaseMode = true;
-    // Cancel safety timer once listeners are set — they will call hideLoadingScreen()
-    clearTimeout(safetyTimer);
-    setupFirebaseListeners();
-  } catch(e) {
-    clearTimeout(safetyTimer);
-    console.error('Firebase failed:', e);
-    seedDefaults();
-    hideLoadingScreen();
+    setSyncStatus('syncing');
+
+    // Test connection first with a small ping
+    firebaseDb.ref('.info/connected').once('value', snap => {
+      if(snap.val() === true){
+        // Connected — now load all data
+        loadAllFromFirebase();
+      } else {
+        setSyncStatus('offline');
+      }
+    });
+
+    // If no connection in 5 seconds, give up gracefully
+    setTimeout(()=>{
+      if(document.getElementById('syncText').textContent.includes('Syncing')){
+        setSyncStatus('offline');
+        firebaseMode = false;
+      }
+    }, 5000);
+
+  } catch(e){
+    console.error('Firebase init error:', e);
     setSyncStatus('offline');
   }
 })();
+
+/* Load all data from Firebase, update UI when done */
+function loadAllFromFirebase(){
+  setSyncStatus('syncing');
+  const loaded = new Set();
+
+  ALL_KEYS.forEach(key => {
+    // Set up real-time listener
+    firebaseDb.ref('num268/' + key).on('value', snap => {
+      const val = snap.val();
+      if(val !== null && val !== undefined){
+        dbCache[key] = val;
+        try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){}
+      } else {
+        // Key doesn't exist in Firebase yet — push local data up
+        const localVal = load(key, null);
+        if(localVal !== null){
+          firebaseDb.ref('num268/' + key).set(localVal);
+        }
+      }
+
+      // Track initial load completion
+      if(!loaded.has(key)){
+        loaded.add(key);
+        if(loaded.size === ALL_KEYS.length){
+          setSyncStatus('synced');
+          // Refresh any open modal to show Firebase data
+          rerenderIfOpen();
+        }
+      } else {
+        // This is a live update from another device
+        setSyncStatus('synced');
+        rerenderIfOpen();
+      }
+    }, err => {
+      console.warn('Firebase listener error for', key, err);
+      loaded.add(key);
+      if(loaded.size === ALL_KEYS.length) setSyncStatus('offline');
+    });
+  });
+}
 
 /* ── Seed defaults (only if key is empty) ── */
 function seedDefaults(){
