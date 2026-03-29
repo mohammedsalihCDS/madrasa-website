@@ -5,46 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nadvathum Uloom Madrasa – NUM 268</title>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<!-- ╔══════════════════════════════════════════════════════════════╗
-     ║  FIREBASE SETUP INSTRUCTIONS  (read before deploying)       ║
-     ║  ─────────────────────────────────────────────────────────  ║
-     ║  1. Go to https://console.firebase.google.com               ║
-     ║  2. Click "Add project" → name it "num268-madrasa"          ║
-     ║  3. Disable Google Analytics → Create project               ║
-     ║  4. Click "Web" icon (</>) to register a web app            ║
-     ║  5. Copy the firebaseConfig object below and paste yours    ║
-     ║  6. In the Firebase console, go to:                         ║
-     ║     Build → Realtime Database → Create Database             ║
-     ║     Choose "Start in test mode" → Enable                    ║
-     ║  7. That's it! Data will now sync across all phones.        ║
-     ╚══════════════════════════════════════════════════════════════╝ -->
-
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
-
-<style>
-/* ── SYNC STATUS INDICATOR ── */
-.sync-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;margin-right:5px;animation:syncPulse 2s infinite;}
-.sync-dot.offline{background:#ef4444;animation:none;}
-.sync-dot.syncing{background:#f59e0b;animation:syncPulse .5s infinite;}
-@keyframes syncPulse{0%,100%{opacity:1;}50%{opacity:.4;}}
-.sync-bar{position:fixed;bottom:0;left:0;right:0;background:var(--navy);border-top:1px solid rgba(200,134,26,.2);padding:6px 16px;font-size:11px;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:6px;z-index:9000;transform:translateY(100%);transition:.3s;}
-.sync-bar.show{transform:translateY(0);}
-</style>
-
 <style>
 :root{
-  --navy:#07111f;--navy-mid:#0f2240;--blue-royal:#1a3a8a;--blue-mid:#2451a0;
-  --blue-light:#3667c6;--gold:#c9861a;--gold-light:#e8a832;--gold-pale:#fef4df;
-  --teal:#0891b2;--teal-light:#22d3ee;--cream:#f0f4fb;--white:#ffffff;
-  --text-dark:#0f172a;--text-mid:#374151;--text-light:#6b7280;
-  --shadow-sm:0 2px 14px rgba(10,26,80,.07);--shadow-md:0 8px 36px rgba(10,26,80,.14);
-  --shadow-lg:0 24px 64px rgba(10,26,80,.22);--radius:16px;--radius-sm:10px;
+  --navy:       #07111f;
+  --navy-mid:   #0f2240;
+  --blue-royal: #1a3a8a;
+  --blue-mid:   #2451a0;
+  --blue-light: #3667c6;
+  --gold:       #c9861a;
+  --gold-light: #e8a832;
+  --gold-pale:  #fef4df;
+  --teal:       #0891b2;
+  --teal-light: #22d3ee;
+  --cream:      #f0f4fb;
+  --white:      #ffffff;
+  --text-dark:  #0f172a;
+  --text-mid:   #374151;
+  --text-light: #6b7280;
+  --shadow-sm:  0 2px 14px rgba(10,26,80,.07);
+  --shadow-md:  0 8px 36px rgba(10,26,80,.14);
+  --shadow-lg:  0 24px 64px rgba(10,26,80,.22);
+  --radius:     16px;
+  --radius-sm:  10px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-dark);overflow-x:hidden;padding-bottom:0;}
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-dark);overflow-x:hidden;}
+
+/* ── NAVBAR ── */
 .navbar{background:var(--navy);padding:0 22px;display:flex;align-items:center;justify-content:space-between;height:70px;position:sticky;top:0;z-index:200;box-shadow:0 4px 28px rgba(0,0,0,.45);border-bottom:2px solid var(--blue-royal);}
 .nav-brand{display:flex;align-items:center;gap:12px;}
 .nav-logo img{width:48px;height:48px;object-fit:contain;border-radius:8px;background:white;padding:3px;box-shadow:0 0 0 2px var(--gold);}
@@ -53,45 +42,65 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .nav-right{display:flex;gap:8px;align-items:center;}
 .nav-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:white;padding:7px 14px;border-radius:8px;font-size:12px;cursor:pointer;transition:.2s;font-family:'Outfit',sans-serif;font-weight:500;}
 .nav-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--navy);}
-.admin-badge{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;display:none;}
+.admin-badge{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;display:none;animation:pulse 2s infinite;}
 .admin-badge.show{display:block;}
+
+/* ── TICKER ── */
 .ticker-wrap{background:linear-gradient(90deg,var(--blue-royal),var(--teal),var(--blue-royal));padding:9px 0;overflow:hidden;white-space:nowrap;}
 .ticker-inner{display:inline-block;animation:ticker 30s linear infinite;padding-left:100%;}
 .ticker-inner span{font-size:12px;font-weight:600;color:#fff;padding:0 36px;letter-spacing:.3px;}
 .ticker-inner span::before{content:"📢  ";}
 @keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-100%);}}
+
+/* ── HERO ── */
 .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 50%,var(--blue-royal) 100%);padding:60px 20px 70px;text-align:center;position:relative;overflow:hidden;}
 .hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none;}
-.hero-logo{width:96px;height:96px;object-fit:contain;margin:0 auto 18px;display:block;border-radius:12px;background:white;padding:6px;box-shadow:0 0 0 3px var(--gold),0 8px 32px rgba(0,0,0,.4);}
-.hero h1{font-size:clamp(20px,4vw,32px);font-weight:700;color:#fff;margin-bottom:6px;}
-.hero-sub{color:rgba(255,255,255,.6);font-size:13px;margin-bottom:22px;letter-spacing:.5px;}
-.hero-info-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+.hero::after{content:'';position:absolute;top:-60%;left:20%;width:600px;height:600px;background:radial-gradient(ellipse,rgba(200,134,26,.06) 0%,transparent 65%);pointer-events:none;}
+.hero-logo{width:96px;height:96px;object-fit:contain;margin:0 auto 18px;display:block;filter:drop-shadow(0 6px 20px rgba(0,0,0,.5));animation:fadeDown .7s ease;border-radius:12px;background:white;padding:6px;box-shadow:0 0 0 3px var(--gold),0 8px 32px rgba(0,0,0,.4);}
+.hero h1{font-size:clamp(20px,4vw,32px);font-weight:700;color:#fff;margin-bottom:6px;animation:fadeDown .8s ease;}
+.hero-sub{color:rgba(255,255,255,.6);font-size:13px;margin-bottom:22px;animation:fadeDown .9s ease;letter-spacing:.5px;}
+.hero-info-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;animation:fadeDown 1s ease;}
 .info-chip{background:rgba(255,255,255,.08);border:1px solid rgba(200,134,26,.4);color:var(--gold-light);padding:6px 16px;border-radius:20px;font-size:12px;font-weight:500;backdrop-filter:blur(4px);}
 @keyframes fadeDown{from{opacity:0;transform:translateY(-14px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── STATS ── */
 .stats-section{background:var(--navy);padding:44px 20px;border-top:1px solid rgba(200,134,26,.2);}
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:16px;max-width:860px;margin:auto;}
 .stat-card{text-align:center;border:1px solid rgba(200,134,26,.2);border-radius:var(--radius);padding:24px 12px;background:rgba(26,58,138,.25);transition:.3s;}
 .stat-card:hover{border-color:var(--gold);transform:translateY(-3px);}
 .stat-card .num{font-size:34px;font-weight:700;color:var(--gold-light);font-family:'Amiri',serif;}
 .stat-card .lbl{font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.6px;margin-top:4px;}
+
+/* ── SECTION HEADER ── */
 .section-header{text-align:center;padding:48px 20px 28px;}
 .section-header h2{font-size:22px;font-weight:700;color:var(--blue-royal);display:inline-block;position:relative;}
 .section-header h2::after{content:'';display:block;height:3px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:7px;border-radius:2px;}
 .section-header p{color:var(--text-light);font-size:13px;margin-top:7px;}
+
+/* ── GRID ── */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;padding:0 20px 50px;max-width:1200px;margin:auto;}
+
+/* ── CARD ── */
 .card{background:white;border-radius:var(--radius);padding:22px 18px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow-sm);cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);border:1px solid rgba(0,0,0,.05);border-left:3px solid transparent;}
 .card:hover{transform:translateY(-6px) scale(1.01);box-shadow:var(--shadow-md);border-left-color:var(--gold);}
 .card-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
-.card-icon.blue{background:rgba(26,58,138,.08);}.card-icon.cyan{background:rgba(8,145,178,.1);}
-.card-icon.green{background:rgba(16,185,129,.1);}.card-icon.purple{background:rgba(139,92,246,.1);}
-.card-icon.red{background:rgba(239,68,68,.1);}.card-icon.orange{background:rgba(249,115,22,.1);}
-.card-icon.pink{background:rgba(236,72,153,.1);}.card-icon.gold{background:rgba(201,134,26,.1);}
+.card-icon.blue{background:rgba(26,58,138,.08);}
+.card-icon.cyan{background:rgba(8,145,178,.1);}
+.card-icon.green{background:rgba(16,185,129,.1);}
+.card-icon.purple{background:rgba(139,92,246,.1);}
+.card-icon.red{background:rgba(239,68,68,.1);}
+.card-icon.orange{background:rgba(249,115,22,.1);}
+.card-icon.pink{background:rgba(236,72,153,.1);}
+.card-icon.gold{background:rgba(201,134,26,.1);}
 .card-icon.teal{background:rgba(8,145,178,.1);}
 .card-body h3{font-size:14px;font-weight:600;color:var(--text-dark);margin-bottom:2px;}
 .card-body p{font-size:12px;color:var(--text-light);}
 .card-arrow{margin-left:auto;color:#ccc;font-size:16px;transition:.2s;}
 .card:hover .card-arrow{color:var(--gold);transform:translateX(4px);}
+
+/* ── OVERLAY & MODAL ── */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(5px);display:none;justify-content:center;align-items:center;z-index:1000;padding:14px;}
+.overlay.active{display:flex;}
 .modal{background:white;border-radius:var(--radius);width:100%;max-width:540px;max-height:92vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:popIn .3s cubic-bezier(.34,1.56,.64,1);}
 @keyframes popIn{from{opacity:0;transform:scale(.88);}to{opacity:1;transform:scale(1);}}
 .modal-header{background:linear-gradient(135deg,var(--navy),var(--blue-royal));color:white;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-radius:var(--radius) var(--radius) 0 0;position:sticky;top:0;z-index:10;}
@@ -102,16 +111,22 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .primary-btn{background:linear-gradient(135deg,var(--blue-royal),var(--blue-mid));color:white;border:none;padding:11px 26px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:.2s;}
 .primary-btn:hover{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);}
 .primary-btn:disabled{opacity:.5;cursor:not-allowed;}
+
+/* ── PROGRAMMES – TABS ── */
 .prog-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;background:#f4f6fb;border-radius:12px;padding:6px;}
 .prog-tab{padding:9px 16px;border-radius:8px;font-size:12px;cursor:pointer;font-family:'Outfit',sans-serif;transition:.25s;font-weight:600;border:none;background:transparent;color:var(--text-mid);}
 .prog-tab.active{background:white;color:var(--blue-royal);box-shadow:0 2px 10px rgba(26,58,138,.15);}
 .prog-tab:hover:not(.active){background:rgba(255,255,255,.6);}
+
+/* ══ SCOREBOARD ══ */
 .sb-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 50%,var(--blue-royal) 100%);border-radius:14px;padding:20px 18px 16px;margin-bottom:18px;position:relative;overflow:hidden;}
+.sb-hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='20' cy='20' r='3'/%3E%3C/g%3E%3C/svg%3E");pointer-events:none;}
 .sb-hero-title{color:rgba(255,255,255,.5);font-size:10px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px;}
 .sb-leader-banner{display:flex;align-items:center;gap:12px;}
 .sb-leader-crown{font-size:32px;animation:float 2s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
-.sb-leader-info{flex:1;}.sb-leader-name{font-size:20px;font-weight:700;color:var(--gold-light);line-height:1.1;}
+.sb-leader-info{flex:1;}
+.sb-leader-name{font-size:20px;font-weight:700;color:var(--gold-light);line-height:1.1;}
 .sb-leader-sub{font-size:12px;color:rgba(255,255,255,.55);margin-top:3px;}
 .sb-leader-score-big{font-family:'Amiri',serif;font-size:42px;font-weight:700;color:white;line-height:1;}
 .sb-leader-score-lbl{font-size:10px;color:rgba(255,255,255,.45);text-align:center;letter-spacing:.5px;}
@@ -128,10 +143,11 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .sb-team-row:hover{transform:translateX(3px);box-shadow:0 4px 18px rgba(26,58,138,.12);}
 .sb-rank-medal{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;font-weight:700;}
 .sb-rank-medal.m1{background:linear-gradient(135deg,#ffd700,#f59e0b);color:white;box-shadow:0 3px 10px rgba(245,158,11,.4);}
-.sb-rank-medal.m2{background:linear-gradient(135deg,#c0c0c0,#9ca3af);color:white;}
-.sb-rank-medal.m3{background:linear-gradient(135deg,#cd7f32,#b45309);color:white;}
+.sb-rank-medal.m2{background:linear-gradient(135deg,#c0c0c0,#9ca3af);color:white;box-shadow:0 3px 8px rgba(156,163,175,.4);}
+.sb-rank-medal.m3{background:linear-gradient(135deg,#cd7f32,#b45309);color:white;box-shadow:0 3px 8px rgba(180,83,9,.4);}
 .sb-rank-medal.mN{background:linear-gradient(135deg,var(--blue-royal),var(--blue-mid));color:white;}
-.sb-team-info{flex:1;min-width:0;}.sb-team-name{font-size:14px;font-weight:700;color:var(--text-dark);}
+.sb-team-info{flex:1;min-width:0;}
+.sb-team-name{font-size:14px;font-weight:700;color:var(--text-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .sb-team-leader{font-size:11px;color:var(--text-light);margin-top:2px;}
 .sb-score-col{text-align:right;flex-shrink:0;}
 .sb-score-num{font-size:22px;font-weight:700;color:var(--blue-royal);font-family:'Amiri',serif;line-height:1;}
@@ -140,14 +156,18 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .sb-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--blue-royal),var(--gold));transition:width .8s cubic-bezier(.34,1,.64,1);}
 .sb-ind-table{width:100%;border-collapse:collapse;margin-top:4px;}
 .sb-ind-table th{background:var(--blue-royal);color:white;padding:10px 12px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.3px;}
-.sb-ind-table th:first-child{border-radius:8px 0 0 0;}.sb-ind-table th:last-child{border-radius:0 8px 0 0;}
+.sb-ind-table th:first-child{border-radius:8px 0 0 0;}
+.sb-ind-table th:last-child{border-radius:0 8px 0 0;}
 .sb-ind-table td{padding:9px 12px;border-bottom:1px solid #f0f2fa;font-size:12px;color:var(--text-mid);}
-.sb-ind-table tr:last-child td{border-bottom:none;}.sb-ind-table tr:hover td{background:#f8faff;}
+.sb-ind-table tr:last-child td{border-bottom:none;}
+.sb-ind-table tr:hover td{background:#f8faff;}
 .sb-ind-table .del-score-btn{background:none;border:none;cursor:pointer;color:#ef4444;font-size:14px;padding:2px 6px;border-radius:6px;transition:.2s;}
 .sb-ind-table .del-score-btn:hover{background:#fef2f2;}
 .pts-badge{display:inline-block;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);border-radius:12px;padding:2px 9px;font-size:11px;font-weight:700;}
 .sb-section-title{font-size:13px;font-weight:700;color:var(--blue-royal);margin:18px 0 10px;display:flex;align-items:center;gap:7px;}
 .sb-section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(26,58,138,.2),transparent);}
+
+/* ── TEAM CARDS ── */
 .team-card{background:linear-gradient(135deg,rgba(26,58,138,.05),rgba(8,145,178,.04));border:1.5px solid rgba(26,58,138,.15);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;position:relative;overflow:hidden;}
 .team-card::before{content:'';position:absolute;top:0;right:0;width:80px;height:80px;background:var(--gold);opacity:.06;border-radius:0 0 0 100%;}
 .team-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
@@ -169,6 +189,8 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .team-edit-form{background:#f8faff;border:1.5px dashed var(--blue-light);border-radius:10px;padding:13px;margin-bottom:10px;display:none;}
 .team-edit-form.open{display:block;}
 .edit-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+
+/* ── ADMIN CONTROLS ── */
 .admin-controls{background:linear-gradient(135deg,rgba(200,134,26,.08),rgba(200,134,26,.04));border:2px dashed var(--gold);border-radius:var(--radius-sm);padding:16px;margin-bottom:18px;}
 .admin-controls h4{font-size:13px;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:6px;font-weight:700;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
@@ -178,12 +200,16 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .form-label{font-size:11px;font-weight:600;color:var(--text-mid);margin-bottom:4px;display:block;}
 .add-btn{background:var(--gold);color:var(--navy);border:none;padding:9px 18px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:.2s;font-family:'Outfit',sans-serif;}
 .add-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
+
+/* ── EVENTS ── */
 .event-card{background:white;border:1px solid #e8e8e8;border-left:4px solid var(--teal);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px;transition:.2s;display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .event-card:hover{box-shadow:var(--shadow-sm);}
 .event-title{font-size:13px;font-weight:600;color:var(--text-dark);}
 .event-date{font-size:11px;color:var(--text-light);margin-top:2px;}
 .ev-del-btn{background:none;border:none;cursor:pointer;color:#d1d5db;font-size:16px;transition:.2s;flex-shrink:0;}
 .ev-del-btn:hover{color:#ef4444;}
+
+/* ── LOGIN MODAL ── */
 .login-form{text-align:center;padding:20px 0;}
 .login-input{width:100%;max-width:240px;border:2px solid #e0e0e0;border-radius:10px;padding:12px 16px;font-size:14px;text-align:center;margin-bottom:14px;font-family:'Outfit',sans-serif;letter-spacing:3px;font-weight:600;outline:none;}
 .login-input:focus{border-color:var(--gold);}
@@ -191,6 +217,8 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .login-btn:hover{transform:scale(1.05);box-shadow:0 6px 20px rgba(200,134,26,.3);}
 .login-error{color:#ef4444;font-size:12px;margin-top:8px;display:none;}
 .login-success{color:#22c55e;font-size:12px;margin-top:8px;display:none;}
+
+/* ── BLACKBOARD ── */
 .board-modal{background:#070d1a!important;color:white;}
 .board-controls{padding:12px 18px;background:#030810;display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-bottom:1px solid rgba(255,255,255,.06);}
 .tool-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:white;padding:6px 13px;border-radius:8px;cursor:pointer;font-size:12px;font-family:'Outfit',sans-serif;transition:.2s;display:flex;align-items:center;gap:4px;}
@@ -204,6 +232,8 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .arabic-select{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:white;padding:6px 10px;border-radius:8px;font-size:18px;font-family:'Amiri',serif;cursor:pointer;}
 #board{width:100%;height:300px;background:#030810;border-radius:var(--radius-sm);border:1px solid rgba(200,134,26,.25);display:block;touch-action:none;cursor:crosshair;}
 .board-canvas-wrap{padding:14px 18px 18px;}
+
+/* ── QUIZ ── */
 .quiz-progress{height:5px;background:#e5e7eb;overflow:hidden;}
 .quiz-bar{height:100%;background:linear-gradient(90deg,var(--blue-royal),var(--gold));transition:width .4s;}
 .quiz-body{padding:26px 22px;}
@@ -224,6 +254,8 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .cat-pill{padding:6px 15px;border:2px solid #e0e0e0;border-radius:20px;font-size:12px;cursor:pointer;font-family:'Outfit',sans-serif;transition:.2s;}
 .cat-pill.active{background:var(--blue-royal);color:white;border-color:var(--blue-royal);}
 .quiz-category-select{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:18px;}
+
+/* ── RESULTS ── */
 .result-form input,.result-form select{width:100%;border:2px solid #e8e8e8;border-radius:var(--radius-sm);padding:11px 14px;font-size:13px;margin-bottom:12px;font-family:'Outfit',sans-serif;transition:.2s;background:#fafafa;outline:none;}
 .result-form input:focus,.result-form select:focus{border-color:var(--teal);}
 .result-form label{font-size:12px;font-weight:600;color:var(--text-mid);display:block;margin-bottom:4px;}
@@ -232,12 +264,19 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .result-table th{background:var(--blue-royal);color:white;font-weight:600;}
 .result-table tr:hover td{background:#f8f8f8;}
 .grade-pill{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;}
-.grade-A{background:#d1fae5;color:#065f46;}.grade-B{background:#dbeafe;color:#1e40af;}.grade-C{background:#fef9c3;color:#854d0e;}
+.grade-A{background:#d1fae5;color:#065f46;}
+.grade-B{background:#dbeafe;color:#1e40af;}
+.grade-C{background:#fef9c3;color:#854d0e;}
+
+/* ══════════════════════════════
+   TIMETABLE – ENHANCED
+══════════════════════════════ */
 .tt-wrapper{display:flex;flex-direction:column;gap:0;}
 .tt-day-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
 .day-tab{padding:7px 15px;border-radius:20px;font-size:12px;cursor:pointer;border:2px solid #e0e0e0;font-family:'Outfit',sans-serif;transition:.2s;font-weight:500;}
 .day-tab.active{background:var(--blue-royal);color:white;border-color:var(--blue-royal);}
 .day-tab:hover:not(.active){background:#f0f4ff;border-color:#c5d0f0;}
+
 .tt-entry{display:flex;align-items:flex-start;gap:0;margin-bottom:10px;position:relative;}
 .tt-time-col{width:80px;flex-shrink:0;text-align:right;padding-right:14px;padding-top:12px;}
 .tt-time-txt{font-size:11px;font-weight:700;color:var(--text-light);}
@@ -260,19 +299,31 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .tt-del-row{display:flex;justify-content:flex-end;margin-top:6px;}
 .tt-del-btn{background:none;border:none;cursor:pointer;color:#d1d5db;font-size:13px;padding:2px 6px;border-radius:6px;transition:.2s;font-family:'Outfit',sans-serif;}
 .tt-del-btn:hover{color:#ef4444;background:#fef2f2;}
+
 .tt-empty{text-align:center;padding:32px 20px;color:var(--text-light);font-size:13px;}
 .tt-empty-icon{font-size:36px;margin-bottom:8px;}
+
+/* ══════════════════════════════
+   EXAM TIMETABLE – PROFESSIONAL
+══════════════════════════════ */
+.exam-tt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.exam-tt-filter{display:flex;gap:6px;flex-wrap:wrap;}
+.exam-filter-btn{padding:6px 13px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:2px solid #e0e0e0;font-family:'Outfit',sans-serif;transition:.2s;}
+.exam-filter-btn.active{background:var(--blue-royal);color:white;border-color:var(--blue-royal);}
+
 .exam-tt-table-wrap{overflow-x:auto;border-radius:12px;box-shadow:0 2px 16px rgba(26,58,138,.08);}
 .exam-tt-table{width:100%;border-collapse:collapse;font-size:13px;}
 .exam-tt-table thead tr{background:linear-gradient(135deg,var(--navy),var(--blue-royal));}
 .exam-tt-table th{padding:12px 14px;text-align:left;color:white;font-weight:600;font-size:11px;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap;}
-.exam-tt-table th:first-child{border-radius:12px 0 0 0;}.exam-tt-table th:last-child{border-radius:0 12px 0 0;}
+.exam-tt-table th:first-child{border-radius:12px 0 0 0;}
+.exam-tt-table th:last-child{border-radius:0 12px 0 0;}
 .exam-tt-table tbody tr{border-bottom:1px solid #f0f2fa;transition:.2s;}
 .exam-tt-table tbody tr:last-child{border-bottom:none;}
 .exam-tt-table tbody tr:hover{background:#f5f8ff;}
 .exam-tt-table td{padding:13px 14px;vertical-align:middle;}
 .exam-date-cell{display:flex;flex-direction:column;}
 .exam-date-main{font-weight:700;color:var(--text-dark);font-size:13px;}
+.exam-date-sub{font-size:10px;color:var(--text-light);margin-top:1px;}
 .exam-day-badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:10px;font-weight:700;background:rgba(26,58,138,.08);color:var(--blue-royal);}
 .exam-time-cell{font-weight:600;color:var(--text-dark);font-size:12px;}
 .exam-time-cell span{display:block;font-size:10px;color:var(--text-light);font-weight:400;margin-top:1px;}
@@ -283,15 +334,17 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .exam-del-btn:hover{color:#ef4444;background:#fef2f2;}
 .exam-status-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:12px;font-size:10px;font-weight:700;}
 .exam-status-upcoming{background:#dbeafe;color:#1e40af;}
-.exam-status-today{background:#fef9c3;color:#854d0e;}
+.exam-status-today{background:#fef9c3;color:#854d0e;animation:pulse 1.5s infinite;}
 .exam-status-past{background:#f3f4f6;color:#6b7280;}
 .exam-empty{text-align:center;padding:48px 20px;color:var(--text-light);}
 .exam-summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
 .exam-sum-card{background:white;border:1.5px solid rgba(26,58,138,.1);border-radius:10px;padding:12px;text-align:center;}
 .exam-sum-num{font-size:24px;font-weight:700;color:var(--blue-royal);font-family:'Amiri',serif;}
 .exam-sum-lbl{font-size:10px;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
-.exam-filter-btn{padding:6px 13px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:2px solid #e0e0e0;font-family:'Outfit',sans-serif;transition:.2s;}
-.exam-filter-btn.active{background:var(--blue-royal);color:white;border-color:var(--blue-royal);}
+
+/* ══════════════════════════════
+   STAFF – ENHANCED
+══════════════════════════════ */
 .staff-grid{display:grid;grid-template-columns:1fr;gap:12px;}
 .staff-card-pro{background:white;border:1.5px solid rgba(26,58,138,.1);border-radius:14px;padding:16px;display:flex;align-items:flex-start;gap:14px;transition:.25s;position:relative;overflow:hidden;}
 .staff-card-pro::before{content:'';position:absolute;top:0;right:0;width:60px;height:60px;background:var(--gold);opacity:.05;border-radius:0 0 0 100%;}
@@ -300,6 +353,7 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .staff-info-pro{flex:1;min-width:0;}
 .staff-name-pro{font-size:15px;font-weight:700;color:var(--text-dark);}
 .staff-role-pro{font-size:12px;color:var(--blue-royal);font-weight:600;margin-top:2px;}
+.staff-qual-pro{font-size:11px;color:var(--text-light);margin-top:3px;display:flex;align-items:center;gap:4px;}
 .staff-contact-row{display:flex;gap:10px;margin-top:7px;flex-wrap:wrap;}
 .staff-contact-chip{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-mid);background:#f5f7ff;padding:3px 9px;border-radius:12px;}
 .staff-actions{display:flex;gap:5px;flex-shrink:0;}
@@ -308,6 +362,12 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .staff-action-btn.danger:hover{background:#ef4444;border-color:#ef4444;color:white;}
 .staff-edit-form{background:#f8faff;border:1.5px dashed var(--blue-light);border-radius:10px;padding:14px;margin-top:10px;display:none;}
 .staff-edit-form.open{display:block;}
+.staff-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.staff-dept-label{font-size:11px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.8px;background:#f0f4fb;padding:4px 10px;border-radius:8px;}
+
+/* ══════════════════════════════
+   SYLLABUS – ENHANCED
+══════════════════════════════ */
 .syl-accordion .syl-item{border:1.5px solid #eef2ff;border-radius:12px;margin-bottom:10px;overflow:hidden;transition:.2s;}
 .syl-item.open{box-shadow:0 4px 16px rgba(26,58,138,.08);}
 .syl-header{background:white;padding:14px 17px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:13px;font-weight:700;transition:.2s;gap:10px;}
@@ -321,7 +381,7 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .syl-item.open .syl-badge{background:rgba(255,255,255,.15);color:var(--gold-light);}
 .syl-item.open .syl-chevron{color:white;transform:rotate(180deg);}
 .syl-body{max-height:0;overflow:hidden;transition:max-height .35s ease;background:white;}
-.syl-item.open .syl-body{max-height:500px;}
+.syl-item.open .syl-body{max-height:400px;}
 .syl-body-inner{padding:14px 17px;}
 .syl-items-list{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
 .syl-item-row{display:flex;align-items:center;gap:9px;padding:7px 10px;background:#f9faff;border-radius:8px;border:1px solid rgba(26,58,138,.06);}
@@ -340,10 +400,14 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .syl-del-section-btn:hover{background:#ef4444;color:white;}
 .syl-edit-form{background:#f8faff;border:1.5px dashed var(--blue-light);border-radius:9px;padding:12px;margin-top:10px;display:none;}
 .syl-edit-form.open{display:block;}
+
+/* ── REG FORM ── */
 .reg-form input,.reg-form select,.reg-form textarea{width:100%;border:2px solid #e8e8e8;border-radius:var(--radius-sm);padding:10px 13px;font-size:13px;margin-bottom:11px;font-family:'Outfit',sans-serif;transition:.2s;background:#fafafa;outline:none;}
 .reg-form input:focus,.reg-form select:focus{border-color:var(--teal);}
 .reg-form label{font-size:12px;font-weight:600;color:var(--text-mid);display:block;margin-bottom:3px;}
 .success-msg{text-align:center;padding:20px;background:#eff6ff;border-radius:var(--radius-sm);color:var(--blue-royal);display:none;}
+
+/* ── NEWS ── */
 .news-item{display:flex;gap:13px;align-items:flex-start;padding:15px 0;border-bottom:1px solid #f0f0f0;}
 .news-date{background:linear-gradient(135deg,var(--blue-royal),var(--blue-mid));color:white;border-radius:10px;text-align:center;padding:7px 10px;min-width:44px;flex-shrink:0;}
 .news-date .day{font-size:19px;font-weight:700;line-height:1;}
@@ -351,6 +415,8 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .news-content h4{font-size:13px;font-weight:600;margin-bottom:3px;}
 .news-content p{font-size:12px;color:var(--text-light);line-height:1.5;}
 .news-tag{display:inline-block;font-size:10px;padding:2px 8px;background:rgba(26,58,138,.09);color:var(--blue-royal);border-radius:10px;margin-top:5px;font-weight:500;}
+
+/* ── QURAN ── */
 .quran-tab-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px;}
 .q-tab{padding:6px 14px;border:2px solid #e0e0e0;border-radius:20px;font-size:12px;cursor:pointer;font-family:'Outfit',sans-serif;transition:.2s;}
 .q-tab.active{background:var(--blue-royal);color:white;border-color:var(--blue-royal);}
@@ -369,11 +435,15 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .player-info .psub{color:rgba(255,255,255,.5);font-size:11px;}
 .player-progress{flex:1;height:3px;background:rgba(255,255,255,.15);border-radius:3px;margin-top:6px;overflow:hidden;}
 .player-bar-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .5s linear;width:0%;}
+
+/* ── DUA CARDS ── */
 .dua-card{background:#f8f9ff;border:1px solid rgba(26,58,138,.1);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;border-left:3px solid var(--gold);}
 .dua-card .dua-arabic{font-family:'Amiri',serif;font-size:22px;color:var(--blue-royal);text-align:right;direction:rtl;margin-bottom:8px;line-height:1.8;}
 .dua-card .dua-trans{font-size:12px;color:var(--text-mid);font-style:italic;margin-bottom:4px;}
 .dua-card .dua-meaning{font-size:12px;color:var(--text-light);}
 .dua-card .dua-label{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+
+/* ── WUDU / SALAH ── */
 .wudu-scroll-wrap{max-height:340px;overflow-y:auto;padding:4px 0;}
 .wudu-steps{display:flex;flex-direction:column;gap:0;}
 .wudu-step{display:flex;align-items:flex-start;gap:14px;padding:14px 12px;border-bottom:1px solid #f0f0f0;opacity:.35;transition:all .5s ease;border-radius:10px;}
@@ -391,6 +461,8 @@ body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text-da
 .salah-icon{width:44px;height:44px;border-radius:50%;background:rgba(26,58,138,.07);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:2px solid transparent;transition:.4s;}
 .salah-step.active-step .salah-icon{background:var(--blue-royal);border-color:var(--gold);animation:pulse 1.3s infinite;}
 .step-num-badge{width:22px;height:22px;background:var(--gold);color:var(--navy);border-radius:50%;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+
+/* ── FOOTER ── */
 footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text-align:center;border-top:2px solid rgba(200,134,26,.25);}
 .footer-logo{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:14px;}
 .footer-logo img{width:50px;height:50px;object-fit:contain;background:white;border-radius:8px;padding:3px;box-shadow:0 0 0 2px var(--gold);}
@@ -399,20 +471,63 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
 .footer-details{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin:14px 0;font-size:12px;}
 .footer-details span{display:flex;align-items:center;gap:5px;}
 .gold-divider{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:14px auto;max-width:200px;}
+
+/* ── TOAST ── */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:white;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:var(--shadow-md);z-index:9999;transform:translateY(60px);opacity:0;transition:.3s;pointer-events:none;border-left:3px solid var(--gold);}
 .toast.show{transform:translateY(0);opacity:1;}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(200,134,26,.5);}50%{box-shadow:0 0 0 9px rgba(200,134,26,0);}}
+
+/* ── FIREBASE LOADING SCREEN ── */
+#fbLoadScreen{position:fixed;inset:0;background:var(--navy);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;}
+.fb-load-logo{font-size:56px;animation:float 1.6s ease-in-out infinite;}
+.fb-load-title{font-size:18px;font-weight:700;color:white;}
+.fb-load-sub{font-size:13px;color:rgba(255,255,255,.5);}
+.fb-spinner{width:44px;height:44px;border:3px solid rgba(200,134,26,.2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.9s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── FIREBASE SETUP MODAL ── */
+#fbSetupModal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:99998;display:none;align-items:center;justify-content:center;padding:16px;}
+.fb-setup-box{background:white;border-radius:20px;max-width:520px;width:100%;padding:28px;box-shadow:var(--shadow-lg);}
+.fb-setup-box h2{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.fb-setup-box p{font-size:13px;color:var(--text-light);margin-bottom:18px;line-height:1.6;}
+.fb-step{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;padding:12px;background:#f8faff;border-radius:10px;border-left:3px solid var(--blue-royal);}
+.fb-step-num{width:26px;height:26px;background:var(--blue-royal);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.fb-step-text{font-size:12px;color:var(--text-mid);line-height:1.6;}
+.fb-step-text strong{color:var(--text-dark);display:block;margin-bottom:2px;}
+.fb-step-text code{background:#e8eef8;padding:2px 6px;border-radius:5px;font-size:11px;color:var(--blue-royal);}
+.fb-config-input{width:100%;border:2px solid #e0e0e0;border-radius:9px;padding:9px 12px;font-size:12px;font-family:'Outfit',sans-serif;margin-bottom:8px;outline:none;transition:.2s;}
+.fb-config-input:focus{border-color:var(--gold);}
+.fb-save-btn{background:linear-gradient(135deg,var(--blue-royal),var(--blue-mid));color:white;border:none;padding:11px 24px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;width:100%;transition:.2s;margin-top:4px;}
+.fb-save-btn:hover{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);}
+.fb-skip-btn{background:none;border:1px solid #e0e0e0;color:var(--text-light);padding:9px 24px;border-radius:10px;font-size:12px;cursor:pointer;font-family:'Outfit',sans-serif;width:100%;margin-top:8px;transition:.2s;}
+.fb-skip-btn:hover{border-color:var(--text-mid);color:var(--text-mid);}
+
+/* ── SYNC STATUS BADGE ── */
+#syncBadge{position:fixed;bottom:24px;left:24px;background:var(--navy);color:white;padding:8px 14px;border-radius:20px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:6px;box-shadow:0 4px 16px rgba(0,0,0,.3);z-index:5000;transition:.4s;border:1px solid rgba(255,255,255,.1);}
+#syncBadge.synced{border-color:rgba(34,197,94,.3);}
+#syncBadge.syncing{border-color:rgba(200,134,26,.4);}
+#syncBadge.offline{border-color:rgba(239,68,68,.3);}
+.sync-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sync-dot.green{background:#22c55e;box-shadow:0 0 6px #22c55e;}
+.sync-dot.gold{background:var(--gold);animation:pulse 1s infinite;}
+.sync-dot.red{background:#ef4444;}
+
+/* ── RESPONSIVE ── */
 @media(max-width:600px){
   .grid{grid-template-columns:1fr 1fr;gap:11px;padding:0 13px 38px;}
   .card{flex-direction:column;text-align:center;gap:9px;padding:16px 10px;}
-  .card-arrow{display:none;}.nav-btn{display:none;}
-  #board{height:240px;}.form-row{grid-template-columns:1fr;}
-  .form-row-3{grid-template-columns:1fr;}.edit-row{grid-template-columns:1fr;}
-  .sb-leader-score-big{font-size:30px;}.exam-summary-row{grid-template-columns:1fr 1fr;}
+  .card-arrow{display:none;}
+  .nav-btn{display:none;}
+  #board{height:240px;}
+  .form-row{grid-template-columns:1fr;}
+  .form-row-3{grid-template-columns:1fr;}
+  .edit-row{grid-template-columns:1fr;}
+  .sb-leader-score-big{font-size:30px;}
+  .exam-summary-row{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
 <body>
+
 <!-- NAVBAR -->
 <nav class="navbar">
   <div class="nav-brand">
@@ -430,13 +545,19 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
     <button class="nav-btn" onclick="openModal('newsModal')">🔔 News</button>
   </div>
 </nav>
-<div class="ticker-wrap"><div class="ticker-inner">
-  <span>Annual Exam Registration Open – Last date: 15 April 2025</span>
-  <span>New batch starts from 1st Muharram – Admissions open now</span>
-  <span>Results for 2024-25 Annual Exams published – Check portal</span>
-  <span>Friday Special Dars every week after Jumu'ah prayer</span>
-  <span>Download Admit Cards from the portal – NUM 268 Pattarkulam</span>
-</div></div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span>Annual Exam Registration Open – Last date: 15 April 2025</span>
+    <span>New batch starts from 1st Muharram – Admissions open now</span>
+    <span>Results for 2024-25 Annual Exams published – Check portal</span>
+    <span>Friday Special Dars every week after Jumu'ah prayer</span>
+    <span>Download Admit Cards from the portal – NUM 268 Pattarkulam</span>
+  </div>
+</div>
+
+<!-- HERO -->
 <div class="hero">
   <img class="hero-logo" src="logo.png" alt="NUM Logo">
   <h1>Nadvathum Uloom Madrasa</h1>
@@ -449,6 +570,8 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
     <span class="info-chip">⏰ 6:00 AM – 9:00 AM</span>
   </div>
 </div>
+
+<!-- STATS -->
 <div class="stats-section">
   <div class="stats-grid">
     <div class="stat-card"><div class="num">450+</div><div class="lbl">Students</div></div>
@@ -459,9 +582,14 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
     <div class="stat-card"><div class="num">331</div><div class="lbl">Range No</div></div>
   </div>
 </div>
-<div class="section-header"><h2>Student Services</h2><p>Everything you need for your Madrasa journey</p></div>
+
+<!-- SERVICES GRID -->
+<div class="section-header">
+  <h2>Student Services</h2>
+  <p>Everything you need for your Madrasa journey</p>
+</div>
 <div class="grid">
-  <div class="card" onclick="openModal('programmeModal')"><div class="card-icon blue">🏆</div><div class="card-body"><h3>Programmes</h3><p>Nabidhinan &amp; Events</p></div><div class="card-arrow">›</div></div>
+  <div class="card" onclick="openModal('programmeModal')"><div class="card-icon blue">🏆</div><div class="card-body"><h3>Programmes</h3><p>Nabidhinan & Events</p></div><div class="card-arrow">›</div></div>
   <div class="card" onclick="openModal('resultModal')"><div class="card-icon cyan">📊</div><div class="card-body"><h3>Exam Results</h3><p>Check marks &amp; grades</p></div><div class="card-arrow">›</div></div>
   <div class="card" onclick="openModal('timetableModal')"><div class="card-icon green">📅</div><div class="card-body"><h3>Class Timetable</h3><p>Weekly schedule</p></div><div class="card-arrow">›</div></div>
   <div class="card" onclick="openModal('examTimetableModal')"><div class="card-icon teal">📋</div><div class="card-body"><h3>Exam Timetable</h3><p>Dates, subjects &amp; times</p></div><div class="card-arrow">›</div></div>
@@ -477,7 +605,9 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   <div class="card" onclick="openModal('staffModal')"><div class="card-icon gold">👨‍🏫</div><div class="card-body"><h3>Our Staff</h3><p>Teachers &amp; management</p></div><div class="card-arrow">›</div></div>
 </div>
 
-<!-- ══ MODALS ══ -->
+<!-- ══════════ MODALS ══════════ -->
+
+<!-- LOGIN -->
 <div id="loginModal" class="overlay">
   <div class="modal" style="max-width:400px;">
     <div class="modal-header"><h2>🔐 Administrator Login</h2><button class="close-btn" onclick="closeModal('loginModal')">✕</button></div>
@@ -485,17 +615,23 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
       <div class="login-form">
         <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">Enter administrator access code</p>
         <input type="password" class="login-input" id="adminCode" placeholder="••••" maxlength="4" onkeydown="if(event.key==='Enter')adminLogin()">
-        <br><button class="login-btn" onclick="adminLogin()">Login</button>
+        <br>
+        <button class="login-btn" onclick="adminLogin()">Login</button>
         <p class="login-error" id="loginError">❌ Invalid code. Please try again.</p>
         <p class="login-success" id="loginSuccess">✅ Login successful!</p>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid #f0f0f0;">
+          <p style="font-size:11px;color:var(--text-light);margin-bottom:8px;">Cloud Sync Settings</p>
+          <button class="nav-btn" style="width:100%;background:#f5f7ff;color:var(--blue-royal);border-color:rgba(26,58,138,.2);padding:9px;" onclick="showFbSetup()">🔥 Reconfigure Firebase / Cloud Sync</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ══ PROGRAMMES – WIDE MODAL ══ -->
 <div id="programmeModal" class="overlay">
   <div class="modal" style="max-width:820px;width:100%;">
-    <div class="modal-header"><h2>🏆 Programmes &amp; Competitions</h2><button class="close-btn" onclick="closeModal('programmeModal')">✕</button></div>
+    <div class="modal-header"><h2>🏆 Programmes & Competitions</h2><button class="close-btn" onclick="closeModal('programmeModal')">✕</button></div>
     <div class="modal-body">
       <div class="prog-tabs">
         <button class="prog-tab active" onclick="switchProgTab(this,'nabidhinan')">🏅 Scoreboard</button>
@@ -504,60 +640,130 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
         <button class="prog-tab" onclick="switchProgTab(this,'teams')">👥 Teams</button>
       </div>
       <div id="nabidhinanTab" class="prog-content">
-        <div id="adminNabidhinan" style="display:none;"><div class="admin-controls"><h4>🔑 Add Score</h4>
-          <div class="form-row"><div><label class="form-label">Select Student</label><select class="form-input" id="nabStudentSelect"></select></div>
-          <div><label class="form-label">Points</label><input type="number" class="form-input" id="nabPoints" placeholder="e.g. 10" min="1"></div></div>
-          <div><label class="form-label">Event / Activity</label><input type="text" class="form-input" id="nabEvent" placeholder="e.g. Arabic Recitation"></div>
-          <button class="add-btn" onclick="addNabScore()">➕ Add Score</button></div></div>
+        <div id="adminNabidhinan" style="display:none;">
+          <div class="admin-controls">
+            <h4>🔑 Add Score</h4>
+            <div class="form-row">
+              <div><label class="form-label">Select Student</label><select class="form-input" id="nabStudentSelect"></select></div>
+              <div><label class="form-label">Points</label><input type="number" class="form-input" id="nabPoints" placeholder="e.g. 10" min="1"></div>
+            </div>
+            <div><label class="form-label">Event / Activity</label><input type="text" class="form-input" id="nabEvent" placeholder="e.g. Arabic Recitation"></div>
+            <button class="add-btn" onclick="addNabScore()">➕ Add Score</button>
+          </div>
+        </div>
         <div id="nabScoreboard"></div>
       </div>
       <div id="quizTab" class="prog-content" style="display:none;">
-        <div id="adminQuiz" style="display:none;"><div class="admin-controls"><h4>🔑 Add Quiz Score</h4>
-          <div class="form-row"><div><label class="form-label">Select Student</label><select class="form-input" id="quizStudentSelect"></select></div>
-          <div><label class="form-label">Score</label><input type="number" class="form-input" id="quizScore" placeholder="0" min="0"></div></div>
-          <div class="form-row"><div><label class="form-label">Quiz Name</label><input type="text" class="form-input" id="quizName" placeholder="e.g. Fiqh Quiz"></div>
-          <div><label class="form-label">Date</label><input type="date" class="form-input" id="quizDate"></div></div>
-          <button class="add-btn" onclick="addQuizScore()">➕ Add Score</button></div></div>
+        <div id="adminQuiz" style="display:none;">
+          <div class="admin-controls">
+            <h4>🔑 Add Quiz Score</h4>
+            <div class="form-row">
+              <div><label class="form-label">Select Student</label><select class="form-input" id="quizStudentSelect"></select></div>
+              <div><label class="form-label">Score</label><input type="number" class="form-input" id="quizScore" placeholder="0" min="0"></div>
+            </div>
+            <div class="form-row">
+              <div><label class="form-label">Quiz Name</label><input type="text" class="form-input" id="quizName" placeholder="e.g. Fiqh Quiz"></div>
+              <div><label class="form-label">Date</label><input type="date" class="form-input" id="quizDate"></div>
+            </div>
+            <button class="add-btn" onclick="addQuizScore()">➕ Add Score</button>
+          </div>
+        </div>
         <div id="quizScoreboard"></div>
       </div>
       <div id="eventsTab" class="prog-content" style="display:none;">
-        <div id="adminEvents" style="display:none;"><div class="admin-controls"><h4>🔑 Add Event</h4>
-          <div><label class="form-label">Event Name</label><input type="text" class="form-input" id="eventName" placeholder="e.g. Annual Sports Day" style="margin-bottom:10px;"></div>
-          <div class="form-row"><div><label class="form-label">Date</label><input type="date" class="form-input" id="eventDate"></div>
-          <div><label class="form-label">Category</label><select class="form-input" id="eventCategory"><option>Academic</option><option>Sports</option><option>Cultural</option><option>Religious</option></select></div></div>
-          <button class="add-btn" onclick="addEvent()">➕ Add Event</button></div></div>
+        <div id="adminEvents" style="display:none;">
+          <div class="admin-controls">
+            <h4>🔑 Add Event</h4>
+            <div><label class="form-label">Event Name</label><input type="text" class="form-input" id="eventName" placeholder="e.g. Annual Sports Day" style="margin-bottom:10px;"></div>
+            <div class="form-row">
+              <div><label class="form-label">Date</label><input type="date" class="form-input" id="eventDate"></div>
+              <div><label class="form-label">Category</label><select class="form-input" id="eventCategory"><option>Academic</option><option>Sports</option><option>Cultural</option><option>Religious</option></select></div>
+            </div>
+            <button class="add-btn" onclick="addEvent()">➕ Add Event</button>
+          </div>
+        </div>
         <div id="eventsList"></div>
       </div>
       <div id="teamsTab" class="prog-content" style="display:none;">
-        <div id="adminTeams" style="display:none;"><div class="admin-controls"><h4>🔑 Create New Team</h4>
-          <div class="edit-row"><div><label class="form-label">Team Name</label><input type="text" class="form-input" id="teamName" placeholder="e.g. Green Team"></div>
-          <div><label class="form-label">Team Leader</label><input type="text" class="form-input" id="teamLeader" placeholder="Leader name"></div></div>
-          <div><label class="form-label">Members (comma-separated)</label><input type="text" class="form-input" id="teamMembers" placeholder="Ahmed, Fatima, Ibrahim…" style="margin-bottom:10px;"></div>
-          <button class="add-btn" onclick="addTeam()">➕ Create Team</button></div></div>
+        <div id="adminTeams" style="display:none;">
+          <div class="admin-controls">
+            <h4>🔑 Create New Team</h4>
+            <div class="edit-row">
+              <div><label class="form-label">Team Name</label><input type="text" class="form-input" id="teamName" placeholder="e.g. Green Team"></div>
+              <div><label class="form-label">Team Leader</label><input type="text" class="form-input" id="teamLeader" placeholder="Leader's name"></div>
+            </div>
+            <div><label class="form-label">Members (comma-separated)</label><input type="text" class="form-input" id="teamMembers" placeholder="Ahmed, Fatima, Ibrahim…" style="margin-bottom:10px;"></div>
+            <button class="add-btn" onclick="addTeam()">➕ Create Team</button>
+          </div>
+        </div>
         <div id="teamsList"></div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ══ CLASS TIMETABLE MODAL ══ -->
 <div id="timetableModal" class="overlay">
   <div class="modal" style="max-width:600px;">
     <div class="modal-header"><h2>📅 Class Timetable</h2><button class="close-btn" onclick="closeModal('timetableModal')">✕</button></div>
     <div class="modal-body">
-      <div id="adminTimetable" style="display:none;"><div class="admin-controls"><h4>🔑 Add Class Entry</h4>
-        <div class="form-row">
-          <div><label class="form-label">Day</label><select class="form-input" id="ttDay"><option value="sat">Saturday</option><option value="sun">Sunday</option><option value="mon">Monday</option><option value="tue">Tuesday</option><option value="wed">Wednesday</option><option value="thu">Thursday</option></select></div>
-          <div><label class="form-label">Time (e.g. 6:00 AM)</label><input type="text" class="form-input" id="ttTime" placeholder="e.g. 6:00 AM"></div>
+
+      <!-- Admin Controls -->
+      <div id="adminTimetable" style="display:none;">
+        <div class="admin-controls">
+          <h4>🔑 Add Class Entry</h4>
+          <div class="form-row">
+            <div>
+              <label class="form-label">Day</label>
+              <select class="form-input" id="ttDay">
+                <option value="sat">Saturday</option>
+                <option value="sun">Sunday</option>
+                <option value="mon">Monday</option>
+                <option value="tue">Tuesday</option>
+                <option value="wed">Wednesday</option>
+                <option value="thu">Thursday</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Time (e.g. 6:00 AM)</label>
+              <input type="text" class="form-input" id="ttTime" placeholder="e.g. 6:00 AM">
+            </div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label class="form-label">Subject / Activity</label>
+              <input type="text" class="form-input" id="ttSubject" placeholder="e.g. Fiqh – Thanawiyyah">
+            </div>
+            <div>
+              <label class="form-label">Class / Grade</label>
+              <select class="form-input" id="ttClass">
+                <option value="">All Classes</option>
+                <option>Ibtidaiyyah 1</option>
+                <option>Ibtidaiyyah 2</option>
+                <option>Mutawassitah 1</option>
+                <option>Mutawassitah 2</option>
+                <option>Thanawiyyah 1</option>
+                <option>Thanawiyyah 2</option>
+                <option>All Classes</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row" style="margin-bottom:12px;">
+            <div>
+              <label class="form-label">Entry Type</label>
+              <select class="form-input" id="ttType">
+                <option value="regular">Regular Class</option>
+                <option value="cyan">Quran / Special</option>
+                <option value="break">Break / End</option>
+              </select>
+            </div>
+            <div style="display:flex;align-items:flex-end;">
+              <button class="add-btn" style="width:100%;" onclick="addTimetableEntry()">➕ Add Entry</button>
+            </div>
+          </div>
         </div>
-        <div class="form-row">
-          <div><label class="form-label">Subject / Activity</label><input type="text" class="form-input" id="ttSubject" placeholder="e.g. Fiqh – Thanawiyyah"></div>
-          <div><label class="form-label">Class / Grade</label><select class="form-input" id="ttClass"><option value="">All Classes</option><option>Ibtidaiyyah 1</option><option>Ibtidaiyyah 2</option><option>Mutawassitah 1</option><option>Mutawassitah 2</option><option>Thanawiyyah 1</option><option>Thanawiyyah 2</option><option>All Classes</option></select></div>
-        </div>
-        <div class="form-row" style="margin-bottom:12px;">
-          <div><label class="form-label">Entry Type</label><select class="form-input" id="ttType"><option value="regular">Regular Class</option><option value="cyan">Quran / Special</option><option value="break">Break / End</option></select></div>
-          <div style="display:flex;align-items:flex-end;"><button class="add-btn" style="width:100%;" onclick="addTimetableEntry()">➕ Add Entry</button></div>
-        </div>
-      </div></div>
+      </div>
+
       <div class="tt-day-tabs" id="ttDayTabs">
         <div class="day-tab active" onclick="showTTDay(this,'sat')">Sat</div>
         <div class="day-tab" onclick="showTTDay(this,'sun')">Sun</div>
@@ -571,94 +777,154 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   </div>
 </div>
 
+<!-- ══ EXAM TIMETABLE MODAL ══ -->
 <div id="examTimetableModal" class="overlay">
   <div class="modal" style="max-width:720px;width:100%;">
     <div class="modal-header"><h2>📋 Exam Timetable</h2><button class="close-btn" onclick="closeModal('examTimetableModal')">✕</button></div>
     <div class="modal-body">
-      <div id="adminExamTT" style="display:none;"><div class="admin-controls"><h4>🔑 Add Exam Entry</h4>
-        <div class="form-row"><div><label class="form-label">Date</label><input type="date" class="form-input" id="etDate"></div>
-        <div><label class="form-label">Start Time</label><input type="time" class="form-input" id="etStart"></div></div>
-        <div class="form-row"><div><label class="form-label">End Time</label><input type="time" class="form-input" id="etEnd"></div>
-        <div><label class="form-label">Class / Grade</label><select class="form-input" id="etClass"><option value="">Select Class</option><option>Ibtidaiyyah 1</option><option>Ibtidaiyyah 2</option><option>Mutawassitah 1</option><option>Mutawassitah 2</option><option>Thanawiyyah 1</option><option>Thanawiyyah 2</option><option>All Classes</option></select></div></div>
-        <div class="form-row"><div><label class="form-label">Subject</label><input type="text" class="form-input" id="etSubject" placeholder="e.g. Fiqh"></div>
-        <div><label class="form-label">Venue / Room</label><input type="text" class="form-input" id="etVenue" placeholder="e.g. Main Hall"></div></div>
-        <div style="margin-bottom:10px;"><label class="form-label">Notes (Optional)</label><input type="text" class="form-input" id="etNotes" placeholder="e.g. Bring admit card"></div>
-        <button class="add-btn" onclick="addExamEntry()">➕ Add Exam Entry</button>
-      </div></div>
+
+      <!-- Admin Controls -->
+      <div id="adminExamTT" style="display:none;">
+        <div class="admin-controls">
+          <h4>🔑 Add Exam Entry</h4>
+          <div class="form-row">
+            <div>
+              <label class="form-label">Date</label>
+              <input type="date" class="form-input" id="etDate">
+            </div>
+            <div>
+              <label class="form-label">Start Time</label>
+              <input type="time" class="form-input" id="etStart">
+            </div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label class="form-label">End Time</label>
+              <input type="time" class="form-input" id="etEnd">
+            </div>
+            <div>
+              <label class="form-label">Class / Grade</label>
+              <select class="form-input" id="etClass">
+                <option value="">Select Class</option>
+                <option>Ibtidaiyyah 1</option>
+                <option>Ibtidaiyyah 2</option>
+                <option>Mutawassitah 1</option>
+                <option>Mutawassitah 2</option>
+                <option>Thanawiyyah 1</option>
+                <option>Thanawiyyah 2</option>
+                <option>All Classes</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label class="form-label">Subject</label>
+              <input type="text" class="form-input" id="etSubject" placeholder="e.g. Fiqh">
+            </div>
+            <div>
+              <label class="form-label">Venue / Room</label>
+              <input type="text" class="form-input" id="etVenue" placeholder="e.g. Main Hall">
+            </div>
+          </div>
+          <div style="margin-bottom:10px;">
+            <label class="form-label">Notes (Optional)</label>
+            <input type="text" class="form-input" id="etNotes" placeholder="e.g. Bring admit card">
+          </div>
+          <button class="add-btn" onclick="addExamEntry()">➕ Add Exam Entry</button>
+        </div>
+      </div>
+
       <div id="examTTBody"></div>
     </div>
   </div>
 </div>
 
+<!-- REGISTRATION -->
+<div id="regModal" class="overlay">
+  <div class="modal">
+    <div class="modal-header"><h2>📝 Exam Registration</h2><button class="close-btn" onclick="closeModal('regModal')">✕</button></div>
+    <div class="modal-body">
+      <div class="reg-form" id="regForm">
+        <label>Student Full Name</label><input type="text" placeholder="Enter full name">
+        <label>Roll Number</label><input type="text" placeholder="NM-XXXX-XXX">
+        <label>Class / Grade</label>
+        <select><option>Select Class</option><option>Ibtidaiyyah 1</option><option>Ibtidaiyyah 2</option><option>Mutawassitah 1</option><option>Mutawassitah 2</option><option>Thanawiyyah 1</option><option>Thanawiyyah 2</option></select>
+        <label>Parent Phone</label><input type="tel" placeholder="+91 XXXXX XXXXX">
+        <label>Exam Type</label>
+        <select><option>Annual Examination 2025</option><option>Half-Yearly Examination</option><option>Unit Test</option></select>
+        <button class="primary-btn" style="width:100%;" onclick="submitReg()">Submit Registration</button>
+      </div>
+      <div class="success-msg" id="regSuccess"><div style="font-size:44px;">✅</div><h3 style="margin-top:8px;">Registration Successful!</h3><p style="font-size:12px;color:#666;margin-top:5px;">Confirmation SMS will be sent shortly.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- SYLLABUS -->
 <div id="syllabusModal" class="overlay">
   <div class="modal" style="max-width:600px;">
     <div class="modal-header"><h2>📚 Syllabus</h2><button class="close-btn" onclick="closeModal('syllabusModal')">✕</button></div>
     <div class="modal-body">
-      <div id="adminSyllabus" style="display:none;"><div class="admin-controls"><h4>🔑 Add New Section</h4>
-        <div class="form-row"><div><label class="form-label">Section Title</label><input type="text" class="form-input" id="sylTitle" placeholder="e.g. Advanced Studies"></div>
-        <div><label class="form-label">Year / Badge</label><input type="text" class="form-input" id="sylBadge" placeholder="e.g. Years 7–8"></div></div>
-        <div style="margin-bottom:10px;"><label class="form-label">Topics (comma-separated)</label><input type="text" class="form-input" id="sylItems" placeholder="e.g. Advanced Fiqh, Usool, Hadith"></div>
-        <button class="add-btn" onclick="addSyllabusSection()">➕ Add Section</button>
-      </div></div>
+      <div id="adminSyllabus" style="display:none;">
+        <div class="admin-controls">
+          <h4>🔑 Add New Section</h4>
+          <div class="form-row">
+            <div>
+              <label class="form-label">Section Title</label>
+              <input type="text" class="form-input" id="sylTitle" placeholder="e.g. Advanced Studies">
+            </div>
+            <div>
+              <label class="form-label">Year / Badge</label>
+              <input type="text" class="form-input" id="sylBadge" placeholder="e.g. Years 7–8">
+            </div>
+          </div>
+          <div style="margin-bottom:10px;">
+            <label class="form-label">Topics (comma-separated)</label>
+            <input type="text" class="form-input" id="sylItems" placeholder="e.g. Advanced Fiqh, Usool, Hadith Studies">
+          </div>
+          <button class="add-btn" onclick="addSyllabusSection()">➕ Add Section</button>
+        </div>
+      </div>
       <div class="syl-accordion" id="sylAccordion"></div>
     </div>
   </div>
 </div>
 
-<div id="staffModal" class="overlay">
-  <div class="modal" style="max-width:580px;">
-    <div class="modal-header"><h2>👨‍🏫 Our Staff</h2><button class="close-btn" onclick="closeModal('staffModal')">✕</button></div>
+<!-- RESULTS -->
+<div id="resultModal" class="overlay">
+  <div class="modal">
+    <div class="modal-header"><h2>📊 Exam Results</h2><button class="close-btn" onclick="closeModal('resultModal')">✕</button></div>
     <div class="modal-body">
-      <div id="adminStaff" style="display:none;"><div class="admin-controls"><h4>🔑 Add Staff Member</h4>
-        <div class="form-row"><div><label class="form-label">Full Name</label><input type="text" class="form-input" id="staffName" placeholder="e.g. Ustadh Ahmed Ali"></div>
-        <div><label class="form-label">Role / Designation</label><input type="text" class="form-input" id="staffRole" placeholder="e.g. Senior Teacher – Fiqh"></div></div>
-        <div class="form-row"><div><label class="form-label">Qualification</label><input type="text" class="form-input" id="staffQual" placeholder="e.g. Alim, Dars-e-Nizami"></div>
-        <div><label class="form-label">Phone (Optional)</label><input type="text" class="form-input" id="staffPhone" placeholder="+91 XXXXX XXXXX"></div></div>
-        <div class="form-row" style="margin-bottom:12px;">
-          <div><label class="form-label">Email (Optional)</label><input type="text" class="form-input" id="staffEmail" placeholder="example@email.com"></div>
-          <div><label class="form-label">Icon (Emoji)</label><select class="form-input" id="staffIcon"><option value="👨‍🏫">👨‍🏫 Male Teacher</option><option value="👩‍🏫">👩‍🏫 Female Teacher</option><option value="👨‍💼">👨‍💼 Male Admin</option><option value="👩‍💼">👩‍💼 Female Admin</option><option value="🧑‍🎓">🧑‍🎓 Scholar</option></select></div>
-        </div>
-        <button class="add-btn" onclick="addStaffMember()">➕ Add Staff</button>
-      </div></div>
-      <div id="staffBody"></div>
+      <div class="result-form">
+        <label>Student Roll Number</label>
+        <input type="text" id="rollInput" placeholder="e.g. NM-2025-001">
+        <label>Academic Year</label>
+        <select id="yearSelect"><option>2024-25</option><option>2023-24</option><option>2022-23</option></select>
+        <button class="primary-btn" style="width:100%;" onclick="searchResult()">Search Result</button>
+      </div>
+      <div id="resultOutput"></div>
     </div>
   </div>
 </div>
 
-<div id="resultModal" class="overlay">
-  <div class="modal"><div class="modal-header"><h2>📊 Exam Results</h2><button class="close-btn" onclick="closeModal('resultModal')">✕</button></div>
-    <div class="modal-body"><div class="result-form">
-      <label>Student Roll Number</label><input type="text" id="rollInput" placeholder="e.g. NM-2025-001">
-      <label>Academic Year</label><select id="yearSelect"><option>2024-25</option><option>2023-24</option><option>2022-23</option></select>
-      <button class="primary-btn" style="width:100%;" onclick="searchResult()">Search Result</button>
-    </div><div id="resultOutput"></div></div>
-  </div>
-</div>
-
-<div id="regModal" class="overlay">
-  <div class="modal"><div class="modal-header"><h2>📝 Exam Registration</h2><button class="close-btn" onclick="closeModal('regModal')">✕</button></div>
-    <div class="modal-body"><div class="reg-form" id="regForm">
-      <label>Student Full Name</label><input type="text" placeholder="Enter full name">
-      <label>Roll Number</label><input type="text" placeholder="NM-XXXX-XXX">
-      <label>Class / Grade</label><select><option>Select Class</option><option>Ibtidaiyyah 1</option><option>Ibtidaiyyah 2</option><option>Mutawassitah 1</option><option>Mutawassitah 2</option><option>Thanawiyyah 1</option><option>Thanawiyyah 2</option></select>
-      <label>Parent Phone</label><input type="tel" placeholder="+91 XXXXX XXXXX">
-      <label>Exam Type</label><select><option>Annual Examination 2025</option><option>Half-Yearly Examination</option><option>Unit Test</option></select>
-      <button class="primary-btn" style="width:100%;" onclick="submitReg()">Submit Registration</button>
-    </div><div class="success-msg" id="regSuccess"><div style="font-size:44px;">✅</div><h3 style="margin-top:8px;">Registration Successful!</h3><p style="font-size:12px;color:#666;margin-top:5px;">Confirmation SMS will be sent shortly.</p></div></div>
-  </div>
-</div>
-
+<!-- NEWS -->
 <div id="newsModal" class="overlay">
-  <div class="modal"><div class="modal-header"><h2>📰 News &amp; Events</h2><button class="close-btn" onclick="closeModal('newsModal')">✕</button></div>
-    <div class="modal-body" id="newsBody"></div></div>
+  <div class="modal">
+    <div class="modal-header"><h2>📰 News &amp; Events</h2><button class="close-btn" onclick="closeModal('newsModal')">✕</button></div>
+    <div class="modal-body" id="newsBody"></div>
+  </div>
 </div>
 
+<!-- FULL QURAN -->
 <div id="quranModal" class="overlay">
   <div class="modal" style="max-width:560px;">
     <div class="modal-header"><h2>📖 Full Quran – All 114 Surahs</h2><button class="close-btn" onclick="closeModal('quranModal');stopAudio();">✕</button></div>
     <div class="modal-body">
       <input type="text" id="surahSearch" placeholder="🔍 Search surah name…" oninput="filterSurahs()" style="width:100%;border:2px solid #e0e0e0;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:14px;font-family:'Outfit',sans-serif;outline:none;">
-      <div class="quran-tab-row"><div class="q-tab active" onclick="filterByType(this,'all')">All</div><div class="q-tab" onclick="filterByType(this,'Meccan')">Meccan</div><div class="q-tab" onclick="filterByType(this,'Medinan')">Medinan</div></div>
+      <div class="quran-tab-row">
+        <div class="q-tab active" onclick="filterByType(this,'all')">All</div>
+        <div class="q-tab" onclick="filterByType(this,'Meccan')">Meccan</div>
+        <div class="q-tab" onclick="filterByType(this,'Medinan')">Medinan</div>
+      </div>
       <div class="surah-list-wrap" id="surahList"></div>
       <div class="player-bar" id="playerBar" style="display:none;">
         <button class="play-btn" id="playPauseBtn" onclick="togglePlay()">▶</button>
@@ -673,6 +939,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   </div>
 </div>
 
+<!-- DUA -->
 <div id="duaModal" class="overlay">
   <div class="modal" style="max-width:520px;">
     <div class="modal-header"><h2>🤲 Daily Duas</h2><button class="close-btn" onclick="closeModal('duaModal')">✕</button></div>
@@ -690,6 +957,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   </div>
 </div>
 
+<!-- WUDU -->
 <div id="wuduModal" class="overlay">
   <div class="modal" style="max-width:500px;">
     <div class="modal-header"><h2>💧 Wudu Step-by-Step Guide</h2><button class="close-btn" onclick="closeModal('wuduModal');stopWudu();">✕</button></div>
@@ -704,6 +972,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   </div>
 </div>
 
+<!-- SALAH -->
 <div id="salahModal" class="overlay">
   <div class="modal" style="max-width:500px;">
     <div class="modal-header"><h2>🕌 Salah Step-by-Step Guide</h2><button class="close-btn" onclick="closeModal('salahModal');stopSalah();">✕</button></div>
@@ -718,6 +987,59 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   </div>
 </div>
 
+<!-- STAFF -->
+<div id="staffModal" class="overlay">
+  <div class="modal" style="max-width:580px;">
+    <div class="modal-header"><h2>👨‍🏫 Our Staff</h2><button class="close-btn" onclick="closeModal('staffModal')">✕</button></div>
+    <div class="modal-body">
+      <div id="adminStaff" style="display:none;">
+        <div class="admin-controls">
+          <h4>🔑 Add Staff Member</h4>
+          <div class="form-row">
+            <div>
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-input" id="staffName" placeholder="e.g. Ustadh Ahmed Ali">
+            </div>
+            <div>
+              <label class="form-label">Role / Designation</label>
+              <input type="text" class="form-input" id="staffRole" placeholder="e.g. Senior Teacher – Fiqh">
+            </div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label class="form-label">Qualification</label>
+              <input type="text" class="form-input" id="staffQual" placeholder="e.g. Alim, Dars-e-Nizami">
+            </div>
+            <div>
+              <label class="form-label">Phone (Optional)</label>
+              <input type="text" class="form-input" id="staffPhone" placeholder="+91 XXXXX XXXXX">
+            </div>
+          </div>
+          <div class="form-row" style="margin-bottom:12px;">
+            <div>
+              <label class="form-label">Email (Optional)</label>
+              <input type="text" class="form-input" id="staffEmail" placeholder="example@email.com">
+            </div>
+            <div>
+              <label class="form-label">Icon (Emoji)</label>
+              <select class="form-input" id="staffIcon">
+                <option value="👨‍🏫">👨‍🏫 Male Teacher</option>
+                <option value="👩‍🏫">👩‍🏫 Female Teacher</option>
+                <option value="👨‍💼">👨‍💼 Male Admin</option>
+                <option value="👩‍💼">👩‍💼 Female Admin</option>
+                <option value="🧑‍🎓">🧑‍🎓 Scholar</option>
+              </select>
+            </div>
+          </div>
+          <button class="add-btn" onclick="addStaffMember()">➕ Add Staff</button>
+        </div>
+      </div>
+      <div id="staffBody"></div>
+    </div>
+  </div>
+</div>
+
+<!-- BLACKBOARD -->
 <div id="boardModal" class="overlay">
   <div class="modal board-modal" style="max-width:600px;">
     <div class="modal-header"><h2>🖊️ Arabic Blackboard</h2><button class="close-btn" onclick="closeModal('boardModal')">✕</button></div>
@@ -758,6 +1080,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   </div>
 </div>
 
+<!-- QUIZ -->
 <div id="quizModal" class="overlay">
   <div class="modal" style="max-width:460px;">
     <div class="modal-header"><h2>🧠 Islamic Quiz</h2><button class="close-btn" onclick="closeModal('quizModal');clearInterval(quizTimer);">✕</button></div>
@@ -793,289 +1116,340 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   </div>
 </div>
 
-<!-- SYNC BAR -->
-<div class="sync-bar" id="syncBar">
-  <div class="sync-dot" id="syncDot"></div>
-  <span id="syncMsg">Syncing...</span>
+<!-- ══ FIREBASE LOADING SCREEN ══ -->
+<div id="fbLoadScreen">
+  <div class="fb-load-logo">🕌</div>
+  <div class="fb-load-title">Nadvathum Uloom Madrasa</div>
+  <div class="fb-spinner"></div>
+  <div class="fb-load-sub" id="fbLoadMsg">Connecting to NUM 268 database…</div>
 </div>
+
+<!-- ══ FIREBASE SETUP MODAL ══ -->
+<div id="fbSetupModal" style="display:none;visibility:hidden;">
+  <div class="fb-setup-box">
+    <h2>🔥 Set Up Cloud Sync</h2>
+    <p>To share data across all devices, connect a free Firebase Realtime Database. Data will sync live across every phone, tablet and computer instantly.</p>
+    <div class="fb-step">
+      <div class="fb-step-num">1</div>
+      <div class="fb-step-text"><strong>Create a free Firebase project</strong>Go to <code>console.firebase.google.com</code> → New Project → any name</div>
+    </div>
+    <div class="fb-step">
+      <div class="fb-step-num">2</div>
+      <div class="fb-step-text"><strong>Create Realtime Database</strong>Build → Realtime Database → Create → Start in test mode</div>
+    </div>
+    <div class="fb-step">
+      <div class="fb-step-num">3</div>
+      <div class="fb-step-text"><strong>Get your config</strong>Project Settings → Your apps → Web → Register → Copy the config values below</div>
+    </div>
+    <input type="text" class="fb-config-input" id="fbInputApiKey" placeholder="apiKey  (e.g. AIzaSy...)">
+    <input type="text" class="fb-config-input" id="fbInputDbUrl" placeholder="databaseURL  (e.g. https://your-project-default-rtdb.firebaseio.com)">
+    <input type="text" class="fb-config-input" id="fbInputProjectId" placeholder="projectId  (e.g. your-project-id)">
+    <button class="fb-save-btn" onclick="saveFirebaseConfig()">🔗 Connect & Sync</button>
+    <button class="fb-skip-btn" onclick="skipFirebase()">Use on this device only (no cloud sync)</button>
+  </div>
+</div>
+
+<!-- SYNC BADGE -->
+<div id="syncBadge" style="display:none;">
+  <div class="sync-dot green" id="syncDot"></div>
+  <span id="syncText">Synced</span>
+</div>
+
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<!-- FOOTER -->
 <footer>
   <div class="footer-logo">
     <img src="logo.png" alt="NUM Logo">
-    <div class="footer-name"><h3>Nadvathum Uloom Madrasa</h3><p>مدرسة ندوة العلوم · Est. 1980</p></div>
+    <div class="footer-name">
+      <h3>Nadvathum Uloom Madrasa</h3>
+      <p>مدرسة ندوة العلوم · Est. 1980</p>
+    </div>
   </div>
   <div class="gold-divider"></div>
   <div class="footer-details">
-    <span>📍 Pattarkulam, Kerala</span><span>🏫 Madrasa No: 268</span>
-    <span>📋 Range No: 331</span><span>⏰ 6:00 AM – 9:00 AM</span>
+    <span>📍 Pattarkulam, Kerala</span>
+    <span>🏫 Madrasa No: 268</span>
+    <span>📋 Range No: 331</span>
+    <span>⏰ 6:00 AM – 9:00 AM</span>
   </div>
-  <p>🎓 Samastha Affiliated · 📞 +91 XXXXX XXXXX · ✉️ info@num268.edu.in</p>
+  <p>🎓 Samastha Affiliated · 📞 +91 XXXXX XXXXX · ✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="553c3b333a153b203867636d7b3031207b3c3b">[email&#160;protected]</a></p>
   <div class="gold-divider"></div>
   <p style="font-size:11px;opacity:.4;margin-top:8px;">© 2025 Nadvathum Uloom Madrasa. All rights reserved.</p>
 </footer>
-<script>
-/* ═══════════════════════════════════════════════════════════════════
-   FIREBASE CONFIG
-   ─────────────────────────────────────────────────────────────────
-   REPLACE the values below with your own Firebase project config.
-   
-   HOW TO GET YOUR CONFIG:
-   1. Go to https://console.firebase.google.com
-   2. Create project → "num268-madrasa" → Continue
-   3. Register web app (</> icon) → copy firebaseConfig
-   4. Build → Realtime Database → Create Database → Test mode
-   ═══════════════════════════════════════════════════════════════════ */
-const firebaseConfig = {
-  apiKey:            "https://madrsa-a3b91-default-rtdb.firebaseio.com/",
-  authDomain:        "your-project.firebaseapp.com",
-  databaseURL:       "https://your-project-default-rtdb.firebaseio.com",
-  projectId:         "your-project",
-  storageBucket:     "your-project.appspot.com",
-  messagingSenderId: "000000000000",
-  appId:             "1:000000000000:web:abc123"
-};
 
-/* ── Firebase init & realtime DB ── */
-let db = null;
-let firebaseOK = false;
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ══════════════════════════════════════════════════
+   FIREBASE + CROSS-DEVICE STORAGE
+══════════════════════════════════════════════════ */
+const FB_API_KEY='num_fb_apikey',FB_DB_URL='num_fb_dburl',FB_PROJECT_ID='num_fb_projectid',FB_SKIP_KEY='num_fb_skip';
+const KEY_TEAMS='num_teams_v2',KEY_NAB_SCORES='num_nab_scores_v2',KEY_QUIZ_SCORES='num_quiz_scores_v2',KEY_EVENTS='num_events_v2';
+const KEY_TIMETABLE='num_timetable_v3',KEY_EXAM_TT='num_exam_tt_v1',KEY_STAFF='num_staff_v1',KEY_SYLLABUS='num_syllabus_v1';
+const ALL_KEYS=[KEY_TEAMS,KEY_NAB_SCORES,KEY_QUIZ_SCORES,KEY_EVENTS,KEY_TIMETABLE,KEY_EXAM_TT,KEY_STAFF,KEY_SYLLABUS];
 
-try {
-  firebase.initializeApp(firebaseConfig);
-  db = firebase.database();
-  firebaseOK = true;
-} catch(e) {
-  console.warn('Firebase not configured yet – using localStorage only. Error:', e.message);
-}
+let dbCache={},firebaseDb=null,firebaseMode=false,currentOpenModal=null;
 
-/* ── In-memory cache (updated by Firebase listeners) ── */
-const cache = {};
-const dbKeys = ['teams','nabScores','quizScores','events','timetable','examTT','staff','syllabus'];
-
-/* ── SYNC BAR ── */
-let syncBarTimeout;
-function showSyncBar(msg, state='syncing'){
-  const bar=document.getElementById('syncBar');
-  const dot=document.getElementById('syncDot');
-  const msgEl=document.getElementById('syncMsg');
-  dot.className='sync-dot '+(state==='ok'?'':'syncing');
-  msgEl.textContent=msg;
-  bar.classList.add('show');
-  clearTimeout(syncBarTimeout);
-  if(state==='ok') syncBarTimeout=setTimeout(()=>bar.classList.remove('show'),2500);
-}
-
-/* ══ STORAGE LAYER ══ */
-/* save() – writes to Firebase; falls back to localStorage */
-function save(key, val){
-  cache[key] = val;
-  localStorage.setItem('num_'+key, JSON.stringify(val));   // always save locally as fallback
-  if(firebaseOK && db){
-    showSyncBar('Saving...');
-    db.ref('num268/'+key).set(val)
-      .then(()=>showSyncBar('✅ Saved & synced to all devices','ok'))
-      .catch(e=>{console.warn('Firebase save failed:',e);showSyncBar('⚠️ Saved locally only','ok');});
+function load(key,def){if(dbCache[key]!==undefined)return dbCache[key];try{const v=localStorage.getItem(key);return v?JSON.parse(v):def;}catch(e){return def;}}
+function save(key,val){
+  dbCache[key]=val;
+  try{localStorage.setItem(key,JSON.stringify(val));}catch(e){}
+  if(firebaseDb&&firebaseMode){
+    setSyncStatus('syncing');
+    firebaseDb.ref('num268/'+key).set(val).then(()=>setSyncStatus('synced')).catch(()=>setSyncStatus('offline'));
   }
 }
 
-/* load() – returns cached value (populated from Firebase on startup) */
-function load(key, def){
-  if(cache[key] !== undefined) return JSON.parse(JSON.stringify(cache[key]));
-  // fallback to localStorage
-  try{ const v=localStorage.getItem('num_'+key); if(v) return JSON.parse(v); }catch(e){}
-  return typeof def === 'object' ? JSON.parse(JSON.stringify(def)) : def;
+function setSyncStatus(state){
+  const badge=document.getElementById('syncBadge'),dot=document.getElementById('syncDot'),txt=document.getElementById('syncText');
+  badge.style.display='flex';badge.className='';dot.className='sync-dot';
+  if(state==='synced') {badge.classList.add('synced');dot.classList.add('green');txt.textContent='☁️ Synced';}
+  if(state==='syncing'){badge.classList.add('syncing');dot.classList.add('gold');txt.textContent='↑ Syncing…';}
+  if(state==='offline'){badge.classList.add('offline');dot.classList.add('red');txt.textContent='⚠️ Offline';}
+  if(state==='local')  {badge.classList.add('offline');dot.classList.add('red');txt.textContent='📱 Local – upload to web for sync';}
 }
 
-/* ── DEFAULT DATA ── */
-const DEFAULTS = {
-  teams:[
-    {id:1,name:'Green Team',color:'#22c55e',leader:'Ahmed Ali',members:['Ahmed Ali','Ibrahim Hassan','Yusuf Malik'],score:0},
-    {id:2,name:'Blue Team',color:'#3b82f6',leader:'Aisha Rahman',members:['Aisha Rahman','Fatima Zehra','Omar Said'],score:0},
-  ],
-  nabScores:[],
-  quizScores:[],
-  events:[
-    {id:1,name:'Annual Sports Day',date:'2025-04-15',category:'Sports'},
-    {id:2,name:'Quran Competition',date:'2025-05-01',category:'Religious'},
-    {id:3,name:'Arabic Speech Contest',date:'2025-05-20',category:'Academic'},
-  ],
-  timetable:{
-    sat:[
-      {id:1,time:'6:00 AM',subject:'Quran Recitation & Hifz',classGrade:'All Classes',type:'cyan'},
-      {id:2,time:'6:45 AM',subject:'Arabic Grammar (Nahw)',classGrade:'Mutawassitah 1',type:'regular'},
-      {id:3,time:'7:30 AM',subject:'Short Break',classGrade:'',type:'break'},
-      {id:4,time:'7:45 AM',subject:'Fiqh',classGrade:'Thanawiyyah 1',type:'regular'},
-      {id:5,time:'8:30 AM',subject:'Dua & Closing Assembly',classGrade:'All Classes',type:'cyan'},
-      {id:6,time:'9:00 AM',subject:'End of Day 🏁',classGrade:'',type:'break'},
-    ],
-    sun:[
-      {id:1,time:'6:00 AM',subject:'Quran Memorisation (Hifz)',classGrade:'All Classes',type:'cyan'},
-      {id:2,time:'6:45 AM',subject:'Tafsir ul Quran',classGrade:'Thanawiyyah 2',type:'regular'},
-      {id:3,time:'7:30 AM',subject:'Short Break',classGrade:'',type:'break'},
-      {id:4,time:'7:45 AM',subject:'Islamic History & Seerah',classGrade:'Mutawassitah 2',type:'regular'},
-      {id:5,time:'8:30 AM',subject:'Dua & Closing Assembly',classGrade:'All Classes',type:'cyan'},
-      {id:6,time:'9:00 AM',subject:'End of Day 🏁',classGrade:'',type:'break'},
-    ],
-    mon:[
-      {id:1,time:'6:00 AM',subject:'Quran Recitation',classGrade:'All Classes',type:'cyan'},
-      {id:2,time:'6:45 AM',subject:'Hadith Studies',classGrade:'Thanawiyyah 1',type:'regular'},
-      {id:3,time:'7:30 AM',subject:'Short Break',classGrade:'',type:'break'},
-      {id:4,time:'7:45 AM',subject:'Aqeedah & Fiqh',classGrade:'Mutawassitah 2',type:'regular'},
-      {id:5,time:'8:30 AM',subject:'Arabic Composition',classGrade:'Mutawassitah 1',type:'cyan'},
-      {id:6,time:'9:00 AM',subject:'End of Day 🏁',classGrade:'',type:'break'},
-    ],
-    tue:[
-      {id:1,time:'6:00 AM',subject:'Hifz Revision',classGrade:'All Classes',type:'cyan'},
-      {id:2,time:'6:45 AM',subject:'Nahw & Sarf (Morphology)',classGrade:'Mutawassitah 1',type:'regular'},
-      {id:3,time:'7:30 AM',subject:'Short Break',classGrade:'',type:'break'},
-      {id:4,time:'7:45 AM',subject:'Calligraphy & Arabic Writing',classGrade:'Ibtidaiyyah 1',type:'regular'},
-      {id:5,time:'8:30 AM',subject:'Dua & Closing Assembly',classGrade:'All Classes',type:'cyan'},
-      {id:6,time:'9:00 AM',subject:'End of Day 🏁',classGrade:'',type:'break'},
-    ],
-    wed:[],thu:[],
-  },
-  examTT:[
-    {id:1,date:'2025-04-20',startTime:'08:00',endTime:'10:00',classGrade:'Thanawiyyah 1',subject:'Fiqh',venue:'Main Hall',notes:'Bring admit card'},
-    {id:2,date:'2025-04-21',startTime:'08:00',endTime:'10:00',classGrade:'Thanawiyyah 2',subject:'Arabic Grammar',venue:'Main Hall',notes:''},
-    {id:3,date:'2025-04-22',startTime:'08:00',endTime:'09:30',classGrade:'Mutawassitah 1',subject:'Quran Recitation',venue:'Masjid Hall',notes:'Oral exam'},
-    {id:4,date:'2025-04-23',startTime:'08:00',endTime:'10:00',classGrade:'Mutawassitah 2',subject:'Hadith Studies',venue:'Main Hall',notes:''},
-    {id:5,date:'2025-04-24',startTime:'08:00',endTime:'09:30',classGrade:'Ibtidaiyyah 1',subject:'Basic Fiqh',venue:'Room A',notes:''},
-    {id:6,date:'2025-04-25',startTime:'08:00',endTime:'09:30',classGrade:'Ibtidaiyyah 2',subject:'Arabic Letters',venue:'Room B',notes:''},
-  ],
-  staff:[
-    {id:1,name:'Ustadh Abdul Rahman',role:'Head Teacher – Fiqh & Hadith',qualification:'Alim, Dars-e-Nizami (Darul Uloom)',phone:'',email:'',icon:'👨‍🏫'},
-    {id:2,name:'Ustadh Muhammed Shafi',role:'Senior Teacher – Quran & Tafsir',qualification:'Hafiz, Qari (Samastha)',phone:'',email:'',icon:'👨‍🏫'},
-    {id:3,name:'Ustadha Fathima Beevi',role:'Teacher – Arabic & Nahw',qualification:'B.A. Arabic, Samastha Certified',phone:'',email:'',icon:'👩‍🏫'},
-    {id:4,name:'Ustadh Ibrahim Khalil',role:'Teacher – Islamic History',qualification:'M.A. Islamic Studies',phone:'',email:'',icon:'👨‍🏫'},
-    {id:5,name:'Ustadha Mariyam Siddiqui',role:'Teacher – Ibtidaiyyah',qualification:'Samastha Certified Teacher',phone:'',email:'',icon:'👩‍🏫'},
-    {id:6,name:'Br. Aslam Pattarkulam',role:'Administrative Manager',qualification:'B.Com, Office Management',phone:'',email:'',icon:'👨‍💼'},
-    {id:7,name:'Sr. Khadeeja Noor',role:'Student Affairs Coordinator',qualification:'Social Work Diploma',phone:'',email:'',icon:'👩‍💼'},
-  ],
-  syllabus:[
-    {id:1,title:'Ibtidaiyyah – Foundation',badge:'Years 1–2',items:['Basic Arabic Letters & Harakat','Quran Recitation (Qaida)','Basic Duas & Short Surahs','Islamic Manners (Adab)']},
-    {id:2,title:'Mutawassitah – Intermediate',badge:'Years 3–4',items:['Nahw (Arabic Grammar)','Sarf (Morphology)','Fiqh – Hanafi Madhab','Forty Hadith (Nawawi)','Tafsir of Juz Amma']},
-    {id:3,title:'Thanawiyyah – Secondary',badge:'Years 5–6',items:['Advanced Fiqh & Fatawa','Usool ul Fiqh','Hadith Studies – Mishkat','Aqeedah – Tahawiyyah','Islamic History & Seerah']},
-    {id:4,title:'Examinations & Assessment',badge:'All Years',items:['Monthly Unit Tests','Half-Yearly Exams (Samastha)','Annual Board Examination','Oral Assessment (Shafahi)']},
-  ],
-};
+function rerenderIfOpen(){
+  if(!currentOpenModal)return;
+  const id=currentOpenModal;
+  if(id==='timetableModal')     renderTimetableDay(currentTTDay);
+  if(id==='examTimetableModal') renderExamTimetable();
+  if(id==='staffModal')         renderStaff();
+  if(id==='syllabusModal')      renderSyllabus();
+  if(id==='programmeModal')     renderNabidhinan();
+}
 
-/* ── Init: load from Firebase (real-time) or localStorage fallback ── */
-let dataReady = false;
+function initFirebase(apiKey,databaseURL,projectId){
+  try{
+    const config = HARDCODED_FB;  // always use built-in full config
+    if(!firebase.apps.length) firebase.initializeApp(config);
+    firebaseDb=firebase.database();return true;
+  }catch(e){console.error('Firebase error:',e);return false;}
+}
 
-function initData(){
-  if(firebaseOK && db){
-    showSyncBar('📡 Loading data from cloud...');
-    db.ref('num268').once('value').then(snap=>{
-      const remoteData = snap.val() || {};
-      // Merge: use remote if exists, else use localStorage fallback, else defaults
-      dbKeys.forEach(key=>{
-        if(remoteData[key] !== undefined && remoteData[key] !== null){
-          cache[key] = remoteData[key];
-          localStorage.setItem('num_'+key, JSON.stringify(remoteData[key]));
-        } else {
-          // Try localStorage
-          try{
-            const local = localStorage.getItem('num_'+key);
-            if(local){ cache[key] = JSON.parse(local); }
-            else { cache[key] = JSON.parse(JSON.stringify(DEFAULTS[key])); }
-          }catch(e){ cache[key] = JSON.parse(JSON.stringify(DEFAULTS[key])); }
+function setupFirebaseListeners(){
+  const loaded=new Set();
+  document.getElementById('fbLoadMsg').textContent='Loading data…';
+
+  // Per-listener timeout: if Firebase doesn't respond in 6s, load from localStorage
+  const fbTimeout=setTimeout(()=>{
+    if(loaded.size<ALL_KEYS.length){
+      console.warn('Firebase listeners timed out, loading from cache');
+      // Fill any missing keys from localStorage/defaults
+      ALL_KEYS.forEach(key=>{
+        if(!loaded.has(key)){
+          const lv=localStorage.getItem(key);
+          if(lv) try{dbCache[key]=JSON.parse(lv);}catch(e){}
         }
       });
-      dataReady = true;
-      showSyncBar('✅ Data loaded from cloud','ok');
-      setupRealtimeListeners();
-    }).catch(e=>{
-      console.warn('Firebase read failed, using localStorage:', e);
-      loadFromLocalStorage();
-    });
-  } else {
-    loadFromLocalStorage();
-  }
-}
+      seedDefaults();
+      hideLoadingScreen();
+      setSyncStatus('offline');
+    }
+  },6000);
 
-function loadFromLocalStorage(){
-  dbKeys.forEach(key=>{
-    try{
-      const local = localStorage.getItem('num_'+key);
-      cache[key] = local ? JSON.parse(local) : JSON.parse(JSON.stringify(DEFAULTS[key]));
-    }catch(e){ cache[key] = JSON.parse(JSON.stringify(DEFAULTS[key])); }
-  });
-  dataReady = true;
-  showSyncBar('⚠️ Using local data (Firebase not connected)','ok');
-}
-
-/* ── Real-time listeners: update UI when other devices change data ── */
-function setupRealtimeListeners(){
-  if(!firebaseOK || !db) return;
-  dbKeys.forEach(key=>{
-    db.ref('num268/'+key).on('value', snap=>{
-      const val = snap.val();
-      if(val !== null && JSON.stringify(val) !== JSON.stringify(cache[key])){
-        cache[key] = val;
-        localStorage.setItem('num_'+key, JSON.stringify(val));
-        // Re-render relevant open modals
-        onDataChanged(key);
+  ALL_KEYS.forEach(key=>{
+    firebaseDb.ref('num268/'+key).on('value',snap=>{
+      const val=snap.val();
+      if(val!==null&&val!==undefined){dbCache[key]=val;try{localStorage.setItem(key,JSON.stringify(val));}catch(e){}}
+      else{const lv=load(key,null);if(lv!==null){firebaseDb.ref('num268/'+key).set(lv);dbCache[key]=lv;}}
+      if(!loaded.has(key)){
+        loaded.add(key);
+        if(loaded.size===ALL_KEYS.length){
+          clearTimeout(fbTimeout);
+          hideLoadingScreen();
+          setSyncStatus('synced');
+        }
+      } else {
+        setSyncStatus('synced');
+        rerenderIfOpen();
       }
+    },()=>{
+      loaded.add(key);
+      if(loaded.size===ALL_KEYS.length){clearTimeout(fbTimeout);hideLoadingScreen();}
     });
   });
 }
 
-function onDataChanged(key){
-  // Refresh relevant sections if they're currently visible
-  if(key==='nabScores' || key==='teams') {
-    const nb=document.getElementById('nabScoreboard');
-    const tb=document.getElementById('nabidhinanTab');
-    if(nb && tb && tb.style.display!=='none') renderNabidhinan();
+function hideLoadingScreen(){const s=document.getElementById('fbLoadScreen');s.style.transition='opacity .5s';s.style.opacity='0';setTimeout(()=>s.style.display='none',500);}
+
+function saveFirebaseConfig(){
+  const apiKey=document.getElementById('fbInputApiKey').value.trim();
+  const dbUrl=document.getElementById('fbInputDbUrl').value.trim();
+  const projectId=document.getElementById('fbInputProjectId').value.trim();
+  if(!apiKey||!dbUrl||!projectId){alert('Please fill all three fields.');return;}
+  localStorage.setItem(FB_API_KEY,apiKey);localStorage.setItem(FB_DB_URL,dbUrl);localStorage.setItem(FB_PROJECT_ID,projectId);
+  localStorage.removeItem(FB_SKIP_KEY);
+  document.getElementById('fbSetupModal').style.display='none';
+  document.getElementById('fbLoadScreen').style.display='flex';
+  const ok=initFirebase(apiKey,dbUrl,projectId);
+  if(ok){firebaseMode=true;setupFirebaseListeners();}
+  else{alert('Could not connect. Please check your config values.');hideLoadingScreen();setSyncStatus('offline');}
+}
+
+function skipFirebase(){
+  localStorage.setItem(FB_SKIP_KEY,'1');
+  document.getElementById('fbSetupModal').style.display='none';
+  seedDefaults();hideLoadingScreen();setSyncStatus('local');
+}
+
+/* ═══════════════════════════════════════════════════
+   FIREBASE CONFIG – NUM 268 Pattarkulam Madrasa
+═══════════════════════════════════════════════════ */
+const HARDCODED_FB = {
+  apiKey:            'AIzaSyBaJ_PHxRg1d9MIxpCNvq-mblLO9KuxvHI',
+  databaseURL:       'https://madrsa-a3b91-default-rtdb.firebaseio.com',
+  projectId:         'madrsa-a3b91',
+  authDomain:        'madrsa-a3b91.firebaseapp.com',
+  storageBucket:     'madrsa-a3b91.firebasestorage.app',
+  messagingSenderId: '846662804547',
+  appId:             '1:846662804547:web:b50e66a830335f7855e0f6',
+  measurementId:     'G-8C705M328G'
+};
+
+/* ── App startup — auto-connects to Firebase on every device ── */
+(function startApp(){
+  document.getElementById('fbSetupModal').style.display='none';
+  document.getElementById('fbLoadScreen').style.display='flex';
+
+  // If opened as a local file (file://) Firebase won't work — load instantly from localStorage
+  const isLocalFile = location.protocol === 'file:';
+  if(isLocalFile){
+    console.warn('Running from local file — Firebase disabled. Host on a web server for cross-device sync.');
+    seedDefaults();
+    hideLoadingScreen();
+    setSyncStatus('local');
+    return;
   }
-  if(key==='quizScores'){
-    const qb=document.getElementById('quizScoreboard');
-    const qt=document.getElementById('quizTab');
-    if(qb && qt && qt.style.display!=='none') renderQuizResults();
+
+  // Safety timeout — if Firebase takes too long, load anyway
+  const safetyTimer = setTimeout(()=>{
+    console.warn('Firebase timeout — loading from localStorage');
+    seedDefaults();
+    hideLoadingScreen();
+    setSyncStatus('offline');
+  }, 7000);
+
+  try {
+    if(!firebase.apps.length) firebase.initializeApp(HARDCODED_FB);
+    firebaseDb = firebase.database();
+    firebaseMode = true;
+    // Cancel safety timer once listeners are set — they will call hideLoadingScreen()
+    clearTimeout(safetyTimer);
+    setupFirebaseListeners();
+  } catch(e) {
+    clearTimeout(safetyTimer);
+    console.error('Firebase failed:', e);
+    seedDefaults();
+    hideLoadingScreen();
+    setSyncStatus('offline');
   }
-  if(key==='events'){
-    const el=document.getElementById('eventsList');
-    const et=document.getElementById('eventsTab');
-    if(el && et && et.style.display!=='none') renderEvents();
+})();
+
+/* ── Seed defaults (only if key is empty) ── */
+function seedDefaults(){
+  if(!load(KEY_TEAMS,null)){
+    save(KEY_TEAMS,[
+      {id:1,name:'Green Team',color:'#22c55e',leader:'Ahmed Ali',members:['Ahmed Ali','Ibrahim Hassan','Yusuf Malik'],score:0},
+      {id:2,name:'Blue Team',color:'#3b82f6',leader:'Aisha Rahman',members:['Aisha Rahman','Fatima Zehra','Omar Said'],score:0},
+    ]);
   }
-  if(key==='teams'){
-    const tl=document.getElementById('teamsList');
-    const tt=document.getElementById('teamsTab');
-    if(tl && tt && tt.style.display!=='none') renderTeams();
+  if(!load(KEY_NAB_SCORES,null))  save(KEY_NAB_SCORES,[]);
+  if(!load(KEY_QUIZ_SCORES,null)) save(KEY_QUIZ_SCORES,[]);
+  if(!load(KEY_EVENTS,null)){
+    save(KEY_EVENTS,[
+      {id:1,name:'Annual Sports Day',date:'2025-04-15',category:'Sports'},
+      {id:2,name:'Quran Competition',date:'2025-05-01',category:'Religious'},
+      {id:3,name:'Arabic Speech Contest',date:'2025-05-20',category:'Academic'},
+    ]);
   }
-  if(key==='timetable'){
-    const tc=document.getElementById('timetable-content');
-    if(tc && document.getElementById('timetableModal').style.display!=='none') renderTimetableDay(currentTTDay);
+  if(!load(KEY_TIMETABLE,null)){
+    save(KEY_TIMETABLE,{
+      sat:[
+        {id:1,time:'6:00 AM',subject:'Quran Recitation & Hifz',classGrade:'All Classes',type:'cyan'},
+        {id:2,time:'6:45 AM',subject:'Arabic Grammar (Nahw)',classGrade:'Mutawassitah 1',type:'regular'},
+        {id:3,time:'7:30 AM',subject:'Short Break',classGrade:'',type:'break'},
+        {id:4,time:'7:45 AM',subject:'Fiqh',classGrade:'Thanawiyyah 1',type:'regular'},
+        {id:5,time:'8:30 AM',subject:'Dua & Closing Assembly',classGrade:'All Classes',type:'cyan'},
+        {id:6,time:'9:00 AM',subject:'End of Day 🏁',classGrade:'',type:'break'},
+      ],
+      sun:[
+        {id:1,time:'6:00 AM',subject:'Quran Memorisation (Hifz)',classGrade:'All Classes',type:'cyan'},
+        {id:2,time:'6:45 AM',subject:'Tafsir ul Quran',classGrade:'Thanawiyyah 2',type:'regular'},
+        {id:3,time:'7:30 AM',subject:'Short Break',classGrade:'',type:'break'},
+        {id:4,time:'7:45 AM',subject:'Islamic History & Seerah',classGrade:'Mutawassitah 2',type:'regular'},
+        {id:5,time:'8:30 AM',subject:'Dua & Closing Assembly',classGrade:'All Classes',type:'cyan'},
+        {id:6,time:'9:00 AM',subject:'End of Day 🏁',classGrade:'',type:'break'},
+      ],
+      mon:[
+        {id:1,time:'6:00 AM',subject:'Quran Recitation',classGrade:'All Classes',type:'cyan'},
+        {id:2,time:'6:45 AM',subject:'Hadith Studies',classGrade:'Thanawiyyah 1',type:'regular'},
+        {id:3,time:'7:30 AM',subject:'Short Break',classGrade:'',type:'break'},
+        {id:4,time:'7:45 AM',subject:'Aqeedah & Fiqh',classGrade:'Mutawassitah 2',type:'regular'},
+        {id:5,time:'8:30 AM',subject:'Arabic Composition',classGrade:'Mutawassitah 1',type:'cyan'},
+        {id:6,time:'9:00 AM',subject:'End of Day 🏁',classGrade:'',type:'break'},
+      ],
+      tue:[
+        {id:1,time:'6:00 AM',subject:'Hifz Revision',classGrade:'All Classes',type:'cyan'},
+        {id:2,time:'6:45 AM',subject:'Nahw & Sarf (Morphology)',classGrade:'Mutawassitah 1',type:'regular'},
+        {id:3,time:'7:30 AM',subject:'Short Break',classGrade:'',type:'break'},
+        {id:4,time:'7:45 AM',subject:'Calligraphy & Arabic Writing',classGrade:'Ibtidaiyyah 1',type:'regular'},
+        {id:5,time:'8:30 AM',subject:'Dua & Closing Assembly',classGrade:'All Classes',type:'cyan'},
+        {id:6,time:'9:00 AM',subject:'End of Day 🏁',classGrade:'',type:'break'},
+      ],
+      wed:[],
+      thu:[],
+    });
   }
-  if(key==='examTT'){
-    const eb=document.getElementById('examTTBody');
-    if(eb && document.getElementById('examTimetableModal').style.display!=='none') renderExamTimetable();
+  if(!load(KEY_EXAM_TT,null)){
+    save(KEY_EXAM_TT,[
+      {id:1,date:'2025-04-20',startTime:'08:00',endTime:'10:00',classGrade:'Thanawiyyah 1',subject:'Fiqh',venue:'Main Hall',notes:'Bring admit card'},
+      {id:2,date:'2025-04-21',startTime:'08:00',endTime:'10:00',classGrade:'Thanawiyyah 2',subject:'Arabic Grammar',venue:'Main Hall',notes:''},
+      {id:3,date:'2025-04-22',startTime:'08:00',endTime:'09:30',classGrade:'Mutawassitah 1',subject:'Quran Recitation',venue:'Masjid Hall',notes:'Oral exam'},
+      {id:4,date:'2025-04-23',startTime:'08:00',endTime:'10:00',classGrade:'Mutawassitah 2',subject:'Hadith Studies',venue:'Main Hall',notes:''},
+      {id:5,date:'2025-04-24',startTime:'08:00',endTime:'09:30',classGrade:'Ibtidaiyyah 1',subject:'Basic Fiqh',venue:'Room A',notes:''},
+      {id:6,date:'2025-04-25',startTime:'08:00',endTime:'09:30',classGrade:'Ibtidaiyyah 2',subject:'Arabic Letters',venue:'Room B',notes:''},
+    ]);
   }
-  if(key==='staff'){
-    const sb=document.getElementById('staffBody');
-    if(sb && document.getElementById('staffModal').style.display!=='none') renderStaff();
+  if(!load(KEY_STAFF,null)){
+    save(KEY_STAFF,[
+      {id:1,name:'Ustadh Abdul Rahman',role:'Head Teacher – Fiqh & Hadith',qualification:'Alim, Dars-e-Nizami (Darul Uloom)',phone:'',email:'',icon:'👨‍🏫'},
+      {id:2,name:'Ustadh Muhammed Shafi',role:'Senior Teacher – Quran & Tafsir',qualification:'Hafiz, Qari (Samastha)',phone:'',email:'',icon:'👨‍🏫'},
+      {id:3,name:'Ustadha Fathima Beevi',role:'Teacher – Arabic & Nahw',qualification:'B.A. Arabic, Samastha Certified',phone:'',email:'',icon:'👩‍🏫'},
+      {id:4,name:'Ustadh Ibrahim Khalil',role:'Teacher – Islamic History',qualification:'M.A. Islamic Studies',phone:'',email:'',icon:'👨‍🏫'},
+      {id:5,name:'Ustadha Mariyam Siddiqui',role:'Teacher – Ibtidaiyyah',qualification:'Samastha Certified Teacher',phone:'',email:'',icon:'👩‍🏫'},
+      {id:6,name:'Br. Aslam Pattarkulam',role:'Administrative Manager',qualification:'B.Com, Office Management',phone:'',email:'',icon:'👨‍💼'},
+      {id:7,name:'Sr. Khadeeja Noor',role:'Student Affairs Coordinator',qualification:'Social Work Diploma',phone:'',email:'',icon:'👩‍💼'},
+    ]);
   }
-  if(key==='syllabus'){
-    const sa=document.getElementById('sylAccordion');
-    if(sa && document.getElementById('syllabusModal').style.display!=='none') renderSyllabus();
+  if(!load(KEY_SYLLABUS,null)){
+    save(KEY_SYLLABUS,[
+      {id:1,title:'Ibtidaiyyah – Foundation',badge:'Years 1–2',items:['Basic Arabic Letters & Harakat','Quran Recitation (Qaida)','Basic Duas & Short Surahs','Islamic Manners (Adab)']},
+      {id:2,title:'Mutawassitah – Intermediate',badge:'Years 3–4',items:['Nahw (Arabic Grammar)','Sarf (Morphology)','Fiqh – Hanafi Madhab','Forty Hadith (Nawawi)','Tafsir of Juz Amma']},
+      {id:3,title:'Thanawiyyah – Secondary',badge:'Years 5–6',items:['Advanced Fiqh & Fatawa','Usool ul Fiqh','Hadith Studies – Mishkat','Aqeedah – Tahawiyyah','Islamic History & Seerah']},
+      {id:4,title:'Examinations & Assessment',badge:'All Years',items:['Monthly Unit Tests','Half-Yearly Exams (Samastha)','Annual Board Examination','Oral Assessment (Shafahi)']},
+    ]);
   }
 }
 
-/* Start the data init */
-initData();
-
-/* ══ TOAST ══ */
+/* ══════════════════════════════════════════════════
+   TOAST HELPER
+══════════════════════════════════════════════════ */
 let toastTimeout;
 function showToast(msg){
   const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>t.classList.remove('show'),2800);
 }
 
-/* ══ MODAL / ADMIN ══ */
+/* ══════════════════════════════════════════════════
+   MODAL HELPERS
+══════════════════════════════════════════════════ */
 let isAdmin=false;
 const ADMIN_CODE='3291';
 let currentTTDay='sat';
 
 function openModal(id){
+  currentOpenModal=id;
   document.getElementById(id).style.display='flex';
   if(id==='boardModal')         initBoard();
   if(id==='quizModal')          initQuizUI();
@@ -1090,13 +1464,16 @@ function openModal(id){
   if(id==='staffModal')         buildStaff();
   if(id==='programmeModal')     switchProgTab(document.querySelector('.prog-tab.active'),'nabidhinan');
 }
-function closeModal(id){document.getElementById(id).style.display='none';}
+function closeModal(id){currentOpenModal=null;document.getElementById(id).style.display='none';}
 
 function initTimetableModal(){
   document.getElementById('adminTimetable').style.display=isAdmin?'block':'none';
-  showTTDay(document.querySelector('#ttDayTabs .day-tab.active')||document.querySelector('#ttDayTabs .day-tab'),currentTTDay);
+  showTTDay(document.querySelector('.day-tab.active')||document.querySelector('.day-tab'),currentTTDay);
 }
 
+/* ══════════════════════════════════════════════════
+   ADMIN LOGIN
+══════════════════════════════════════════════════ */
 function adminLogin(){
   const code=document.getElementById('adminCode').value.trim();
   if(code===ADMIN_CODE){
@@ -1117,28 +1494,33 @@ function adminLogin(){
   }
 }
 
-/* ══ CLASS TIMETABLE ══ */
+/* ══════════════════════════════════════════════════
+   CLASS TIMETABLE
+══════════════════════════════════════════════════ */
 const dayNames={sat:'Saturday',sun:'Sunday',mon:'Monday',tue:'Tuesday',wed:'Wednesday',thu:'Thursday'};
 
 function showTTDay(el,day){
   currentTTDay=day;
-  document.querySelectorAll('#ttDayTabs .day-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.day-tab').forEach(t=>t.classList.remove('active'));
   if(el) el.classList.add('active');
   renderTimetableDay(day);
 }
 
 function renderTimetableDay(day){
-  const ttData=load('timetable',DEFAULTS.timetable);
+  const ttData=load(KEY_TIMETABLE,{});
   const entries=(ttData[day]||[]);
   const container=document.getElementById('timetable-content');
+
   if(entries.length===0){
     container.innerHTML=`<div class="tt-empty"><div class="tt-empty-icon">📅</div><p>No entries for ${dayNames[day]} yet.${isAdmin?' Use the admin panel above to add entries.':''}</p></div>`;
     return;
   }
+
   let html=`<div style="margin-bottom:6px;font-size:11px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.8px;">${dayNames[day]} Schedule</div>`;
   entries.forEach((entry,i)=>{
     const isLast=i===entries.length-1;
-    html+=`<div class="tt-entry type-${entry.type||'regular'}">
+    html+=`
+    <div class="tt-entry type-${entry.type||'regular'}">
       <div class="tt-time-col"><div class="tt-time-txt">${entry.time}</div></div>
       ${!isLast?'<div class="tt-line"></div>':''}
       <div class="tt-dot"></div>
@@ -1161,16 +1543,23 @@ function addTimetableEntry(){
   const classGrade=document.getElementById('ttClass').value;
   const type=document.getElementById('ttType').value;
   if(!time||!subject){showToast('⚠️ Time and Subject are required');return;}
-  const ttData=load('timetable',DEFAULTS.timetable);
+  const ttData=load(KEY_TIMETABLE,{});
   if(!ttData[day]) ttData[day]=[];
   const maxId=ttData[day].reduce((m,e)=>Math.max(m,e.id||0),0);
   ttData[day].push({id:maxId+1,time,subject,classGrade,type});
-  save('timetable',ttData);
+  save(KEY_TIMETABLE,ttData);
   document.getElementById('ttTime').value='';
   document.getElementById('ttSubject').value='';
-  document.querySelectorAll('#ttDayTabs .day-tab').forEach(t=>{
-    if(t.textContent.trim().toLowerCase()===day.substring(0,3)){
-      document.querySelectorAll('#ttDayTabs .day-tab').forEach(x=>x.classList.remove('active'));
+  // switch to the day we just added
+  document.querySelectorAll('.day-tab').forEach(t=>{
+    if(t.textContent.trim().toLowerCase().startsWith(day.substring(0,3))||
+       (day==='sat'&&t.textContent.trim()==='Sat')||
+       (day==='sun'&&t.textContent.trim()==='Sun')||
+       (day==='mon'&&t.textContent.trim()==='Mon')||
+       (day==='tue'&&t.textContent.trim()==='Tue')||
+       (day==='wed'&&t.textContent.trim()==='Wed')||
+       (day==='thu'&&t.textContent.trim()==='Thu')){
+      document.querySelectorAll('.day-tab').forEach(x=>x.classList.remove('active'));
       t.classList.add('active');
     }
   });
@@ -1181,14 +1570,16 @@ function addTimetableEntry(){
 
 function deleteTimetableEntry(day,id){
   if(!confirm('Remove this entry?')) return;
-  const ttData=load('timetable',DEFAULTS.timetable);
+  const ttData=load(KEY_TIMETABLE,{});
   if(ttData[day]) ttData[day]=ttData[day].filter(e=>e.id!==id);
-  save('timetable',ttData);
+  save(KEY_TIMETABLE,ttData);
   renderTimetableDay(day);
   showToast('🗑 Entry removed');
 }
 
-/* ══ EXAM TIMETABLE ══ */
+/* ══════════════════════════════════════════════════
+   EXAM TIMETABLE
+══════════════════════════════════════════════════ */
 let examClassFilter='all';
 
 function buildExamTimetable(){
@@ -1197,26 +1588,47 @@ function buildExamTimetable(){
 }
 
 function renderExamTimetable(){
-  const exams=load('examTT',DEFAULTS.examTT);
+  const exams=load(KEY_EXAM_TT,[]);
   const sorted=exams.slice().sort((a,b)=>new Date(a.date)-new Date(b.date));
   const today=new Date();today.setHours(0,0,0,0);
+
+  // unique classes for filter
   const classes=['all',...new Set(exams.map(e=>e.classGrade).filter(Boolean))];
+
   const upcoming=exams.filter(e=>new Date(e.date)>=today).length;
   const past=exams.filter(e=>new Date(e.date)<today).length;
-  let html=`<div class="exam-summary-row">
+
+  let html='';
+
+  // Summary row
+  html+=`<div class="exam-summary-row">
     <div class="exam-sum-card"><div class="exam-sum-num">${exams.length}</div><div class="exam-sum-lbl">Total Exams</div></div>
     <div class="exam-sum-card"><div class="exam-sum-num" style="color:#1e40af;">${upcoming}</div><div class="exam-sum-lbl">Upcoming</div></div>
     <div class="exam-sum-card"><div class="exam-sum-num" style="color:#6b7280;">${past}</div><div class="exam-sum-lbl">Completed</div></div>
   </div>`;
-  html+=`<div style="margin-bottom:14px;display:flex;gap:6px;flex-wrap:wrap;">`;
-  classes.forEach(c=>{html+=`<button class="exam-filter-btn${examClassFilter===c?' active':''}" onclick="setExamFilter('${c}')">${c==='all'?'All Classes':c}</button>`;});
+
+  // Class filter
+  html+=`<div class="exam-tt-filter" style="margin-bottom:14px;flex-wrap:wrap;display:flex;gap:6px;">`;
+  classes.forEach(c=>{
+    const shortName=c==='all'?'All Classes':c;
+    html+=`<button class="exam-filter-btn${examClassFilter===c?' active':''}" onclick="setExamFilter('${c}')">${shortName}</button>`;
+  });
   html+='</div>';
+
   const filtered=examClassFilter==='all'?sorted:sorted.filter(e=>e.classGrade===examClassFilter);
+
   if(filtered.length===0){
     html+=`<div class="exam-empty"><div style="font-size:40px;margin-bottom:10px;">📋</div><p style="font-size:13px;">No exam entries yet.${isAdmin?' Add one above.':''}</p></div>`;
-    document.getElementById('examTTBody').innerHTML=html;return;
+    document.getElementById('examTTBody').innerHTML=html;
+    return;
   }
-  html+=`<div class="exam-tt-table-wrap"><table class="exam-tt-table"><thead><tr><th>Date</th><th>Day</th><th>Time</th><th>Class</th><th>Subject</th><th>Venue</th><th>Status</th>${isAdmin?'<th></th>':''}</tr></thead><tbody>`;
+
+  html+=`<div class="exam-tt-table-wrap"><table class="exam-tt-table">
+    <thead><tr>
+      <th>Date</th><th>Day</th><th>Time</th><th>Class</th><th>Subject</th><th>Venue</th><th>Status</th>
+      ${isAdmin?'<th></th>':''}
+    </tr></thead><tbody>`;
+
   filtered.forEach(e=>{
     const dateObj=new Date(e.date+'T00:00:00');
     const eToday=new Date();eToday.setHours(0,0,0,0);
@@ -1226,22 +1638,39 @@ function renderExamTimetable(){
     const dateStr=dateObj.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
     const startFmt=e.startTime?formatTime12(e.startTime):'';
     const endFmt=e.endTime?formatTime12(e.endTime):'';
-    let statusHtml=isToday?`<span class="exam-status-pill exam-status-today">⚡ Today</span>`:isPast?`<span class="exam-status-pill exam-status-past">✓ Done</span>`:`<span class="exam-status-pill exam-status-upcoming">📅 Upcoming</span>`;
-    html+=`<tr><td><div class="exam-date-cell"><span class="exam-date-main">${dateStr}</span></div></td><td><span class="exam-day-badge">${dayOfWeek}</span></td>
-    <td><div class="exam-time-cell">${startFmt}${endFmt?`<span>to ${endFmt}</span>`:''}</div></td>
-    <td><span class="exam-class-pill">${e.classGrade||'—'}</span></td>
-    <td><div class="exam-subject-cell">${e.subject}${e.notes?`<div style="font-size:10px;color:var(--text-light);font-weight:400;margin-top:2px;">ℹ️ ${e.notes}</div>`:''}</div></td>
-    <td><div class="exam-venue-cell">${e.venue||'—'}</div></td>
-    <td>${statusHtml}</td>
-    ${isAdmin?`<td><button class="exam-del-btn" onclick="deleteExamEntry(${e.id})">🗑</button></td>`:''}
+    let statusHtml='';
+    if(isToday) statusHtml=`<span class="exam-status-pill exam-status-today">⚡ Today</span>`;
+    else if(isPast) statusHtml=`<span class="exam-status-pill exam-status-past">✓ Done</span>`;
+    else statusHtml=`<span class="exam-status-pill exam-status-upcoming">📅 Upcoming</span>`;
+
+    html+=`<tr>
+      <td><div class="exam-date-cell"><span class="exam-date-main">${dateStr}</span></div></td>
+      <td><span class="exam-day-badge">${dayOfWeek}</span></td>
+      <td><div class="exam-time-cell">${startFmt}${endFmt?`<span>to ${endFmt}</span>`:''}</div></td>
+      <td><span class="exam-class-pill">${e.classGrade||'—'}</span></td>
+      <td><div class="exam-subject-cell">${e.subject}${e.notes?`<div style="font-size:10px;color:var(--text-light);font-weight:400;margin-top:2px;">ℹ️ ${e.notes}</div>`:''}</div></td>
+      <td><div class="exam-venue-cell">${e.venue||'—'}</div></td>
+      <td>${statusHtml}</td>
+      ${isAdmin?`<td><button class="exam-del-btn" onclick="deleteExamEntry(${e.id})" title="Delete">🗑</button></td>`:''}
     </tr>`;
   });
+
   html+='</tbody></table></div>';
   document.getElementById('examTTBody').innerHTML=html;
 }
 
-function setExamFilter(cls){examClassFilter=cls;renderExamTimetable();}
-function formatTime12(t){if(!t)return '';const[h,m]=t.split(':').map(Number);const ampm=h>=12?'PM':'AM';const h12=h%12||12;return `${h12}:${m.toString().padStart(2,'0')} ${ampm}`;}
+function setExamFilter(cls){
+  examClassFilter=cls;
+  renderExamTimetable();
+}
+
+function formatTime12(t){
+  if(!t) return '';
+  const [h,m]=t.split(':').map(Number);
+  const ampm=h>=12?'PM':'AM';
+  const h12=h%12||12;
+  return `${h12}:${m.toString().padStart(2,'0')} ${ampm}`;
+}
 
 function addExamEntry(){
   const date=document.getElementById('etDate').value;
@@ -1252,75 +1681,108 @@ function addExamEntry(){
   const venue=document.getElementById('etVenue').value.trim();
   const notes=document.getElementById('etNotes').value.trim();
   if(!date||!subject||!classGrade){showToast('⚠️ Date, Class, and Subject are required');return;}
-  const exams=load('examTT',DEFAULTS.examTT);
+  const exams=load(KEY_EXAM_TT,[]);
   const newId=Math.max(0,...exams.map(e=>e.id||0))+1;
   exams.push({id:newId,date,startTime,endTime,classGrade,subject,venue,notes});
-  save('examTT',exams);
-  ['etDate','etStart','etEnd','etSubject','etVenue','etNotes'].forEach(id=>document.getElementById(id).value='');
+  save(KEY_EXAM_TT,exams);
+  document.getElementById('etDate').value='';
+  document.getElementById('etStart').value='';
+  document.getElementById('etEnd').value='';
   document.getElementById('etClass').value='';
+  document.getElementById('etSubject').value='';
+  document.getElementById('etVenue').value='';
+  document.getElementById('etNotes').value='';
   renderExamTimetable();
   showToast('✅ Exam entry added');
 }
 
 function deleteExamEntry(id){
   if(!confirm('Delete this exam entry?')) return;
-  const exams=load('examTT',DEFAULTS.examTT).filter(e=>e.id!==id);
-  save('examTT',exams);
+  const exams=load(KEY_EXAM_TT,[]).filter(e=>e.id!==id);
+  save(KEY_EXAM_TT,exams);
   renderExamTimetable();
   showToast('🗑 Exam entry removed');
 }
 
-/* ══ STAFF ══ */
-function buildStaff(){document.getElementById('adminStaff').style.display=isAdmin?'block':'none';renderStaff();}
+/* ══════════════════════════════════════════════════
+   STAFF
+══════════════════════════════════════════════════ */
+function buildStaff(){
+  document.getElementById('adminStaff').style.display=isAdmin?'block':'none';
+  renderStaff();
+}
 
 function renderStaff(){
-  const staffList=load('staff',DEFAULTS.staff);
-  const teachers=staffList.filter(s=>s.role.toLowerCase().includes('teacher')||s.role.toLowerCase().includes('ustadh')||s.role.toLowerCase().includes('ustadha'));
+  const staffList=load(KEY_STAFF,[]);
+  // separate by type
+  const teachers=staffList.filter(s=>s.icon.includes('🏫')||s.role.toLowerCase().includes('teacher')||s.role.toLowerCase().includes('ustadh')||s.role.toLowerCase().includes('ustadha'));
   const admin=staffList.filter(s=>!teachers.includes(s));
+
   let html='<p style="font-size:12px;color:var(--text-light);margin-bottom:16px;">Dedicated educators of NUM 268, Pattarkulam</p>';
-  const renderSection=(list,label)=>{
-    if(!list.length) return '';
-    let h=`<div style="font-size:13px;font-weight:700;color:var(--blue-royal);margin:18px 0 10px;display:flex;align-items:center;gap:7px;">${label}<span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(26,58,138,.2),transparent);display:inline-block;"></span></div><div class="staff-grid">`;
-    list.forEach(s=>{
-      const chips=[s.phone?`<span class="staff-contact-chip">📞 ${s.phone}</span>`:'',s.email?`<span class="staff-contact-chip">✉️ ${s.email}</span>`:'',s.qualification?`<span class="staff-contact-chip">🎓 ${s.qualification}</span>`:''].filter(Boolean).join('');
-      h+=`<div class="staff-card-pro" id="scard-${s.id}">
-        <div class="staff-avatar-pro">${s.icon}</div>
-        <div class="staff-info-pro">
-          <div class="staff-name-pro">${s.name}</div>
-          <div class="staff-role-pro">${s.role}</div>
-          ${chips?`<div class="staff-contact-row">${chips}</div>`:''}
-          <div class="staff-edit-form" id="sef-${s.id}">
-            <div class="form-row" style="margin-bottom:8px;">
-              <div><label class="form-label">Name</label><input class="form-input" id="sen-${s.id}" value="${s.name.replace(/"/g,'&quot;')}" style="padding:8px;font-size:12px;"></div>
-              <div><label class="form-label">Role</label><input class="form-input" id="ser-${s.id}" value="${s.role.replace(/"/g,'&quot;')}" style="padding:8px;font-size:12px;"></div>
-            </div>
-            <div class="form-row" style="margin-bottom:8px;">
-              <div><label class="form-label">Qualification</label><input class="form-input" id="seq-${s.id}" value="${(s.qualification||'').replace(/"/g,'&quot;')}" style="padding:8px;font-size:12px;"></div>
-              <div><label class="form-label">Phone</label><input class="form-input" id="sep-${s.id}" value="${(s.phone||'').replace(/"/g,'&quot;')}" style="padding:8px;font-size:12px;"></div>
-            </div>
-            <div class="form-row" style="margin-bottom:10px;">
-              <div><label class="form-label">Email</label><input class="form-input" id="see-${s.id}" value="${(s.email||'').replace(/"/g,'&quot;')}" style="padding:8px;font-size:12px;"></div>
-              <div><label class="form-label">Icon</label><select class="form-input" id="sei-${s.id}" style="padding:8px;font-size:12px;">
-                <option value="👨‍🏫" ${s.icon==='👨‍🏫'?'selected':''}>👨‍🏫</option><option value="👩‍🏫" ${s.icon==='👩‍🏫'?'selected':''}>👩‍🏫</option>
-                <option value="👨‍💼" ${s.icon==='👨‍💼'?'selected':''}>👨‍💼</option><option value="👩‍💼" ${s.icon==='👩‍💼'?'selected':''}>👩‍💼</option>
-                <option value="🧑‍🎓" ${s.icon==='🧑‍🎓'?'selected':''}>🧑‍🎓</option>
-              </select></div>
-            </div>
-            <div style="display:flex;gap:7px;">
-              <button class="add-btn" style="font-size:11px;padding:7px 14px;" onclick="saveStaffEdit(${s.id})">💾 Save</button>
-              <button class="staff-action-btn" onclick="cancelStaffEdit(${s.id})">Cancel</button>
-            </div>
+
+  if(teachers.length>0){
+    html+=`<div class="sb-section-title">👨‍🏫 Teaching Staff</div><div class="staff-grid">`;
+    teachers.forEach(s=>{ html+=renderStaffCard(s); });
+    html+='</div>';
+  }
+  if(admin.length>0){
+    html+=`<div class="sb-section-title" style="margin-top:18px;">🏢 Administration</div><div class="staff-grid">`;
+    admin.forEach(s=>{ html+=renderStaffCard(s); });
+    html+='</div>';
+  }
+  if(staffList.length===0){
+    html+='<div style="text-align:center;padding:40px;color:var(--text-light);">No staff added yet.</div>';
+  }
+  document.getElementById('staffBody').innerHTML=html;
+}
+
+function renderStaffCard(s){
+  const contactChips=[
+    s.phone?`<span class="staff-contact-chip">📞 ${s.phone}</span>`:'',
+    s.email?`<span class="staff-contact-chip">✉️ ${s.email}</span>`:'',
+    s.qualification?`<span class="staff-contact-chip">🎓 ${s.qualification}</span>`:'',
+  ].filter(Boolean).join('');
+  return `
+  <div class="staff-card-pro" id="scard-${s.id}">
+    <div class="staff-avatar-pro">${s.icon}</div>
+    <div class="staff-info-pro">
+      <div class="staff-name-pro">${s.name}</div>
+      <div class="staff-role-pro">${s.role}</div>
+      ${contactChips?`<div class="staff-contact-row">${contactChips}</div>`:''}
+
+      <!-- Edit Form -->
+      <div class="staff-edit-form" id="sef-${s.id}">
+        <div class="form-row" style="margin-bottom:8px;">
+          <div><label class="form-label">Name</label><input class="form-input" id="sen-${s.id}" value="${s.name}" style="padding:8px;font-size:12px;"></div>
+          <div><label class="form-label">Role</label><input class="form-input" id="ser-${s.id}" value="${s.role}" style="padding:8px;font-size:12px;"></div>
+        </div>
+        <div class="form-row" style="margin-bottom:8px;">
+          <div><label class="form-label">Qualification</label><input class="form-input" id="seq-${s.id}" value="${s.qualification||''}" style="padding:8px;font-size:12px;"></div>
+          <div><label class="form-label">Phone</label><input class="form-input" id="sep-${s.id}" value="${s.phone||''}" style="padding:8px;font-size:12px;"></div>
+        </div>
+        <div class="form-row" style="margin-bottom:10px;">
+          <div><label class="form-label">Email</label><input class="form-input" id="see-${s.id}" value="${s.email||''}" style="padding:8px;font-size:12px;"></div>
+          <div><label class="form-label">Icon</label>
+            <select class="form-input" id="sei-${s.id}" style="padding:8px;font-size:12px;">
+              <option value="👨‍🏫" ${s.icon==='👨‍🏫'?'selected':''}>👨‍🏫 Male Teacher</option>
+              <option value="👩‍🏫" ${s.icon==='👩‍🏫'?'selected':''}>👩‍🏫 Female Teacher</option>
+              <option value="👨‍💼" ${s.icon==='👨‍💼'?'selected':''}>👨‍💼 Male Admin</option>
+              <option value="👩‍💼" ${s.icon==='👩‍💼'?'selected':''}>👩‍💼 Female Admin</option>
+              <option value="🧑‍🎓" ${s.icon==='🧑‍🎓'?'selected':''}>🧑‍🎓 Scholar</option>
+            </select>
           </div>
         </div>
-        ${isAdmin?`<div class="staff-actions"><button class="staff-action-btn" onclick="toggleStaffEdit(${s.id})">✏️</button><button class="staff-action-btn danger" onclick="deleteStaff(${s.id})">🗑</button></div>`:''}
-      </div>`;
-    });
-    h+='</div>';return h;
-  };
-  html+=renderSection(teachers,'👨‍🏫 Teaching Staff');
-  html+=renderSection(admin,'🏢 Administration');
-  if(!staffList.length) html+='<div style="text-align:center;padding:40px;color:var(--text-light);">No staff added yet.</div>';
-  document.getElementById('staffBody').innerHTML=html;
+        <div style="display:flex;gap:7px;">
+          <button class="add-btn" style="font-size:11px;padding:7px 14px;" onclick="saveStaffEdit(${s.id})">💾 Save</button>
+          <button class="staff-action-btn" onclick="cancelStaffEdit(${s.id})">Cancel</button>
+        </div>
+      </div>
+    </div>
+    ${isAdmin?`<div class="staff-actions">
+      <button class="staff-action-btn" onclick="toggleStaffEdit(${s.id})">✏️</button>
+      <button class="staff-action-btn danger" onclick="deleteStaff(${s.id})">🗑</button>
+    </div>`:''}
+  </div>`;
 }
 
 function toggleStaffEdit(id){document.getElementById('sef-'+id).classList.toggle('open');}
@@ -1328,118 +1790,196 @@ function cancelStaffEdit(id){document.getElementById('sef-'+id).classList.remove
 function saveStaffEdit(id){
   const name=(document.getElementById('sen-'+id).value||'').trim();
   const role=(document.getElementById('ser-'+id).value||'').trim();
-  if(!name||!role){showToast('⚠️ Name and Role required');return;}
-  const staffList=load('staff',DEFAULTS.staff);
-  const s=staffList.find(x=>x.id===id);if(!s)return;
-  s.name=name;s.role=role;s.qualification=document.getElementById('seq-'+id).value.trim();
-  s.phone=document.getElementById('sep-'+id).value.trim();s.email=document.getElementById('see-'+id).value.trim();
+  if(!name||!role){showToast('⚠️ Name and Role are required');return;}
+  const staffList=load(KEY_STAFF,[]);
+  const s=staffList.find(x=>x.id===id);
+  if(!s) return;
+  s.name=name;
+  s.role=role;
+  s.qualification=document.getElementById('seq-'+id).value.trim();
+  s.phone=document.getElementById('sep-'+id).value.trim();
+  s.email=document.getElementById('see-'+id).value.trim();
   s.icon=document.getElementById('sei-'+id).value;
-  save('staff',staffList);renderStaff();showToast('✅ Staff details updated');
+  save(KEY_STAFF,staffList);
+  renderStaff();
+  showToast('✅ Staff details updated');
 }
-function deleteStaff(id){if(!confirm('Remove this staff member?'))return;save('staff',load('staff',DEFAULTS.staff).filter(s=>s.id!==id));renderStaff();showToast('🗑 Staff removed');}
+function deleteStaff(id){
+  if(!confirm('Remove this staff member?')) return;
+  const staffList=load(KEY_STAFF,[]).filter(s=>s.id!==id);
+  save(KEY_STAFF,staffList);
+  renderStaff();
+  showToast('🗑 Staff removed');
+}
 function addStaffMember(){
   const name=document.getElementById('staffName').value.trim();
   const role=document.getElementById('staffRole').value.trim();
-  if(!name||!role){showToast('⚠️ Name and Role required');return;}
-  const staffList=load('staff',DEFAULTS.staff);
+  const qualification=document.getElementById('staffQual').value.trim();
+  const phone=document.getElementById('staffPhone').value.trim();
+  const email=document.getElementById('staffEmail').value.trim();
+  const icon=document.getElementById('staffIcon').value;
+  if(!name||!role){showToast('⚠️ Name and Role are required');return;}
+  const staffList=load(KEY_STAFF,[]);
   const newId=Math.max(0,...staffList.map(s=>s.id||0))+1;
-  staffList.push({id:newId,name,role,qualification:document.getElementById('staffQual').value.trim(),phone:document.getElementById('staffPhone').value.trim(),email:document.getElementById('staffEmail').value.trim(),icon:document.getElementById('staffIcon').value});
-  save('staff',staffList);
-  ['staffName','staffRole','staffQual','staffPhone','staffEmail'].forEach(id=>document.getElementById(id).value='');
-  renderStaff();showToast('✅ '+name+' added');
+  staffList.push({id:newId,name,role,qualification,phone,email,icon});
+  save(KEY_STAFF,staffList);
+  document.getElementById('staffName').value='';
+  document.getElementById('staffRole').value='';
+  document.getElementById('staffQual').value='';
+  document.getElementById('staffPhone').value='';
+  document.getElementById('staffEmail').value='';
+  renderStaff();
+  showToast('✅ '+name+' added to staff');
 }
 
-/* ══ SYLLABUS ══ */
-function buildSyllabus(){document.getElementById('adminSyllabus').style.display=isAdmin?'block':'none';renderSyllabus();}
+/* ══════════════════════════════════════════════════
+   SYLLABUS
+══════════════════════════════════════════════════ */
+function buildSyllabus(){
+  document.getElementById('adminSyllabus').style.display=isAdmin?'block':'none';
+  renderSyllabus();
+}
 
 function renderSyllabus(){
-  const sylData=load('syllabus',DEFAULTS.syllabus);
+  const sylData=load(KEY_SYLLABUS,[]);
   let html='';
   sylData.forEach((sec,i)=>{
-    html+=`<div class="syl-item${i===0?' open':''}" id="syl-${sec.id}">
+    html+=`
+    <div class="syl-item${i===0?' open':''}" id="syl-${sec.id}">
       <div class="syl-header" onclick="toggleSylItem(${sec.id})">
-        <div class="syl-header-left"><span class="syl-title-text">${sec.title}</span><span class="syl-badge">${sec.badge}</span></div>
+        <div class="syl-header-left">
+          <span class="syl-title-text">${sec.title}</span>
+          <span class="syl-badge">${sec.badge}</span>
+        </div>
         <span class="syl-chevron">▼</span>
       </div>
-      <div class="syl-body"><div class="syl-body-inner">
-        <div class="syl-items-list" id="sylitems-${sec.id}">
-          ${sec.items.map((item,ii)=>`<div class="syl-item-row">
-            <div class="syl-item-dot"></div>
-            <span class="syl-item-text">${item}</span>
-            ${isAdmin?`<button class="syl-item-del" onclick="deleteSylItem(${sec.id},${ii})">✕</button>`:''}
-          </div>`).join('')}
-        </div>
-        ${isAdmin?`
-        <div class="syl-add-item-row">
-          <input type="text" id="newitem-${sec.id}" placeholder="Add a topic…" onkeydown="if(event.key==='Enter')addSylItem(${sec.id})">
-          <button onclick="addSylItem(${sec.id})">+ Add</button>
-        </div>
-        <div class="syl-edit-form" id="sylef-${sec.id}">
-          <div class="form-row" style="margin-bottom:8px;">
-            <div><label class="form-label">Section Title</label><input class="form-input" id="sylt-${sec.id}" value="${sec.title.replace(/"/g,'&quot;')}" style="padding:8px;font-size:12px;"></div>
-            <div><label class="form-label">Badge</label><input class="form-input" id="sylb-${sec.id}" value="${sec.badge.replace(/"/g,'&quot;')}" style="padding:8px;font-size:12px;"></div>
+      <div class="syl-body">
+        <div class="syl-body-inner">
+          <div class="syl-items-list" id="sylitems-${sec.id}">
+            ${sec.items.map((item,ii)=>`
+            <div class="syl-item-row" id="sylrow-${sec.id}-${ii}">
+              <div class="syl-item-dot"></div>
+              <span class="syl-item-text">${item}</span>
+              ${isAdmin?`<button class="syl-item-del" onclick="deleteSylItem(${sec.id},${ii})" title="Remove">✕</button>`:''}
+            </div>`).join('')}
           </div>
-          <div style="display:flex;gap:7px;">
-            <button class="add-btn" style="font-size:11px;padding:7px 14px;" onclick="saveSylSection(${sec.id})">💾 Save</button>
-            <button class="syl-edit-section-btn" onclick="cancelSylEdit(${sec.id})">Cancel</button>
+          ${isAdmin?`
+          <div class="syl-add-item-row">
+            <input type="text" id="newitem-${sec.id}" placeholder="Add a topic…" onkeydown="if(event.key==='Enter')addSylItem(${sec.id})">
+            <button onclick="addSylItem(${sec.id})">+ Add</button>
           </div>
+
+          <!-- Edit Section Form -->
+          <div class="syl-edit-form" id="sylef-${sec.id}">
+            <div class="form-row" style="margin-bottom:8px;">
+              <div><label class="form-label">Section Title</label><input class="form-input" id="sylt-${sec.id}" value="${sec.title}" style="padding:8px;font-size:12px;"></div>
+              <div><label class="form-label">Badge</label><input class="form-input" id="sylb-${sec.id}" value="${sec.badge}" style="padding:8px;font-size:12px;"></div>
+            </div>
+            <div style="display:flex;gap:7px;">
+              <button class="add-btn" style="font-size:11px;padding:7px 14px;" onclick="saveSylSection(${sec.id})">💾 Save</button>
+              <button class="syl-edit-section-btn" onclick="cancelSylEdit(${sec.id})">Cancel</button>
+            </div>
+          </div>
+
+          <div class="syl-section-actions">
+            <button class="syl-edit-section-btn" onclick="toggleSylEdit(${sec.id})">✏️ Edit Section</button>
+            <button class="syl-del-section-btn" onclick="deleteSylSection(${sec.id})">🗑 Delete Section</button>
+          </div>`:''}
         </div>
-        <div class="syl-section-actions">
-          <button class="syl-edit-section-btn" onclick="toggleSylEdit(${sec.id})">✏️ Edit Section</button>
-          <button class="syl-del-section-btn" onclick="deleteSylSection(${sec.id})">🗑 Delete Section</button>
-        </div>`:''}
-      </div></div>
+      </div>
     </div>`;
   });
-  if(!sylData.length) html='<div style="text-align:center;padding:40px;color:var(--text-light);">No syllabus sections added yet.</div>';
+  if(sylData.length===0) html='<div style="text-align:center;padding:40px;color:var(--text-light);">No syllabus sections added yet.</div>';
   document.getElementById('sylAccordion').innerHTML=html;
 }
 
-function toggleSylItem(id){document.getElementById('syl-'+id).classList.toggle('open');}
+function toggleSylItem(id){
+  const el=document.getElementById('syl-'+id);
+  el.classList.toggle('open');
+}
 function toggleSylEdit(id){document.getElementById('sylef-'+id).classList.toggle('open');}
 function cancelSylEdit(id){document.getElementById('sylef-'+id).classList.remove('open');}
+
 function saveSylSection(id){
   const title=(document.getElementById('sylt-'+id).value||'').trim();
   const badge=(document.getElementById('sylb-'+id).value||'').trim();
-  if(!title){showToast('⚠️ Title required');return;}
-  const s=load('syllabus',DEFAULTS.syllabus);const sec=s.find(x=>x.id===id);if(!sec)return;
-  sec.title=title;sec.badge=badge;save('syllabus',s);renderSyllabus();showToast('✅ Section updated');
-}
-function addSylItem(id){
-  const inp=document.getElementById('newitem-'+id);const text=(inp.value||'').trim();
-  if(!text){showToast('⚠️ Enter a topic');return;}
-  const s=load('syllabus',DEFAULTS.syllabus);const sec=s.find(x=>x.id===id);if(!sec)return;
-  if(sec.items.includes(text)){showToast('ℹ️ Topic already exists');inp.value='';return;}
-  sec.items.push(text);save('syllabus',s);inp.value='';renderSyllabus();
-  setTimeout(()=>{const el=document.getElementById('syl-'+id);if(el&&!el.classList.contains('open'))el.classList.add('open');},50);
-  showToast('✅ Topic added');
-}
-function deleteSylItem(sectionId,itemIdx){
-  if(!confirm('Remove this topic?'))return;
-  const s=load('syllabus',DEFAULTS.syllabus);const sec=s.find(x=>x.id===sectionId);if(!sec)return;
-  sec.items.splice(itemIdx,1);save('syllabus',s);renderSyllabus();
-  setTimeout(()=>{const el=document.getElementById('syl-'+sectionId);if(el&&!el.classList.contains('open'))el.classList.add('open');},50);
-  showToast('🗑 Topic removed');
-}
-function deleteSylSection(id){
-  if(!confirm('Delete this entire section?'))return;
-  save('syllabus',load('syllabus',DEFAULTS.syllabus).filter(s=>s.id!==id));renderSyllabus();showToast('🗑 Section deleted');
-}
-function addSyllabusSection(){
-  const title=document.getElementById('sylTitle').value.trim();const badge=document.getElementById('sylBadge').value.trim();
-  const rawItems=document.getElementById('sylItems').value.trim();
-  if(!title){showToast('⚠️ Section title required');return;}
-  const items=rawItems?rawItems.split(',').map(i=>i.trim()).filter(i=>i):[];
-  const s=load('syllabus',DEFAULTS.syllabus);
-  const newId=Math.max(0,...s.map(x=>x.id||0))+1;
-  s.push({id:newId,title,badge,items});save('syllabus',s);
-  ['sylTitle','sylBadge','sylItems'].forEach(id=>document.getElementById(id).value='');
-  renderSyllabus();showToast('✅ Section "'+title+'" added');
+  if(!title){showToast('⚠️ Section title is required');return;}
+  const sylData=load(KEY_SYLLABUS,[]);
+  const sec=sylData.find(s=>s.id===id);
+  if(!sec) return;
+  sec.title=title;
+  sec.badge=badge;
+  save(KEY_SYLLABUS,sylData);
+  renderSyllabus();
+  showToast('✅ Section updated');
 }
 
-/* ══ PROGRAMMES ══ */
+function addSylItem(id){
+  const inp=document.getElementById('newitem-'+id);
+  const text=(inp.value||'').trim();
+  if(!text){showToast('⚠️ Enter a topic');return;}
+  const sylData=load(KEY_SYLLABUS,[]);
+  const sec=sylData.find(s=>s.id===id);
+  if(!sec) return;
+  if(sec.items.includes(text)){showToast('ℹ️ Topic already exists');inp.value='';return;}
+  sec.items.push(text);
+  save(KEY_SYLLABUS,sylData);
+  inp.value='';
+  renderSyllabus();
+  // reopen the section
+  setTimeout(()=>{
+    const el=document.getElementById('syl-'+id);
+    if(el&&!el.classList.contains('open')) el.classList.add('open');
+  },50);
+  showToast('✅ Topic added');
+}
+
+function deleteSylItem(sectionId,itemIdx){
+  if(!confirm('Remove this topic?')) return;
+  const sylData=load(KEY_SYLLABUS,[]);
+  const sec=sylData.find(s=>s.id===sectionId);
+  if(!sec) return;
+  sec.items.splice(itemIdx,1);
+  save(KEY_SYLLABUS,sylData);
+  renderSyllabus();
+  setTimeout(()=>{
+    const el=document.getElementById('syl-'+sectionId);
+    if(el&&!el.classList.contains('open')) el.classList.add('open');
+  },50);
+  showToast('🗑 Topic removed');
+}
+
+function deleteSylSection(id){
+  if(!confirm('Delete this entire section and all its topics?')) return;
+  const sylData=load(KEY_SYLLABUS,[]).filter(s=>s.id!==id);
+  save(KEY_SYLLABUS,sylData);
+  renderSyllabus();
+  showToast('🗑 Section deleted');
+}
+
+function addSyllabusSection(){
+  const title=document.getElementById('sylTitle').value.trim();
+  const badge=document.getElementById('sylBadge').value.trim();
+  const rawItems=document.getElementById('sylItems').value.trim();
+  if(!title){showToast('⚠️ Section title is required');return;}
+  const items=rawItems?rawItems.split(',').map(i=>i.trim()).filter(i=>i):[];
+  const sylData=load(KEY_SYLLABUS,[]);
+  const newId=Math.max(0,...sylData.map(s=>s.id||0))+1;
+  sylData.push({id:newId,title,badge,items});
+  save(KEY_SYLLABUS,sylData);
+  document.getElementById('sylTitle').value='';
+  document.getElementById('sylBadge').value='';
+  document.getElementById('sylItems').value='';
+  renderSyllabus();
+  showToast('✅ Section "'+title+'" added');
+}
+
+/* ══════════════════════════════════════════════════
+   PROGRAMMES SECTION (unchanged logic)
+══════════════════════════════════════════════════ */
 function switchProgTab(el,tab){
-  document.querySelectorAll('.prog-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
+  document.querySelectorAll('.prog-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
   document.querySelectorAll('.prog-content').forEach(c=>c.style.display='none');
   if(tab==='nabidhinan'){document.getElementById('nabidhinanTab').style.display='block';renderNabidhinan();}
   else if(tab==='quiz'){document.getElementById('quizTab').style.display='block';renderQuizResults();}
@@ -1448,14 +1988,17 @@ function switchProgTab(el,tab){
 }
 
 function computeTeamScores(){
-  const teams=load('teams',DEFAULTS.teams);
-  const scores=load('nabScores',DEFAULTS.nabScores);
-  teams.forEach(team=>{team.score=scores.filter(s=>team.members.includes(s.student)).reduce((sum,s)=>sum+Number(s.points),0);});
-  teams.sort((a,b)=>b.score-a.score);return teams;
+  const teams=load(KEY_TEAMS,[]);
+  const scores=load(KEY_NAB_SCORES,[]);
+  teams.forEach(team=>{
+    team.score=scores.filter(s=>team.members.includes(s.student)).reduce((sum,s)=>sum+Number(s.points),0);
+  });
+  teams.sort((a,b)=>b.score-a.score);
+  return teams;
 }
 
 function populateStudentSelect(selId){
-  const teams=load('teams',DEFAULTS.teams);
+  const teams=load(KEY_TEAMS,[]);
   const students=[...new Set(teams.flatMap(t=>t.members).filter(m=>m.trim()))];
   const el=document.getElementById(selId);
   if(el) el.innerHTML='<option value="">-- Select Student --</option>'+students.map(s=>`<option>${s}</option>`).join('');
@@ -1465,16 +2008,18 @@ function renderNabidhinan(){
   document.getElementById('adminNabidhinan').style.display=isAdmin?'block':'none';
   if(isAdmin) populateStudentSelect('nabStudentSelect');
   const teams=computeTeamScores();
-  const scores=load('nabScores',DEFAULTS.nabScores);
+  const scores=load(KEY_NAB_SCORES,[]);
   const maxScore=teams.length?Math.max(...teams.map(t=>t.score),1):1;
   const totalEvents=[...new Set(scores.map(s=>s.event))].length;
-  const totalStudents=[...new Set(load('teams',DEFAULTS.teams).flatMap(t=>t.members).filter(m=>m.trim()))].length;
+  const totalStudents=[...new Set(load(KEY_TEAMS,[]).flatMap(t=>t.members).filter(m=>m.trim()))].length;
   let html='';
   if(teams.length&&teams[0].score>0){
     html+=`<div class="sb-hero"><div class="sb-hero-title">🔥 Currently Leading</div>
-    <div class="sb-leader-banner"><div class="sb-leader-crown">👑</div>
-    <div class="sb-leader-info"><div class="sb-leader-name">${teams[0].name}</div><div class="sb-leader-sub">Leader: ${teams[0].leader}</div></div>
-    <div style="text-align:center;"><div class="sb-leader-score-big">${teams[0].score}</div><div class="sb-leader-score-lbl">PTS</div></div></div>
+    <div class="sb-leader-banner">
+      <div class="sb-leader-crown">👑</div>
+      <div class="sb-leader-info"><div class="sb-leader-name">${teams[0].name}</div><div class="sb-leader-sub">Leader: ${teams[0].leader}</div></div>
+      <div style="text-align:center;"><div class="sb-leader-score-big">${teams[0].score}</div><div class="sb-leader-score-lbl">PTS</div></div>
+    </div>
     <div class="sb-stats-row">
       <div class="sb-stat-chip"><strong>${teams.length}</strong>Teams</div>
       <div class="sb-stat-chip"><strong>${totalStudents}</strong>Students</div>
@@ -1492,11 +2037,14 @@ function renderNabidhinan(){
   const medals=['m1','m2','m3'];const trophies=['🥇','🥈','🥉'];
   teams.forEach((team,i)=>{
     const pct=maxScore>0?Math.round((team.score/maxScore)*100):0;
-    html+=`<div class="sb-team-row${i<3?' rank-'+(i+1):''}">
-      <div class="sb-rank-medal${i<3?' '+medals[i]:' mN'}">${i<3?trophies[i]:'#'+(i+1)}</div>
-      <div class="sb-team-info"><div class="sb-team-name">${team.name}</div>
-      <div class="sb-team-leader">👤 ${team.leader} · ${team.members.length} members</div>
-      <div class="sb-bar-wrap"><div class="sb-bar-fill" style="width:0%" data-pct="${pct}"></div></div></div>
+    const rankClass=i<3?`rank-${i+1}`:'';const medalClass=i<3?medals[i]:'mN';const trophy=i<3?trophies[i]:`#${i+1}`;
+    html+=`<div class="sb-team-row ${rankClass}">
+      <div class="sb-rank-medal ${medalClass}">${trophy}</div>
+      <div class="sb-team-info">
+        <div class="sb-team-name">${team.name}</div>
+        <div class="sb-team-leader">👤 ${team.leader} · ${team.members.length} members</div>
+        <div class="sb-bar-wrap"><div class="sb-bar-fill" style="width:0%" data-pct="${pct}"></div></div>
+      </div>
       <div class="sb-score-col"><div class="sb-score-num">${team.score}</div><div class="sb-score-sub">points</div></div>
     </div>`;
   });
@@ -1504,7 +2052,7 @@ function renderNabidhinan(){
   if(scores.length>0){
     html+=`<div class="sb-section-title">📋 Individual Score Log</div>
     <table class="sb-ind-table"><thead><tr><th>Student</th><th>Event</th><th>Points</th><th>Team</th>${isAdmin?'<th></th>':''}</tr></thead><tbody>`;
-    const teams2=load('teams',DEFAULTS.teams);
+    const teams2=load(KEY_TEAMS,[]);
     scores.slice().reverse().forEach((s,ri)=>{
       const realIdx=scores.length-1-ri;
       const team=teams2.find(t=>t.members.includes(s.student));
@@ -1521,22 +2069,23 @@ function addNabScore(){
   const points=parseInt(document.getElementById('nabPoints').value)||0;
   const event=document.getElementById('nabEvent').value.trim();
   if(!student||!event||points<=0){showToast('⚠️ Please fill all fields correctly');return;}
-  const scores=load('nabScores',DEFAULTS.nabScores);
+  const scores=load(KEY_NAB_SCORES,[]);
   scores.push({student,event,points,date:new Date().toISOString()});
-  save('nabScores',scores);
-  document.getElementById('nabStudentSelect').value='';document.getElementById('nabPoints').value='';document.getElementById('nabEvent').value='';
+  save(KEY_NAB_SCORES,scores);
+  document.getElementById('nabStudentSelect').value='';
+  document.getElementById('nabPoints').value='';
+  document.getElementById('nabEvent').value='';
   renderNabidhinan();showToast('✅ Score added for '+student);
 }
-
 function deleteNabScore(idx){
-  if(!confirm('Delete this score entry?'))return;
-  const scores=load('nabScores',DEFAULTS.nabScores);scores.splice(idx,1);save('nabScores',scores);renderNabidhinan();showToast('🗑 Score removed');
+  if(!confirm('Delete this score entry?')) return;
+  const scores=load(KEY_NAB_SCORES,[]);scores.splice(idx,1);save(KEY_NAB_SCORES,scores);renderNabidhinan();showToast('🗑 Score removed');
 }
 
 function renderQuizResults(){
   document.getElementById('adminQuiz').style.display=isAdmin?'block':'none';
   if(isAdmin) populateStudentSelect('quizStudentSelect');
-  const scores=load('quizScores',DEFAULTS.quizScores);
+  const scores=load(KEY_QUIZ_SCORES,[]);
   let html=`<div class="sb-section-title">🧠 Quiz Scoreboard</div>`;
   if(scores.length>0){
     const sorted=scores.slice().sort((a,b)=>b.score-a.score);
@@ -1547,7 +2096,7 @@ function renderQuizResults(){
       html+=`<tr><td>${i<3?medals[i]:'#'+(i+1)}</td><td><strong>${s.student}</strong></td><td>${s.quiz}</td><td><span class="pts-badge">${s.score}</span></td><td style="color:var(--text-light);">${new Date(s.date).toLocaleDateString()}</td>${isAdmin?`<td><button class="del-score-btn" onclick="deleteQuizScore(${origIdx})">🗑</button></td>`:''}</tr>`;
     });
     html+='</tbody></table>';
-  } else { html+=`<div style="text-align:center;color:var(--text-light);padding:40px 20px;font-size:13px;">No quiz results yet.</div>`; }
+  } else {html+=`<div style="text-align:center;color:var(--text-light);padding:40px 20px;font-size:13px;">No quiz results yet.</div>`;}
   document.getElementById('quizScoreboard').innerHTML=html;
 }
 
@@ -1557,16 +2106,15 @@ function addQuizScore(){
   const quiz=document.getElementById('quizName').value.trim();
   const date=document.getElementById('quizDate').value;
   if(!student||!quiz||score<0||!date){showToast('⚠️ Fill all fields');return;}
-  const scores=load('quizScores',DEFAULTS.quizScores);scores.push({student,quiz,score,date});save('quizScores',scores);
+  const scores=load(KEY_QUIZ_SCORES,[]);scores.push({student,quiz,score,date});save(KEY_QUIZ_SCORES,scores);
   document.getElementById('quizStudentSelect').value='';document.getElementById('quizScore').value='';document.getElementById('quizName').value='';document.getElementById('quizDate').value='';
   renderQuizResults();showToast('✅ Quiz score saved');
 }
-function deleteQuizScore(idx){if(!confirm('Delete?'))return;const scores=load('quizScores',DEFAULTS.quizScores);scores.splice(idx,1);save('quizScores',scores);renderQuizResults();showToast('🗑 Removed');}
+function deleteQuizScore(idx){if(!confirm('Delete this quiz score?')) return;const scores=load(KEY_QUIZ_SCORES,[]);scores.splice(idx,1);save(KEY_QUIZ_SCORES,scores);renderQuizResults();showToast('🗑 Removed');}
 
 function renderEvents(){
   document.getElementById('adminEvents').style.display=isAdmin?'block':'none';
-  const events=load('events',DEFAULTS.events);
-  let html=`<div class="sb-section-title">📅 Upcoming Events</div>`;
+  const events=load(KEY_EVENTS,[]);let html=`<div class="sb-section-title">📅 Upcoming Events</div>`;
   if(events.length){
     events.sort((a,b)=>new Date(a.date)-new Date(b.date)).forEach(e=>{
       const catColors={Academic:'#3b82f6',Sports:'#22c55e',Cultural:'#8b5cf6',Religious:'#f59e0b'};const col=catColors[e.category]||'#6b7280';
@@ -1578,33 +2126,39 @@ function renderEvents(){
   } else {html+=`<div style="text-align:center;color:var(--text-light);padding:30px;font-size:13px;">No events scheduled.</div>`;}
   document.getElementById('eventsList').innerHTML=html;
 }
+
 function addEvent(){
   const name=document.getElementById('eventName').value.trim();const date=document.getElementById('eventDate').value;const category=document.getElementById('eventCategory').value;
   if(!name||!date){showToast('⚠️ Fill event name and date');return;}
-  const events=load('events',DEFAULTS.events);const newId=Math.max(0,...events.map(e=>e.id))+1;
-  events.push({id:newId,name,date,category});save('events',events);document.getElementById('eventName').value='';document.getElementById('eventDate').value='';renderEvents();showToast('✅ Event added');
+  const events=load(KEY_EVENTS,[]);const newId=Math.max(0,...events.map(e=>e.id))+1;
+  events.push({id:newId,name,date,category});save(KEY_EVENTS,events);document.getElementById('eventName').value='';document.getElementById('eventDate').value='';renderEvents();showToast('✅ Event added');
 }
-function deleteEvent(id){if(!confirm('Delete this event?'))return;save('events',load('events',DEFAULTS.events).filter(e=>e.id!==id));renderEvents();showToast('🗑 Event removed');}
+function deleteEvent(id){if(!confirm('Delete this event?')) return;const events=load(KEY_EVENTS,[]).filter(e=>e.id!==id);save(KEY_EVENTS,events);renderEvents();showToast('🗑 Event removed');}
 
 function renderTeams(){
   document.getElementById('adminTeams').style.display=isAdmin?'block':'none';
-  const teams=load('teams',DEFAULTS.teams);
-  let html='';
+  const teams=load(KEY_TEAMS,[]);let html='';
   if(teams.length){
     teams.forEach(team=>{
       const members=team.members.filter(m=>m.trim());
       html+=`<div class="team-card" id="tc-${team.id}">
         <div class="team-edit-form" id="tef-${team.id}">
-          <div class="edit-row"><div><label class="form-label">Team Name</label><input class="form-input" id="ten-${team.id}" value="${team.name.replace(/"/g,'&quot;')}"></div>
-          <div><label class="form-label">Leader</label><input class="form-input" id="tel-${team.id}" value="${team.leader.replace(/"/g,'&quot;')}"></div></div>
-          <div style="display:flex;gap:8px;margin-top:4px;"><button class="add-btn" onclick="saveTeamEdit(${team.id})">💾 Save</button><button class="team-act-btn" onclick="cancelTeamEdit(${team.id})">Cancel</button></div>
+          <div class="edit-row">
+            <div><label class="form-label">Team Name</label><input class="form-input" id="ten-${team.id}" value="${team.name}"></div>
+            <div><label class="form-label">Leader</label><input class="form-input" id="tel-${team.id}" value="${team.leader}"></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <button class="add-btn" onclick="saveTeamEdit(${team.id})">💾 Save</button>
+            <button class="team-act-btn" onclick="cancelTeamEdit(${team.id})">Cancel</button>
+          </div>
         </div>
-        <div class="team-header"><div class="team-name-lbl">${team.name}</div>
+        <div class="team-header">
+          <div class="team-name-lbl">${team.name}</div>
           ${isAdmin?`<div class="team-actions"><button class="team-act-btn" onclick="toggleTeamEdit(${team.id})">✏️ Edit</button><button class="team-act-btn danger" onclick="deleteTeam(${team.id})">🗑 Delete</button></div>`:''}
         </div>
         <div class="team-leader-row">👑 <strong>Leader:</strong> ${team.leader} &nbsp;·&nbsp; ${members.length} members</div>
         <div class="team-members" id="tm-${team.id}">
-          ${members.map(m=>`<span class="member-badge">${m}${isAdmin?`<button class="member-remove" onclick="removeMember(${team.id},'${m.replace(/'/g,"\\'").replace(/"/g,'\\"')}')">✕</button>`:''}</span>`).join('')}
+          ${members.map(m=>`<span class="member-badge">${m}${isAdmin?`<button class="member-remove" onclick="removeMember(${team.id},'${m.replace(/'/g,"\\'")}')">✕</button>`:''}</span>`).join('')}
         </div>
         ${isAdmin?`<div class="member-add-inline"><input type="text" id="newmem-${team.id}" placeholder="Add member name…" onkeydown="if(event.key==='Enter')addMember(${team.id})"><button onclick="addMember(${team.id})">+ Add</button></div>`:''}
       </div>`;
@@ -1615,43 +2169,48 @@ function renderTeams(){
 
 function addTeam(){
   const name=document.getElementById('teamName').value.trim();const leader=document.getElementById('teamLeader').value.trim();const raw=document.getElementById('teamMembers').value.trim();
-  if(!name||!leader){showToast('⚠️ Team name and leader required');return;}
+  if(!name||!leader){showToast('⚠️ Team name and leader are required');return;}
   const members=[...new Set([leader,...(raw?raw.split(',').map(m=>m.trim()).filter(m=>m):[])])];
-  const teams=load('teams',DEFAULTS.teams);const newId=Math.max(0,...teams.map(t=>t.id))+1;
-  teams.push({id:newId,name,leader,members,score:0});save('teams',teams);
+  const teams=load(KEY_TEAMS,[]);const newId=Math.max(0,...teams.map(t=>t.id))+1;
+  teams.push({id:newId,name,leader,members,score:0});save(KEY_TEAMS,teams);
   document.getElementById('teamName').value='';document.getElementById('teamLeader').value='';document.getElementById('teamMembers').value='';
   renderTeams();showToast('✅ Team "'+name+'" created');
 }
-function deleteTeam(id){if(!confirm('Delete this team?'))return;save('teams',load('teams',DEFAULTS.teams).filter(t=>t.id!==id));renderTeams();showToast('🗑 Team removed');}
+function deleteTeam(id){if(!confirm('Delete this team?')) return;save(KEY_TEAMS,load(KEY_TEAMS,[]).filter(t=>t.id!==id));renderTeams();showToast('🗑 Team removed');}
 function toggleTeamEdit(id){document.getElementById('tef-'+id).classList.toggle('open');}
 function cancelTeamEdit(id){document.getElementById('tef-'+id).classList.remove('open');}
 function saveTeamEdit(id){
   const name=(document.getElementById('ten-'+id).value||'').trim();const leader=(document.getElementById('tel-'+id).value||'').trim();
-  if(!name||!leader){showToast('⚠️ Name and leader required');return;}
-  const teams=load('teams',DEFAULTS.teams);const team=teams.find(t=>t.id===id);if(!team)return;
-  team.name=name;team.leader=leader;if(!team.members.includes(leader))team.members.unshift(leader);
-  save('teams',teams);renderTeams();showToast('✅ Team updated');
+  if(!name||!leader){showToast('⚠️ Name and leader cannot be empty');return;}
+  const teams=load(KEY_TEAMS,[]);const team=teams.find(t=>t.id===id);if(!team) return;
+  team.name=name;team.leader=leader;if(!team.members.includes(leader)) team.members.unshift(leader);
+  save(KEY_TEAMS,teams);renderTeams();showToast('✅ Team updated');
 }
 function addMember(id){
-  const inp=document.getElementById('newmem-'+id);const name=(inp.value||'').trim();if(!name){showToast('⚠️ Enter a name');return;}
-  const teams=load('teams',DEFAULTS.teams);const team=teams.find(t=>t.id===id);if(!team)return;
-  if(team.members.includes(name)){showToast('ℹ️ '+name+' already in team');inp.value='';return;}
-  team.members.push(name);save('teams',teams);inp.value='';renderTeams();showToast('✅ '+name+' added');
+  const inp=document.getElementById('newmem-'+id);const name=(inp.value||'').trim();if(!name){showToast('⚠️ Enter a member name');return;}
+  const teams=load(KEY_TEAMS,[]);const team=teams.find(t=>t.id===id);if(!team) return;
+  if(team.members.includes(name)){showToast('ℹ️ '+name+' is already in this team');inp.value='';return;}
+  team.members.push(name);save(KEY_TEAMS,teams);inp.value='';renderTeams();showToast('✅ '+name+' added to '+team.name);
 }
 function removeMember(id,name){
-  if(!confirm('Remove '+name+'?'))return;
-  const teams=load('teams',DEFAULTS.teams);const team=teams.find(t=>t.id===id);if(!team)return;
-  team.members=team.members.filter(m=>m!==name);save('teams',teams);renderTeams();showToast('🗑 '+name+' removed');
+  if(!confirm('Remove '+name+' from this team?')) return;
+  const teams=load(KEY_TEAMS,[]);const team=teams.find(t=>t.id===id);if(!team) return;
+  team.members=team.members.filter(m=>m!==name);save(KEY_TEAMS,teams);renderTeams();showToast('🗑 '+name+' removed');
 }
 
-/* ══ BLACKBOARD ══ */
+/* ══════════════════════════════════════════════════
+   BLACKBOARD
+══════════════════════════════════════════════════ */
 let bCanvas,bCtx,bDrawing=false,bColor='#ffffff',bSize=3,bTool='pen';
 let bHistory=[],bCurrent=[],bCurrentLetter='',bInited=false;
-function initBoard(){if(bInited)return;bInited=true;bCanvas=document.getElementById('board');bCtx=bCanvas.getContext('2d');fitCanvas();drawBg();
+function initBoard(){
+  if(bInited)return;bInited=true;bCanvas=document.getElementById('board');bCtx=bCanvas.getContext('2d');
+  fitCanvas();drawBg();
   bCanvas.addEventListener('mousedown',startDraw);bCanvas.addEventListener('mousemove',doDraw);bCanvas.addEventListener('mouseup',endDraw);bCanvas.addEventListener('mouseleave',endDraw);
   bCanvas.addEventListener('touchstart',e=>{e.preventDefault();startDraw(e.touches[0]);},{passive:false});
   bCanvas.addEventListener('touchmove',e=>{e.preventDefault();doDraw(e.touches[0]);},{passive:false});
-  bCanvas.addEventListener('touchend',e=>{e.preventDefault();endDraw();},{passive:false});}
+  bCanvas.addEventListener('touchend',e=>{e.preventDefault();endDraw();},{passive:false});
+}
 function fitCanvas(){const w=bCanvas.parentElement.clientWidth-32;bCanvas.width=w;bCanvas.height=window.innerWidth<500?230:300;}
 function getPos(e){const r=bCanvas.getBoundingClientRect();return{x:(e.clientX||e.pageX)-r.left,y:(e.clientY||e.pageY)-r.top};}
 function startDraw(e){bDrawing=true;bCurrent=[];const p=getPos(e);bCtx.beginPath();bCtx.moveTo(p.x,p.y);}
@@ -1669,7 +2228,9 @@ function undoDraw(){bHistory.pop();redrawAll();}
 function saveBoard(){const a=document.createElement('a');a.download='arabic-practice.png';a.href=bCanvas.toDataURL();a.click();}
 window.addEventListener('resize',()=>{if(bCanvas){fitCanvas();redrawAll();}});
 
-/* ══ QUIZ ══ */
+/* ══════════════════════════════════════════════════
+   QUIZ
+══════════════════════════════════════════════════ */
 const allQuestions=[
   {cat:'pillars',q:"How many pillars of Islam are there?",opts:["Five","Four","Six","Seven"],ans:0},
   {cat:'pillars',q:"Which pillar of Islam involves fasting?",opts:["Sawm","Salah","Zakat","Hajj"],ans:0},
@@ -1696,33 +2257,46 @@ function nextQuestion(){if(!answered)return;qIdx++;showQQuestion();}
 function showQuizResult(){document.getElementById('quizPlay').style.display='none';document.getElementById('quizFooter').style.display='none';document.getElementById('quizEnd').style.display='block';document.getElementById('quizBar').style.width='100%';document.getElementById('finalScore').textContent=qScore+'/'+quizQuestions.length;const p=qScore/quizQuestions.length;document.getElementById('finalMsg').textContent=p>=.8?'🌟 Excellent! Masha Allah!':p>=.5?'👍 Good effort! Keep learning.':'📖 Keep studying. You can do it!';}
 function restartQuiz(){initQuizUI();}
 
-/* ══ RESULTS ══ */
+/* ══════════════════════════════════════════════════
+   RESULTS
+══════════════════════════════════════════════════ */
 const mockResults={'NM-2025-001':{name:'Ahmed Ali',class:'Thanawiyyah 1',subjects:[{sub:'Fiqh',marks:88,grade:'A'},{sub:'Arabic',marks:76,grade:'B'},{sub:'Hadith',marks:91,grade:'A'},{sub:'Tafsir',marks:83,grade:'A'},{sub:'History',marks:69,grade:'B'}]},'NM-2025-042':{name:'Fatima Zehra',class:'Mutawassitah 2',subjects:[{sub:'Fiqh',marks:95,grade:'A'},{sub:'Arabic',marks:90,grade:'A'},{sub:'Hadith',marks:87,grade:'A'},{sub:'Tafsir',marks:92,grade:'A'}]}};
 function searchResult(){const roll=document.getElementById('rollInput').value.trim().toUpperCase();const out=document.getElementById('resultOutput');const r=mockResults[roll];if(!r){out.innerHTML='<p style="color:#ef4444;margin-top:13px;font-size:13px;">❌ No record found. Try: NM-2025-001</p>';return;}const total=r.subjects.reduce((s,x)=>s+x.marks,0);const avg=(total/r.subjects.length).toFixed(1);out.innerHTML='<div style="background:#eff6ff;border-radius:10px;padding:13px;margin-top:13px;border-left:3px solid var(--blue-royal)"><strong>'+r.name+'</strong> &nbsp;·&nbsp; <span style="color:#666;font-size:12px;">'+r.class+'</span></div><table class="result-table"><thead><tr><th>Subject</th><th>Marks</th><th>Grade</th></tr></thead><tbody>'+r.subjects.map(s=>'<tr><td>'+s.sub+'</td><td>'+s.marks+'/100</td><td><span class="grade-pill grade-'+s.grade+'">'+s.grade+'</span></td></tr>').join('')+'<tr style="background:#f9fafb"><td><strong>Average</strong></td><td><strong>'+avg+'%</strong></td><td></td></tr></tbody></table>';}
 
+/* ══════════════════════════════════════════════════
+   REGISTRATION
+══════════════════════════════════════════════════ */
 function submitReg(){document.getElementById('regForm').style.display='none';document.getElementById('regSuccess').style.display='block';}
 
-/* ══ NEWS ══ */
+/* ══════════════════════════════════════════════════
+   NEWS
+══════════════════════════════════════════════════ */
 const newsItems=[{day:'24',mon:'Mar',title:'Annual Exam 2025 Registration Open',tag:'Exams',body:'Registration for the Samastha Annual Examination 2025 is now open. Last date: 15 April 2025.'},{day:'18',mon:'Mar',title:'New Hadith Course Launched',tag:'Academics',body:'Advanced Hadith Studies course launched for Thanawiyyah by Ustadh Muhammed Shafi.'},{day:'10',mon:'Mar',title:'Ramadan Special Dars Programme',tag:'Events',body:'Daily Tafsir sessions after Fajr throughout Ramadan. All students and community welcome.'},{day:'01',mon:'Mar',title:'2024-25 Half-Yearly Results Published',tag:'Results',body:'Half-yearly results are now available. Check via the results portal with your roll number.'},{day:'20',mon:'Feb',title:'Admissions Open for 2025-26',tag:'Admissions',body:'New admissions for 2025-26 are open. Visit NUM 268 Pattarkulam office or apply online.'}];
 function buildNews(){document.getElementById('newsBody').innerHTML=newsItems.map(n=>'<div class="news-item"><div class="news-date"><div class="day">'+n.day+'</div><div class="mon">'+n.mon+'</div></div><div class="news-content"><h4>'+n.title+'</h4><p>'+n.body+'</p><span class="news-tag">'+n.tag+'</span></div></div>').join('');}
 
-/* ══ QURAN ══ */
+/* ══════════════════════════════════════════════════
+   QURAN AUDIO PLAYER
+══════════════════════════════════════════════════ */
 const allSurahs=[{num:1,name:'Al-Fatiha',arabic:'الفاتحة',verses:7,type:'Meccan'},{num:2,name:'Al-Baqarah',arabic:'البقرة',verses:286,type:'Medinan'},{num:3,name:'Ali Imran',arabic:'آل عمران',verses:200,type:'Medinan'},{num:4,name:"An-Nisa",arabic:'النساء',verses:176,type:'Medinan'},{num:5,name:'Al-Maidah',arabic:'المائدة',verses:120,type:'Medinan'},{num:6,name:"Al-An'am",arabic:'الأنعام',verses:165,type:'Meccan'},{num:7,name:"Al-A'raf",arabic:'الأعراف',verses:206,type:'Meccan'},{num:8,name:'Al-Anfal',arabic:'الأنفال',verses:75,type:'Medinan'},{num:9,name:'At-Tawbah',arabic:'التوبة',verses:129,type:'Medinan'},{num:10,name:'Yunus',arabic:'يونس',verses:109,type:'Meccan'},{num:11,name:'Hud',arabic:'هود',verses:123,type:'Meccan'},{num:12,name:'Yusuf',arabic:'يوسف',verses:111,type:'Meccan'},{num:13,name:"Ar-Ra'd",arabic:'الرعد',verses:43,type:'Medinan'},{num:14,name:'Ibrahim',arabic:'إبراهيم',verses:52,type:'Meccan'},{num:15,name:'Al-Hijr',arabic:'الحجر',verses:99,type:'Meccan'},{num:16,name:'An-Nahl',arabic:'النحل',verses:128,type:'Meccan'},{num:17,name:'Al-Isra',arabic:'الإسراء',verses:111,type:'Meccan'},{num:18,name:'Al-Kahf',arabic:'الكهف',verses:110,type:'Meccan'},{num:19,name:'Maryam',arabic:'مريم',verses:98,type:'Meccan'},{num:20,name:'Ta-Ha',arabic:'طه',verses:135,type:'Meccan'},{num:21,name:'Al-Anbiya',arabic:'الأنبياء',verses:112,type:'Meccan'},{num:22,name:'Al-Hajj',arabic:'الحج',verses:78,type:'Medinan'},{num:23,name:"Al-Mu'minun",arabic:'المؤمنون',verses:118,type:'Meccan'},{num:24,name:'An-Nur',arabic:'النور',verses:64,type:'Medinan'},{num:25,name:'Al-Furqan',arabic:'الفرقان',verses:77,type:'Meccan'},{num:26,name:"Ash-Shu'ara",arabic:'الشعراء',verses:227,type:'Meccan'},{num:27,name:'An-Naml',arabic:'النمل',verses:93,type:'Meccan'},{num:28,name:'Al-Qasas',arabic:'القصص',verses:88,type:'Meccan'},{num:29,name:"Al-'Ankabut",arabic:'العنكبوت',verses:69,type:'Meccan'},{num:30,name:'Ar-Rum',arabic:'الروم',verses:60,type:'Meccan'},{num:31,name:'Luqman',arabic:'لقمان',verses:34,type:'Meccan'},{num:32,name:'As-Sajdah',arabic:'السجدة',verses:30,type:'Meccan'},{num:33,name:'Al-Ahzab',arabic:'الأحزاب',verses:73,type:'Medinan'},{num:34,name:"Saba'",arabic:'سبأ',verses:54,type:'Meccan'},{num:35,name:'Fatir',arabic:'فاطر',verses:45,type:'Meccan'},{num:36,name:'Ya-Sin',arabic:'يس',verses:83,type:'Meccan'},{num:37,name:'As-Saffat',arabic:'الصافات',verses:182,type:'Meccan'},{num:38,name:'Sad',arabic:'ص',verses:88,type:'Meccan'},{num:39,name:'Az-Zumar',arabic:'الزمر',verses:75,type:'Meccan'},{num:40,name:'Ghafir',arabic:'غافر',verses:85,type:'Meccan'},{num:41,name:'Fussilat',arabic:'فصلت',verses:54,type:'Meccan'},{num:42,name:'Ash-Shura',arabic:'الشورى',verses:53,type:'Meccan'},{num:43,name:'Az-Zukhruf',arabic:'الزخرف',verses:89,type:'Meccan'},{num:44,name:'Ad-Dukhan',arabic:'الدخان',verses:59,type:'Meccan'},{num:45,name:'Al-Jathiyah',arabic:'الجاثية',verses:37,type:'Meccan'},{num:46,name:'Al-Ahqaf',arabic:'الأحقاف',verses:35,type:'Meccan'},{num:47,name:'Muhammad',arabic:'محمد',verses:38,type:'Medinan'},{num:48,name:'Al-Fath',arabic:'الفتح',verses:29,type:'Medinan'},{num:49,name:'Al-Hujurat',arabic:'الحجرات',verses:18,type:'Medinan'},{num:50,name:'Qaf',arabic:'ق',verses:45,type:'Meccan'},{num:51,name:'Adh-Dhariyat',arabic:'الذاريات',verses:60,type:'Meccan'},{num:52,name:'At-Tur',arabic:'الطور',verses:49,type:'Meccan'},{num:53,name:'An-Najm',arabic:'النجم',verses:62,type:'Meccan'},{num:54,name:'Al-Qamar',arabic:'القمر',verses:55,type:'Meccan'},{num:55,name:'Ar-Rahman',arabic:'الرحمن',verses:78,type:'Medinan'},{num:56,name:"Al-Waqi'ah",arabic:'الواقعة',verses:96,type:'Meccan'},{num:57,name:'Al-Hadid',arabic:'الحديد',verses:29,type:'Medinan'},{num:58,name:'Al-Mujadila',arabic:'المجادلة',verses:22,type:'Medinan'},{num:59,name:'Al-Hashr',arabic:'الحشر',verses:24,type:'Medinan'},{num:60,name:'Al-Mumtahanah',arabic:'الممتحنة',verses:13,type:'Medinan'},{num:61,name:'As-Saf',arabic:'الصف',verses:14,type:'Medinan'},{num:62,name:"Al-Jumu'ah",arabic:'الجمعة',verses:11,type:'Medinan'},{num:63,name:'Al-Munafiqun',arabic:'المنافقون',verses:11,type:'Medinan'},{num:64,name:'At-Taghabun',arabic:'التغابن',verses:18,type:'Medinan'},{num:65,name:'At-Talaq',arabic:'الطلاق',verses:12,type:'Medinan'},{num:66,name:'At-Tahrim',arabic:'التحريم',verses:12,type:'Medinan'},{num:67,name:'Al-Mulk',arabic:'الملك',verses:30,type:'Meccan'},{num:68,name:'Al-Qalam',arabic:'القلم',verses:52,type:'Meccan'},{num:69,name:'Al-Haqqah',arabic:'الحاقة',verses:52,type:'Meccan'},{num:70,name:"Al-Ma'arij",arabic:'المعارج',verses:44,type:'Meccan'},{num:71,name:'Nuh',arabic:'نوح',verses:28,type:'Meccan'},{num:72,name:'Al-Jinn',arabic:'الجن',verses:28,type:'Meccan'},{num:73,name:'Al-Muzzammil',arabic:'المزمل',verses:20,type:'Meccan'},{num:74,name:'Al-Muddaththir',arabic:'المدثر',verses:56,type:'Meccan'},{num:75,name:'Al-Qiyamah',arabic:'القيامة',verses:40,type:'Meccan'},{num:76,name:'Al-Insan',arabic:'الإنسان',verses:31,type:'Medinan'},{num:77,name:'Al-Mursalat',arabic:'المرسلات',verses:50,type:'Meccan'},{num:78,name:"An-Naba'",arabic:'النبأ',verses:40,type:'Meccan'},{num:79,name:"An-Nazi'at",arabic:'النازعات',verses:46,type:'Meccan'},{num:80,name:"'Abasa",arabic:'عبس',verses:42,type:'Meccan'},{num:81,name:'At-Takwir',arabic:'التكوير',verses:29,type:'Meccan'},{num:82,name:'Al-Infitar',arabic:'الانفطار',verses:19,type:'Meccan'},{num:83,name:'Al-Mutaffifin',arabic:'المطففين',verses:36,type:'Meccan'},{num:84,name:'Al-Inshiqaq',arabic:'الانشقاق',verses:25,type:'Meccan'},{num:85,name:'Al-Buruj',arabic:'البروج',verses:22,type:'Meccan'},{num:86,name:'At-Tariq',arabic:'الطارق',verses:17,type:'Meccan'},{num:87,name:"Al-A'la",arabic:'الأعلى',verses:19,type:'Meccan'},{num:88,name:'Al-Ghashiyah',arabic:'الغاشية',verses:26,type:'Meccan'},{num:89,name:'Al-Fajr',arabic:'الفجر',verses:30,type:'Meccan'},{num:90,name:'Al-Balad',arabic:'البلد',verses:20,type:'Meccan'},{num:91,name:'Ash-Shams',arabic:'الشمس',verses:15,type:'Meccan'},{num:92,name:'Al-Layl',arabic:'الليل',verses:21,type:'Meccan'},{num:93,name:'Ad-Duha',arabic:'الضحى',verses:11,type:'Meccan'},{num:94,name:'Ash-Sharh',arabic:'الشرح',verses:8,type:'Meccan'},{num:95,name:'At-Tin',arabic:'التين',verses:8,type:'Meccan'},{num:96,name:"Al-'Alaq",arabic:'العلق',verses:19,type:'Meccan'},{num:97,name:'Al-Qadr',arabic:'القدر',verses:5,type:'Meccan'},{num:98,name:'Al-Bayyinah',arabic:'البينة',verses:8,type:'Medinan'},{num:99,name:'Az-Zalzalah',arabic:'الزلزلة',verses:8,type:'Medinan'},{num:100,name:"Al-'Adiyat",arabic:'العاديات',verses:11,type:'Meccan'},{num:101,name:"Al-Qari'ah",arabic:'القارعة',verses:11,type:'Meccan'},{num:102,name:'At-Takathur',arabic:'التكاثر',verses:8,type:'Meccan'},{num:103,name:"Al-'Asr",arabic:'العصر',verses:3,type:'Meccan'},{num:104,name:'Al-Humazah',arabic:'الهمزة',verses:9,type:'Meccan'},{num:105,name:'Al-Fil',arabic:'الفيل',verses:5,type:'Meccan'},{num:106,name:'Quraysh',arabic:'قريش',verses:4,type:'Meccan'},{num:107,name:"Al-Ma'un",arabic:'الماعون',verses:7,type:'Meccan'},{num:108,name:'Al-Kawthar',arabic:'الكوثر',verses:3,type:'Meccan'},{num:109,name:'Al-Kafirun',arabic:'الكافرون',verses:6,type:'Meccan'},{num:110,name:'An-Nasr',arabic:'النصر',verses:3,type:'Medinan'},{num:111,name:'Al-Masad',arabic:'المسد',verses:5,type:'Meccan'},{num:112,name:'Al-Ikhlas',arabic:'الإخلاص',verses:4,type:'Meccan'},{num:113,name:'Al-Falaq',arabic:'الفلق',verses:5,type:'Meccan'},{num:114,name:'An-Nas',arabic:'الناس',verses:6,type:'Meccan'}];
 let audioEl=null,currentSurahNum=null,audioProgressTimer=null,surahTypeFilter='all';
 function buildQuran(){renderSurahs();}
-function renderSurahs(){const search=(document.getElementById('surahSearch')||{}).value||'';const q=search.toLowerCase();const filtered=allSurahs.filter(s=>(surahTypeFilter==='all'||s.type===surahTypeFilter)&&(s.name.toLowerCase().includes(q)||s.arabic.includes(q)||String(s.num).includes(q)));document.getElementById('surahList').innerHTML=filtered.map(s=>'<div class="surah-item'+(currentSurahNum===s.num?' playing':'')+'" onclick="playSurah('+s.num+',\''+s.name+'\')"><div class="surah-num">'+s.num+'</div><div class="surah-info"><h4>'+s.name+'</h4><p>'+s.verses+' Verses · '+s.type+(currentSurahNum===s.num?' 🎵':'')+'</p></div><div class="surah-arabic">'+s.arabic+'</div></div>').join('');}
+function renderSurahs(){const search=(document.getElementById('surahSearch')||{}).value||'';const q=search.toLowerCase();const filtered=allSurahs.filter(s=>{const matchType=surahTypeFilter==='all'||s.type===surahTypeFilter;const matchSearch=s.name.toLowerCase().includes(q)||s.arabic.includes(q)||String(s.num).includes(q);return matchType&&matchSearch;});document.getElementById('surahList').innerHTML=filtered.map(s=>'<div class="surah-item'+(currentSurahNum===s.num?' playing':'')+'" id="si'+s.num+'" onclick="playSurah('+s.num+',\''+s.name+'\')"><div class="surah-num">'+s.num+'</div><div class="surah-info"><h4>'+s.name+'</h4><p>'+s.verses+' Verses · '+s.type+(currentSurahNum===s.num?' 🎵':'')+'</p></div><div class="surah-arabic">'+s.arabic+'</div></div>').join('');}
 function filterSurahs(){renderSurahs();}
 function filterByType(el,type){surahTypeFilter=type;document.querySelectorAll('.q-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderSurahs();}
-function playSurah(num,name){if(audioEl){audioEl.pause();audioEl.src='';audioEl=null;}clearInterval(audioProgressTimer);currentSurahNum=num;renderSurahs();const pb=document.getElementById('playerBar');const btn=document.getElementById('playPauseBtn');const pn=document.getElementById('playerName');const ps=document.getElementById('playerSubtitle');const pf=document.getElementById('playerBarFill');pb.style.display='flex';pn.textContent='Surah '+name;ps.textContent='Loading…';btn.textContent='⏳';pf.style.width='0%';audioEl=new Audio();audioEl.crossOrigin='anonymous';audioEl.src='https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/'+num+'.mp3';audioEl.addEventListener('canplaythrough',()=>{audioEl.play().then(()=>{btn.textContent='⏸';ps.textContent='Mishary Alafasy · Playing';audioProgressTimer=setInterval(()=>{if(audioEl&&audioEl.duration)pf.style.width=(audioEl.currentTime/audioEl.duration*100)+'%';},500);}).catch(()=>{btn.textContent='▶';ps.textContent='Tap ▶ to play';});},{once:true});audioEl.addEventListener('ended',()=>{btn.textContent='▶';ps.textContent='Mishary Alafasy · Completed ✓';pf.style.width='100%';clearInterval(audioProgressTimer);});audioEl.addEventListener('error',()=>{btn.textContent='⚠️';ps.textContent='Audio unavailable – check internet';currentSurahNum=null;renderSurahs();});audioEl.load();}
+function playSurah(num,name){if(audioEl){audioEl.pause();audioEl.src='';audioEl=null;}clearInterval(audioProgressTimer);currentSurahNum=num;renderSurahs();const playerBar=document.getElementById('playerBar');const playBtn=document.getElementById('playPauseBtn');const pName=document.getElementById('playerName');const pSub=document.getElementById('playerSubtitle');const pFill=document.getElementById('playerBarFill');playerBar.style.display='flex';pName.textContent='Surah '+name;pSub.textContent='Loading…';playBtn.textContent='⏳';pFill.style.width='0%';audioEl=new Audio();audioEl.crossOrigin='anonymous';audioEl.src='https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/'+num+'.mp3';audioEl.addEventListener('canplaythrough',()=>{audioEl.play().then(()=>{playBtn.textContent='⏸';pSub.textContent='Mishary Alafasy · Playing';audioProgressTimer=setInterval(()=>{if(audioEl&&audioEl.duration){const pct=(audioEl.currentTime/audioEl.duration)*100;pFill.style.width=pct+'%';}},500);}).catch(()=>{playBtn.textContent='▶';pSub.textContent='Tap ▶ to play';});},{once:true});audioEl.addEventListener('ended',()=>{playBtn.textContent='▶';pSub.textContent='Mishary Alafasy · Completed ✓';pFill.style.width='100%';clearInterval(audioProgressTimer);});audioEl.addEventListener('error',()=>{playBtn.textContent='⚠️';pSub.textContent='Audio unavailable – check internet';currentSurahNum=null;renderSurahs();});audioEl.load();}
 function togglePlay(){if(!audioEl)return;const btn=document.getElementById('playPauseBtn');if(audioEl.paused){audioEl.play().then(()=>btn.textContent='⏸');}else{audioEl.pause();btn.textContent='▶';document.getElementById('playerSubtitle').textContent='Mishary Alafasy · Paused';}}
 function stopAudio(){if(audioEl){audioEl.pause();audioEl.src='';audioEl=null;}clearInterval(audioProgressTimer);currentSurahNum=null;}
 
-/* ══ DUAS ══ */
-const duaData={morning:[{label:'Upon Waking',arabic:'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ',trans:"Alhamdulillahil-ladhi ahyana ba'da ma amatana wa ilayhin-nushur",meaning:'All praise is for Allah who gave us life after death and to Him is the resurrection.'},{label:'Morning Dhikr',arabic:'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ',trans:'Asbahna wa asbahal-mulku lillah',meaning:'We have entered the morning and at this very time all dominion belongs to Allah.'},{label:'Protection',arabic:'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ',trans:"Bismillahil-ladhi la yadurru ma'as-mihi shay'",meaning:'In the name of Allah, with Whose name nothing is harmed on earth or in the heavens.'}],evening:[{label:'At Evening',arabic:'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ',trans:'Amsayna wa amsal-mulku lillah',meaning:'We have entered the evening and at this very time all dominion belongs to Allah.'},{label:"Sayyidul Istighfar",arabic:'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ',trans:'Allahumma anta rabbi la ilaha illa ant, khalaqtani wa ana abduk',meaning:'O Allah! You are my Lord. None has the right to be worshipped except You. You created me and I am Your servant.'}],meals:[{label:'Before Eating',arabic:'بِسْمِ اللَّهِ',trans:'Bismillah',meaning:'In the name of Allah.'},{label:'After Eating',arabic:'الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ',trans:"Alhamdulillahil-ladhi at'amana wa saqana wa ja'alana muslimin",meaning:'All praise is to Allah who fed us and gave us drink and made us Muslims.'}],sleep:[{label:'Before Sleeping',arabic:'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا',trans:'Bismika Allahumma amutu wa ahya',meaning:'In Your name O Allah I die and I live.'},{label:'Seeking Protection',arabic:'اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ',trans:"Allahumma qini adhabaka yawma tab'athu 'ibadak",meaning:"O Allah, protect me from Your punishment on the Day You resurrect Your servants."}],travel:[{label:'Dua for Travel',arabic:'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ',trans:"Subhanal-ladhi sakhkhara lana hadha wa ma kunna lahu muqrinin, wa inna ila rabbina lamunqalibun",meaning:'Glory be to He who has subjected this for us.'}],study:[{label:'Before Studying',arabic:'رَبِّ زِدْنِي عِلْمًا',trans:"Rabbi zidni 'ilma",meaning:'O my Lord, increase me in knowledge.'},{label:'For Understanding',arabic:'سُبْحَانَكَ لَا عِلْمَ لَنَا إِلَّا مَا عَلَّمْتَنَا',trans:"Subhanaka la 'ilma lana illa ma 'allamtana",meaning:'Glory be to You, we have no knowledge except what You have taught us.'},{label:'For Good Memory',arabic:'اللَّهُمَّ افْتَحْ عَلَيْنَا حِكْمَتَكَ وَانْشُرْ عَلَيْنَا رَحْمَتَكَ',trans:"Allahumma iftah 'alayna hikmataka wanshur 'alayna rahmataka",meaning:'O Allah, open upon us Your wisdom and spread upon us Your mercy.'}]};
+/* ══════════════════════════════════════════════════
+   DUAS
+══════════════════════════════════════════════════ */
+const duaData={morning:[{label:'Upon Waking',arabic:'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ',trans:"Alhamdulillahil-ladhi ahyana ba'da ma amatana wa ilayhin-nushur",meaning:'All praise is for Allah who gave us life after death and to Him is the resurrection.'},{label:'Morning Dhikr',arabic:'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ',trans:'Asbahna wa asbahal-mulku lillah',meaning:'We have entered the morning and at this very time all dominion belongs to Allah.'},{label:'Protection',arabic:'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ',trans:"Bismillahil-ladhi la yadurru ma'as-mihi shay'",meaning:'In the name of Allah, with Whose name nothing is harmed on earth or in the heavens.'}],evening:[{label:'At Evening',arabic:'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ',trans:'Amsayna wa amsal-mulku lillah',meaning:'We have entered the evening and at this very time all dominion belongs to Allah.'},{label:"Sayyidul Istighfar",arabic:'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ',trans:'Allahumma anta rabbi la ilaha illa ant, khalaqtani wa ana abduk',meaning:'O Allah! You are my Lord. None has the right to be worshipped except You. You created me and I am Your servant.'}],meals:[{label:'Before Eating',arabic:'بِسْمِ اللَّهِ',trans:'Bismillah',meaning:'In the name of Allah.'},{label:'After Eating',arabic:'الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ',trans:"Alhamdulillahil-ladhi at'amana wa saqana wa ja'alana muslimin",meaning:'All praise is to Allah who fed us and gave us drink and made us Muslims.'}],sleep:[{label:'Before Sleeping',arabic:'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا',trans:'Bismika Allahumma amutu wa ahya',meaning:'In Your name O Allah I die and I live.'},{label:'Seeking Protection',arabic:'اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ',trans:"Allahumma qini adhabaka yawma tab'athu 'ibadak",meaning:"O Allah, protect me from Your punishment on the Day You resurrect Your servants."}],travel:[{label:'Dua for Travel',arabic:'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ',trans:"Subhanal-ladhi sakhkhara lana hadha wa ma kunna lahu muqrinin, wa inna ila rabbina lamunqalibun",meaning:'Glory be to He who has subjected this for us, and we were not able to do it, and indeed we to our Lord will be returning.'}],study:[{label:'Before Studying',arabic:'رَبِّ زِدْنِي عِلْمًا',trans:"Rabbi zidni 'ilma",meaning:'O my Lord, increase me in knowledge.'},{label:'For Understanding',arabic:'سُبْحَانَكَ لَا عِلْمَ لَنَا إِلَّا مَا عَلَّمْتَنَا إِنَّكَ أَنْتَ الْعَلِيمُ الْحَكِيمُ',trans:"Subhanaka la 'ilma lana illa ma 'allamtana innaka antal-'alimul-hakim",meaning:'Glory be to You, we have no knowledge except what You have taught us. Indeed it is You who is the All-Knowing, the All-Wise.'},{label:'For Good Memory',arabic:'اللَّهُمَّ افْتَحْ عَلَيْنَا حِكْمَتَكَ وَانْشُرْ عَلَيْنَا رَحْمَتَكَ',trans:"Allahumma iftah 'alayna hikmataka wanshur 'alayna rahmataka",meaning:'O Allah, open upon us Your wisdom and spread upon us Your mercy.'}]};
 function showDuas(el,cat){document.querySelectorAll('#duaTabs .q-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');const duas=duaData[cat]||[];document.getElementById('duaContent').innerHTML=duas.map(d=>'<div class="dua-card"><div class="dua-label">'+d.label+'</div><div class="dua-arabic">'+d.arabic+'</div><div class="dua-trans">'+d.trans+'</div><div class="dua-meaning">'+d.meaning+'</div></div>').join('');}
 
-/* ══ WUDU ══ */
-const wuduStepsData=[{icon:'🤲',title:'1. Make Intention (Niyyah)',desc:'Form the intention in your heart to perform Wudu for purification and Salah.',arabic:'نَوَيْتُ الْوُضُوءَ لِرَفْعِ الْحَدَثِ'},{icon:'🙏',title:'2. Say Bismillah',desc:'Begin with Bismillah before starting Wudu.',arabic:'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ'},{icon:'🤲',title:'3. Wash Both Hands',desc:'Wash both hands up to the wrists three times.',arabic:'غَسْلُ الْيَدَيْنِ ثَلَاثًا'},{icon:'💧',title:'4. Rinse the Mouth',desc:'Rinse your mouth thoroughly three times.',arabic:'اَلْمَضْمَضَةُ ثَلَاثًا'},{icon:'👃',title:'5. Clean the Nose',desc:'Sniff water into the nostrils and blow out three times.',arabic:'اَلِاسْتِنْشَاقُ ثَلَاثًا'},{icon:'😊',title:'6. Wash the Face',desc:'Wash the entire face from hairline to chin, three times.',arabic:'غَسْلُ الْوَجْهِ ثَلَاثًا'},{icon:'💪',title:'7. Wash Right Arm',desc:'Wash the right arm up to the elbow three times.',arabic:'غَسْلُ الْيَدِ الْيُمْنَى إِلَى الْمِرْفَقِ'},{icon:'💪',title:'8. Wash Left Arm',desc:'Wash the left arm up to the elbow three times.',arabic:'غَسْلُ الْيَدِ الْيُسْرَى إِلَى الْمِرْفَقِ'},{icon:'👆',title:'9. Wipe the Head (Masah)',desc:'Wipe over the entire head from front to back once.',arabic:'مَسْحُ الرَّأْسِ كَامِلًا مَرَّةً'},{icon:'👂',title:'10. Wipe the Ears',desc:'Use index fingers inside ears, thumbs outside.',arabic:'مَسْحُ الْأُذُنَيْنِ'},{icon:'🦶',title:'11. Wash Right Foot',desc:'Wash the right foot including ankle, three times.',arabic:'غَسْلُ الْقَدَمِ الْيُمْنَى إِلَى الْكَعْبِ'},{icon:'🦶',title:'12. Wash Left Foot',desc:'Wash the left foot including ankle, three times.',arabic:'غَسْلُ الْقَدَمِ الْيُسْرَى إِلَى الْكَعْبِ'}];
+/* ══════════════════════════════════════════════════
+   WUDU ANIMATION
+══════════════════════════════════════════════════ */
+const wuduStepsData=[{icon:'🤲',title:'1. Make Intention (Niyyah)',desc:'Form the intention in your heart to perform Wudu for purification and Salah.',arabic:'نَوَيْتُ الْوُضُوءَ لِرَفْعِ الْحَدَثِ'},{icon:'🙏',title:'2. Say Bismillah',desc:'Begin with Bismillah before starting Wudu.',arabic:'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ'},{icon:'🤲',title:'3. Wash Both Hands',desc:'Wash both hands up to the wrists three times, making sure water reaches between the fingers.',arabic:'غَسْلُ الْيَدَيْنِ ثَلَاثًا'},{icon:'💧',title:'4. Rinse the Mouth (Madmadah)',desc:'Take water into the mouth, swish it around thoroughly, and spit it out. Repeat three times.',arabic:'اَلْمَضْمَضَةُ ثَلَاثًا'},{icon:'👃',title:'5. Clean the Nose (Istinshaq)',desc:'Sniff water into the nostrils with the right hand and blow out with the left hand. Repeat three times.',arabic:'اَلِاسْتِنْشَاقُ ثَلَاثًا'},{icon:'😊',title:'6. Wash the Face',desc:'Wash the entire face from the hairline to the chin and from ear to ear. Repeat three times.',arabic:'غَسْلُ الْوَجْهِ ثَلَاثًا'},{icon:'💪',title:'7. Wash Right Arm',desc:'Wash the right arm from fingertips up to and including the elbow. Repeat three times.',arabic:'غَسْلُ الْيَدِ الْيُمْنَى إِلَى الْمِرْفَقِ'},{icon:'💪',title:'8. Wash Left Arm',desc:'Wash the left arm from fingertips up to and including the elbow. Repeat three times.',arabic:'غَسْلُ الْيَدِ الْيُسْرَى إِلَى الْمِرْفَقِ'},{icon:'👆',title:'9. Wipe the Head (Masah)',desc:'Wet both hands and wipe over the entire head from front to back and return to the front once.',arabic:'مَسْحُ الرَّأْسِ كَامِلًا مَرَّةً'},{icon:'👂',title:'10. Wipe the Ears',desc:'Use the index fingers to wipe inside the ears and thumbs for the outside. Once.',arabic:'مَسْحُ الْأُذُنَيْنِ بِالسَّبَّابَتَيْنِ وَالْإِبْهَامَيْنِ'},{icon:'🦶',title:'11. Wash Right Foot',desc:'Wash the right foot including the ankle and between the toes. Repeat three times.',arabic:'غَسْلُ الْقَدَمِ الْيُمْنَى إِلَى الْكَعْبِ'},{icon:'🦶',title:'12. Wash Left Foot',desc:'Wash the left foot including the ankle and between the toes. Repeat three times.',arabic:'غَسْلُ الْقَدَمِ الْيُسْرَى إِلَى الْكَعْبِ'}];
 let wuduTimer=null,wuduActive=false,wuduIdx=0;
 function buildWudu(){document.getElementById('wuduSteps').innerHTML=wuduStepsData.map((s,i)=>'<div class="wudu-step" id="ws'+i+'"><div class="wudu-icon">'+s.icon+'</div><div class="wudu-text"><h4>'+s.title+'</h4><p>'+s.desc+'</p><div class="wudu-arabic">'+s.arabic+'</div></div></div>').join('');document.getElementById('wuduStatus').textContent='Ready · Press ▶ Start Guide to begin';document.getElementById('wuduPlayBtn').textContent='▶ Start Guide';wuduActive=false;wuduIdx=0;}
 function startWudu(){if(wuduActive)return;wuduActive=true;wuduIdx=0;document.getElementById('wuduPlayBtn').textContent='⏳ Running…';runWuduStep();}
@@ -1730,14 +2304,13 @@ function runWuduStep(){document.querySelectorAll('.wudu-step').forEach(e=>e.clas
 function stopWudu(){clearTimeout(wuduTimer);wuduActive=false;}
 function resetWudu(){stopWudu();document.querySelectorAll('.wudu-step').forEach(e=>e.classList.remove('active-step'));document.getElementById('wuduStatus').textContent='Ready · Press ▶ Start Guide to begin';document.getElementById('wuduPlayBtn').textContent='▶ Start Guide';wuduIdx=0;const wrap=document.getElementById('wuduScrollWrap');if(wrap)wrap.scrollTop=0;}
 
-/* ══ SALAH ══ */
-const salahStepsData=[{icon:'🕴',title:'Qiyam – Standing',desc:'Stand upright facing the Qibla. Eyes focused on the place of Sujud.',arabic:'اَلْقِيَامُ مُسْتَقِيمًا'},{icon:'🙌',title:'Takbiratul Ihram',desc:'Raise both hands to earlobes. Say "Allahu Akbar".',arabic:'اَللَّهُ أَكْبَرُ'},{icon:'🤲',title:"Qira'ah – Recitation",desc:'Place right hand over left on chest. Recite Al-Fatiha then a surah.',arabic:'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ'},{icon:'🙇',title:"Ruku' – Bowing",desc:'Bow with hands on knees. Say "Subhana Rabbiyal Azeem" 3 times.',arabic:'سُبْحَانَ رَبِّيَ الْعَظِيمِ'},{icon:'🕴',title:"I'tidal – Rising from Ruku",desc:"Rise saying 'Sami Allahu liman hamidah'.",arabic:'سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ'},{icon:'🛐',title:'Sujud – First Prostration',desc:'Prostrate with 7 body parts. Say "Subhana Rabbiyal A\'la" 3 times.',arabic:"سُبْحَانَ رَبِّيَ الْأَعْلَى"},{icon:'🧎',title:'Jalsa – Sitting',desc:"Sit between prostrations. Say 'Rabbighfir li'.",arabic:'رَبِّ اغْفِرْ لِي وَارْحَمْنِي'},{icon:'🛐',title:'Sujud – Second Prostration',desc:'Perform the second prostration exactly like the first.',arabic:"سُبْحَانَ رَبِّيَ الْأَعْلَى"},{icon:'🧎',title:'Tashahud – Sitting',desc:"Sit and recite At-Tahiyyat after 2 rak'ahs.",arabic:'اَلتَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ'},{icon:'🙏',title:'Salawat – Durood Ibrahim',desc:"Recite Durood Ibrahim.",arabic:'اَللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ'},{icon:'👈',title:'Tasleem – Right Side',desc:'Turn right and say "As-Salamu Alaykum wa Rahmatullah".',arabic:'اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ'},{icon:'👉',title:'Tasleem – Left Side',desc:'Turn left and say "As-Salamu Alaykum wa Rahmatullah".',arabic:'اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ'}];
+/* ══════════════════════════════════════════════════
+   SALAH ANIMATION
+══════════════════════════════════════════════════ */
+const salahStepsData=[{icon:'🕴',title:'Qiyam – Standing',desc:'Stand upright facing the Qibla. Feet shoulder-width apart. Eyes focused on the place of Sujud.',arabic:'اَلْقِيَامُ مُسْتَقِيمًا'},{icon:'🙌',title:'Takbiratul Ihram',desc:'Raise both hands to earlobes with palms facing forward. Say "Allahu Akbar" to enter the prayer.',arabic:'اَللَّهُ أَكْبَرُ'},{icon:'🤲',title:"Qira'ah – Recitation",desc:"Place right hand over left on chest. Recite Al-Fatiha silently or aloud, then a surah.",arabic:'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ'},{icon:'🙇',title:"Ruku' – Bowing",desc:"Say 'Allahu Akbar', bow with hands on knees, back straight. Say 'Subhana Rabbiyal Azeem' 3 times.",arabic:'سُبْحَانَ رَبِّيَ الْعَظِيمِ'},{icon:'🕴',title:"I'tidal – Rising from Ruku",desc:"Rise saying 'Sami Allahu liman hamidah', then say 'Rabbana lakal hamd' while standing upright.",arabic:'سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ'},{icon:'🛐',title:'Sujud – First Prostration',desc:"Say 'Allahu Akbar', prostrate with 7 body parts touching the ground. Say 'Subhana Rabbiyal A'la' 3 times.",arabic:"سُبْحَانَ رَبِّيَ الْأَعْلَى"},{icon:'🧎',title:'Jalsa – Sitting between Sujud',desc:"Sit up saying 'Allahu Akbar'. Sit on left foot with right foot upright. Say 'Rabbighfir li'.",arabic:'رَبِّ اغْفِرْ لِي وَارْحَمْنِي'},{icon:'🛐',title:'Sujud – Second Prostration',desc:"Say 'Allahu Akbar' and perform the second prostration exactly like the first.",arabic:"سُبْحَانَ رَبِّيَ الْأَعْلَى"},{icon:'🧎',title:'Tashahud – Sitting',desc:"After completing 2 rak'ahs, sit and recite At-Tahiyyat. Raise index finger during Ash-hadu.",arabic:'اَلتَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ'},{icon:'🙏',title:'Salawat – Durood Ibrahim',desc:"After Tashahud, recite Durood Ibrahim (Allahumma salli 'ala Muhammad…).",arabic:'اَللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ'},{icon:'👈',title:'Tasleem – Right Side',desc:"Turn head to the right and say 'As-Salamu Alaykum wa Rahmatullah'.",arabic:'اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ'},{icon:'👉',title:'Tasleem – Left Side',desc:"Turn head to the left and say 'As-Salamu Alaykum wa Rahmatullah'.",arabic:'اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ'}];
 let salahTimer=null,salahActive=false,salahIdx=0;
 function buildSalah(){document.getElementById('salahSteps').innerHTML=salahStepsData.map((s,i)=>'<div class="salah-step" id="ss'+i+'"><span class="step-num-badge">'+(i+1)+'</span><div class="salah-icon">'+s.icon+'</div><div class="wudu-text"><h4>'+s.title+'</h4><p>'+s.desc+'</p><div class="wudu-arabic">'+s.arabic+'</div></div></div>').join('');document.getElementById('salahStatus').textContent='Ready · Press ▶ Start Guide to begin';document.getElementById('salahPlayBtn').textContent='▶ Start Guide';salahActive=false;salahIdx=0;}
 function startSalah(){if(salahActive)return;salahActive=true;salahIdx=0;document.getElementById('salahPlayBtn').textContent='⏳ Running…';runSalahStep();}
 function runSalahStep(){document.querySelectorAll('.salah-step').forEach(e=>e.classList.remove('active-step'));if(salahIdx>=salahStepsData.length){document.getElementById('salahStatus').textContent='✅ Salah complete! Alhamdulillah. آمين';document.getElementById('salahPlayBtn').textContent='✅ Complete';salahActive=false;return;}const el=document.getElementById('ss'+salahIdx);if(el){el.classList.add('active-step');const wrap=document.getElementById('salahScrollWrap');if(wrap){const target=el.offsetTop-(wrap.clientHeight/2)+(el.clientHeight/2);wrap.scrollTo({top:Math.max(0,target),behavior:'smooth'});}document.getElementById('salahStatus').textContent='🔵 Step '+(salahIdx+1)+' / '+salahStepsData.length+' — '+salahStepsData[salahIdx].title;}salahTimer=setTimeout(()=>{salahIdx++;runSalahStep();},3000);}
 function stopSalah(){clearTimeout(salahTimer);salahActive=false;}
-function resetSalah(){stopSalah();document.querySelectorAll('.salah-step').forEach(e=>e.classList.remove('active-step'));document.getElementById('salahStatus').textContent='Ready · Press ▶ Start Guide to begin';document.getElementById('salahPlayBtn').textContent='▶ Start Guide';salahIdx=0;const wrap=document.getElementById('salahScrollWrap');if(wrap)wrap.scrollTop=0;}
-</script>
-</body>
-</html>
+function resetSalah(){stopSalah();document.querySelectorAll('.salah-step').forEach(e=>e.classList.remove('active-step'));document.getElementById('salahStatus').textContent='
