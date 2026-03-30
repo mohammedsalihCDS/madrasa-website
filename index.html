@@ -1085,13 +1085,32 @@ function saveLocalOnly(key,val){
 function setSyncStatus(state){
   const badge=document.getElementById('syncBadge'),dot=document.getElementById('syncDot'),txt=document.getElementById('syncText');
   badge.style.display='flex';badge.className='';dot.className='sync-dot';
-  if(state==='synced') {badge.classList.add('synced');dot.classList.add('green');txt.textContent='☁️ Synced';}
-  if(state==='syncing'){badge.classList.add('syncing');dot.classList.add('gold');txt.textContent='↑ Syncing…';}
+  if(state==='synced') {badge.classList.add('synced');dot.classList.add('green');txt.textContent='🟢 Live Data';}
+  if(state==='syncing'){badge.classList.add('syncing');dot.classList.add('gold');txt.textContent='⏳ Loading…';}
   if(state==='offline'){badge.classList.add('offline');dot.classList.add('red');txt.textContent='⚠️ Offline';}
-  if(state==='local')  {badge.classList.add('offline');dot.classList.add('red');txt.textContent='📱 Local only';}
+  if(state==='local')  {badge.classList.add('offline');dot.classList.add('red');txt.textContent='📱 No connection';}
 }
 
+/* Refresh live stats on homepage for ALL visitors when Firebase updates */
+function refreshHomepageStats(){
+  try{
+    const staff=load(KEY_STAFF,[]);
+    const teams=load(KEY_TEAMS,[]);
+    const totalStudents=teams.reduce((t,team)=>t+(team.members?team.members.length:0),0);
+    const nums=document.querySelectorAll('.stat-card .num');
+    if(nums.length>=2){
+      if(totalStudents>0) nums[0].textContent=totalStudents+'+';
+      if(staff.length>0){
+        const tc=staff.filter(s=>s.role&&(s.role.toLowerCase().includes('teacher')||s.role.toLowerCase().includes('ustadh'))).length;
+        if(tc>0) nums[1].textContent=tc;
+      }
+    }
+  }catch(e){}
+}
+
+/* Called on EVERY Firebase update — refreshes UI for visitors & admin alike */
 function rerenderIfOpen(){
+  refreshHomepageStats();
   if(!currentOpenModal)return;
   const id=currentOpenModal;
   if(id==='timetableModal')     renderTimetableDay(currentTTDay);
@@ -1121,11 +1140,17 @@ function loadAllFromFirebase(){
         if(loaded.size===ALL_KEYS.length){
           setSyncStatus('synced');
           rerenderIfOpen();
+          /* One-time toast so visitors know data is live */
+          if(!window._liveToastShown){
+            window._liveToastShown=true;
+            showToast('🟢 Live data loaded from server');
+          }
         }
       } else {
-        /* Live update from another device */
+        /* Live update pushed from admin on another device */
         setSyncStatus('synced');
         rerenderIfOpen();
+        showToast('🔄 Data updated by admin');
       }
     },err=>{
       console.warn('Firebase listener error',key,err);
