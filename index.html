@@ -1062,6 +1062,8 @@ function load(key,def){
   if(dbCache[key]!==undefined)return dbCache[key];
   try{const v=localStorage.getItem(key);return v?JSON.parse(v):def;}catch(e){return def;}
 }
+
+/* save() — writes to cache, localStorage AND Firebase */
 function save(key,val){
   dbCache[key]=val;
   try{localStorage.setItem(key,JSON.stringify(val));}catch(e){}
@@ -1071,6 +1073,13 @@ function save(key,val){
       .then(()=>setSyncStatus('synced'))
       .catch(()=>setSyncStatus('offline'));
   }
+}
+
+/* saveLocalOnly() — writes ONLY to cache+localStorage, never touches Firebase.
+   Used by seedDefaults() so a fresh device never overwrites real Firebase data. */
+function saveLocalOnly(key,val){
+  dbCache[key]=val;
+  try{localStorage.setItem(key,JSON.stringify(val));}catch(e){}
 }
 
 function setSyncStatus(state){
@@ -1099,16 +1108,25 @@ function loadAllFromFirebase(){
     firebaseDb.ref('num268/'+key).on('value',snap=>{
       const val=snap.val();
       if(val!==null&&val!==undefined){
+        /* Firebase has real data — overwrite local cache+storage with it */
         dbCache[key]=val;
         try{localStorage.setItem(key,JSON.stringify(val));}catch(e){}
-      } else {
-        const localVal=load(key,null);
-        if(localVal!==null) firebaseDb.ref('num268/'+key).set(localVal);
       }
+      /* If Firebase key is empty we do NOT push local defaults up —
+         that would corrupt data on other devices.
+         The admin must add data intentionally via the UI which calls save(). */
+
       if(!loaded.has(key)){
         loaded.add(key);
-        if(loaded.size===ALL_KEYS.length){setSyncStatus('synced');rerenderIfOpen();}
-      } else {setSyncStatus('synced');rerenderIfOpen();}
+        if(loaded.size===ALL_KEYS.length){
+          setSyncStatus('synced');
+          rerenderIfOpen();
+        }
+      } else {
+        /* Live update from another device */
+        setSyncStatus('synced');
+        rerenderIfOpen();
+      }
     },err=>{
       console.warn('Firebase listener error',key,err);
       loaded.add(key);
@@ -1139,20 +1157,20 @@ function loadAllFromFirebase(){
   }catch(e){console.error('Firebase init error:',e);setSyncStatus('offline');}
 })();
 
-/* ── Seed defaults ── */
+/* ── Seed defaults — LOCAL ONLY, never overwrites Firebase ── */
 function seedDefaults(){
-  if(!load(KEY_TEAMS,null)){save(KEY_TEAMS,[
+  if(!load(KEY_TEAMS,null)){saveLocalOnly(KEY_TEAMS,[
     {id:1,name:'Green Team',color:'#22c55e',leader:'Ahmed Ali',members:['Ahmed Ali','Ibrahim Hassan','Yusuf Malik'],score:0},
     {id:2,name:'Blue Team',color:'#3b82f6',leader:'Aisha Rahman',members:['Aisha Rahman','Fatima Zehra','Omar Said'],score:0},
   ]);}
-  if(!load(KEY_NAB_SCORES,null))  save(KEY_NAB_SCORES,[]);
-  if(!load(KEY_QUIZ_SCORES,null)) save(KEY_QUIZ_SCORES,[]);
-  if(!load(KEY_EVENTS,null)){save(KEY_EVENTS,[
+  if(!load(KEY_NAB_SCORES,null))  saveLocalOnly(KEY_NAB_SCORES,[]);
+  if(!load(KEY_QUIZ_SCORES,null)) saveLocalOnly(KEY_QUIZ_SCORES,[]);
+  if(!load(KEY_EVENTS,null)){saveLocalOnly(KEY_EVENTS,[
     {id:1,name:'Annual Sports Day',date:'2025-04-15',category:'Sports'},
     {id:2,name:'Quran Competition',date:'2025-05-01',category:'Religious'},
     {id:3,name:'Arabic Speech Contest',date:'2025-05-20',category:'Academic'},
   ]);}
-  if(!load(KEY_TIMETABLE,null)){save(KEY_TIMETABLE,{
+  if(!load(KEY_TIMETABLE,null)){saveLocalOnly(KEY_TIMETABLE,{
     sat:[
       {id:1,time:'6:00 AM',subject:'Quran Recitation & Hifz',classGrade:'All Classes',type:'cyan'},
       {id:2,time:'6:45 AM',subject:'Arabic Grammar (Nahw)',classGrade:'Mutawassitah 1',type:'regular'},
@@ -1187,7 +1205,7 @@ function seedDefaults(){
     ],
     wed:[],thu:[],
   });}
-  if(!load(KEY_EXAM_TT,null)){save(KEY_EXAM_TT,[
+  if(!load(KEY_EXAM_TT,null)){saveLocalOnly(KEY_EXAM_TT,[
     {id:1,date:'2025-04-20',startTime:'08:00',endTime:'10:00',classGrade:'Thanawiyyah 1',subject:'Fiqh',venue:'Main Hall',notes:'Bring admit card'},
     {id:2,date:'2025-04-21',startTime:'08:00',endTime:'10:00',classGrade:'Thanawiyyah 2',subject:'Arabic Grammar',venue:'Main Hall',notes:''},
     {id:3,date:'2025-04-22',startTime:'08:00',endTime:'09:30',classGrade:'Mutawassitah 1',subject:'Quran Recitation',venue:'Masjid Hall',notes:'Oral exam'},
@@ -1195,7 +1213,7 @@ function seedDefaults(){
     {id:5,date:'2025-04-24',startTime:'08:00',endTime:'09:30',classGrade:'Ibtidaiyyah 1',subject:'Basic Fiqh',venue:'Room A',notes:''},
     {id:6,date:'2025-04-25',startTime:'08:00',endTime:'09:30',classGrade:'Ibtidaiyyah 2',subject:'Arabic Letters',venue:'Room B',notes:''},
   ]);}
-  if(!load(KEY_STAFF,null)){save(KEY_STAFF,[
+  if(!load(KEY_STAFF,null)){saveLocalOnly(KEY_STAFF,[
     {id:1,name:'Ustadh Abdul Rahman',role:'Head Teacher – Fiqh & Hadith',qualification:'Alim, Dars-e-Nizami (Darul Uloom)',phone:'',email:'',icon:'👨‍🏫'},
     {id:2,name:'Ustadh Muhammed Shafi',role:'Senior Teacher – Quran & Tafsir',qualification:'Hafiz, Qari (Samastha)',phone:'',email:'',icon:'👨‍🏫'},
     {id:3,name:'Ustadha Fathima Beevi',role:'Teacher – Arabic & Nahw',qualification:'B.A. Arabic, Samastha Certified',phone:'',email:'',icon:'👩‍🏫'},
@@ -1204,7 +1222,7 @@ function seedDefaults(){
     {id:6,name:'Br. Aslam Pattarkulam',role:'Administrative Manager',qualification:'B.Com, Office Management',phone:'',email:'',icon:'👨‍💼'},
     {id:7,name:'Sr. Khadeeja Noor',role:'Student Affairs Coordinator',qualification:'Social Work Diploma',phone:'',email:'',icon:'👩‍💼'},
   ]);}
-  if(!load(KEY_SYLLABUS,null)){save(KEY_SYLLABUS,[
+  if(!load(KEY_SYLLABUS,null)){saveLocalOnly(KEY_SYLLABUS,[
     {id:1,title:'Ibtidaiyyah – Foundation',badge:'Years 1–2',items:['Basic Arabic Letters & Harakat','Quran Recitation (Qaida)','Basic Duas & Short Surahs','Islamic Manners (Adab)']},
     {id:2,title:'Mutawassitah – Intermediate',badge:'Years 3–4',items:['Nahw (Arabic Grammar)','Sarf (Morphology)','Fiqh – Hanafi Madhab','Forty Hadith (Nawawi)','Tafsir of Juz Amma']},
     {id:3,title:'Thanawiyyah – Secondary',badge:'Years 5–6',items:['Advanced Fiqh & Fatawa','Usool ul Fiqh','Hadith Studies – Mishkat','Aqeedah – Tahawiyyah','Islamic History & Seerah']},
@@ -2173,8 +2191,7 @@ function resetSalah(){
   document.getElementById('salahPlayBtn').textContent='▶ Start Guide';
   salahIdx=0;
   const wrap=document.getElementById('salahScrollWrap');if(wrap)wrap.scrollTop=0;
-}  // end of resetSalah
+}
 </script>
- 
 </body>
 </html>
