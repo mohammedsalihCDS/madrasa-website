@@ -519,6 +519,14 @@ footer{background:var(--navy);color:rgba(255,255,255,.55);padding:36px 24px;text
   </div>
 </nav>
 
+<!-- FIREBASE RULES WARNING BANNER -->
+<div id="firebaseRulesBanner" style="display:none;background:linear-gradient(135deg,#dc2626,#b91c1c);color:white;padding:12px 20px;text-align:center;font-size:13px;font-weight:600;position:relative;z-index:100;">
+  ⚠️ Firebase rules are blocking visitors from seeing data.
+  <a href="https://console.firebase.google.com" target="_blank" style="color:#fde68a;margin-left:8px;text-decoration:underline;">Fix in Firebase Console →</a>
+  <span style="margin-left:8px;font-size:11px;opacity:.8;">Realtime Database → Rules → set ".read": true → Publish</span>
+  <button onclick="document.getElementById('firebaseRulesBanner').style.display='none'" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:white;font-size:18px;cursor:pointer;">✕</button>
+</div>
+
 <!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker-inner">
@@ -1056,7 +1064,7 @@ const KEY_TEAMS='num_teams_v2',KEY_NAB_SCORES='num_nab_scores_v2',KEY_QUIZ_SCORE
 const KEY_TIMETABLE='num_timetable_v3',KEY_EXAM_TT='num_exam_tt_v1',KEY_STAFF='num_staff_v1',KEY_SYLLABUS='num_syllabus_v1';
 const ALL_KEYS=[KEY_TEAMS,KEY_NAB_SCORES,KEY_QUIZ_SCORES,KEY_EVENTS,KEY_TIMETABLE,KEY_EXAM_TT,KEY_STAFF,KEY_SYLLABUS];
 
-let dbCache={},firebaseDb=null,firebaseMode=false,currentOpenModal=null,firebaseReady=false;
+let dbCache={},firebaseDb=null,firebaseMode=false,currentOpenModal=null;
 
 function load(key,def){
   if(dbCache[key]!==undefined)return dbCache[key];
@@ -1110,15 +1118,19 @@ function refreshHomepageStats(){
 
 /* Called on EVERY Firebase update — refreshes UI for visitors & admin alike */
 function rerenderIfOpen(){
+  /* Always refresh homepage stats for all visitors */
   refreshHomepageStats();
   if(!currentOpenModal) return;
   const id=currentOpenModal;
-  /* Re-render the open modal with fresh Firebase data (works even if it showed loading spinner) */
+  /* Re-render open modal with fresh Firebase data — works for both admin and visitors */
   if(id==='timetableModal')     initTimetableModal();
   if(id==='examTimetableModal') buildExamTimetable();
   if(id==='staffModal')         buildStaff();
   if(id==='syllabusModal')      buildSyllabus();
-  if(id==='programmeModal')     switchProgTab(document.querySelector('.prog-tab.active'),'nabidhinan');
+  if(id==='programmeModal'){
+    const activeTab=document.querySelector('.prog-tab.active');
+    if(activeTab) switchProgTab(activeTab, activeTab.getAttribute('onclick').match(/'([^']+)'\)/)?.[1]||'nabidhinan');
+  }
 }
 
 function loadAllFromFirebase(){
@@ -1139,7 +1151,7 @@ function loadAllFromFirebase(){
       if(!loaded.has(key)){
         loaded.add(key);
         if(loaded.size===ALL_KEYS.length){
-          firebaseReady=true;
+          /* All keys received — render everything for admin and visitors */
           setSyncStatus('synced');
           rerenderIfOpen();
           if(!window._liveToastShown){
@@ -1148,13 +1160,18 @@ function loadAllFromFirebase(){
           }
         }
       } else {
-        /* Live update pushed from admin — refresh for ALL visitors */
+        /* Admin changed data on another device — update ALL visitors instantly */
         setSyncStatus('synced');
         rerenderIfOpen();
-        if(window._liveToastShown) showToast('🔄 Updated by admin');
+        showToast('🔄 Data updated');
       }
     },err=>{
       console.warn('Firebase listener error',key,err);
+      /* If permission denied, show the rules warning banner */
+      if(err.code==='PERMISSION_DENIED'||err.message&&err.message.includes('permission')){
+        document.getElementById('firebaseRulesBanner').style.display='block';
+        setSyncStatus('offline');
+      }
       loaded.add(key);
       if(loaded.size===ALL_KEYS.length) setSyncStatus('offline');
     });
@@ -1165,22 +1182,27 @@ function loadAllFromFirebase(){
 (function startApp(){
   seedDefaults();
   setSyncStatus('local');
-  if(location.protocol==='file:'){setSyncStatus('local');return;}
   try{
     if(!firebase.apps.length) firebase.initializeApp(HARDCODED_FB);
     firebaseDb=firebase.database();
     firebaseMode=true;
     setSyncStatus('syncing');
-    firebaseDb.ref('.info/connected').once('value',snap=>{
-      if(snap.val()===true) loadAllFromFirebase();
-      else setSyncStatus('offline');
-    });
+
+    /* Connect and start listening immediately */
+    loadAllFromFirebase();
+
+    /* Show offline warning if no connection after 6 seconds */
     setTimeout(()=>{
-      if(document.getElementById('syncText').textContent.includes('Syncing')){
-        setSyncStatus('offline');firebaseMode=false;
+      const txt=document.getElementById('syncText');
+      if(txt&&txt.textContent.includes('Loading')){
+        setSyncStatus('offline');
+        showToast('⚠️ Could not reach server — showing local data');
       }
-    },5000);
-  }catch(e){console.error('Firebase init error:',e);setSyncStatus('offline');}
+    },6000);
+  }catch(e){
+    console.error('Firebase init error:',e);
+    setSyncStatus('offline');
+  }
 })();
 
 /* ── Seed defaults — LOCAL ONLY, never overwrites Firebase ── */
@@ -1272,21 +1294,12 @@ let isAdmin=false;
 const ADMIN_CODE='3291';
 let currentTTDay='sat';
 
-/* Loading HTML shown inside modals while Firebase data fetches */
-function loadingHTML(msg){
-  return `<div style="text-align:center;padding:48px 20px;">
-    <div style="font-size:36px;margin-bottom:12px;animation:float 1.5s ease-in-out infinite;">⏳</div>
-    <div style="font-size:14px;font-weight:600;color:var(--blue-royal);margin-bottom:6px;">Loading from server…</div>
-    <div style="font-size:12px;color:var(--text-light);">${msg||'Please wait a moment'}</div>
-  </div>`;
-}
-
-/* DATA-DRIVEN modals: show loader first, render real data once Firebase is ready */
+/* DATA-DRIVEN modals — render immediately, refresh when Firebase arrives */
 function openModal(id){
   currentOpenModal=id;
   document.getElementById(id).style.display='flex';
 
-  /* These modals show static content — render immediately, no Firebase needed */
+  /* Static modals — no Firebase data needed */
   if(id==='boardModal')  {initBoard();return;}
   if(id==='quizModal')   {initQuizUI();return;}
   if(id==='newsModal')   {buildNews();return;}
@@ -1295,42 +1308,16 @@ function openModal(id){
   if(id==='wuduModal')   {buildWudu();setTimeout(startWudu,600);return;}
   if(id==='salahModal')  {buildSalah();setTimeout(startSalah,600);return;}
   if(id==='loginModal')  return;
+  if(id==='regModal')    return;
+  if(id==='resultModal') return;
 
-  /* These modals show LIVE data from Firebase — wait if not ready yet */
-  const dataModals={
-    syllabusModal:  ()=>buildSyllabus(),
-    timetableModal: ()=>initTimetableModal(),
-    examTimetableModal: ()=>buildExamTimetable(),
-    staffModal:     ()=>buildStaff(),
-    programmeModal: ()=>switchProgTab(document.querySelector('.prog-tab.active'),'nabidhinan'),
-    resultModal:    ()=>{},  /* static mock data */
-    regModal:       ()=>{}   /* static form */
-  };
-
-  const renderFn = dataModals[id];
-  if(!renderFn) return;
-
-  if(firebaseReady){
-    /* Firebase already loaded — render immediately with real data */
-    renderFn();
-  } else {
-    /* Firebase still loading — show spinner, render when ready */
-    const body = document.querySelector('#'+id+' .modal-body');
-    if(body) body.innerHTML = loadingHTML('Getting latest data from server…');
-
-    /* Poll every 200ms until Firebase is ready, then render real data */
-    const waitInterval = setInterval(()=>{
-      if(firebaseReady){
-        clearInterval(waitInterval);
-        if(currentOpenModal===id) renderFn();
-      }
-      /* Give up after 8 seconds and render whatever we have */
-    }, 200);
-    setTimeout(()=>{
-      clearInterval(waitInterval);
-      if(currentOpenModal===id) renderFn();
-    }, 8000);
-  }
+  /* Live-data modals — render NOW with whatever data we have,
+     Firebase listener will call rerenderIfOpen() when fresh data arrives */
+  if(id==='syllabusModal')      buildSyllabus();
+  if(id==='timetableModal')     initTimetableModal();
+  if(id==='examTimetableModal') buildExamTimetable();
+  if(id==='staffModal')         buildStaff();
+  if(id==='programmeModal')     switchProgTab(document.querySelector('.prog-tab.active'),'nabidhinan');
 }
 function closeModal(id){currentOpenModal=null;document.getElementById(id).style.display='none';}
 
