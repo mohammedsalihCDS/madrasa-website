@@ -1056,7 +1056,7 @@ const KEY_TEAMS='num_teams_v2',KEY_NAB_SCORES='num_nab_scores_v2',KEY_QUIZ_SCORE
 const KEY_TIMETABLE='num_timetable_v3',KEY_EXAM_TT='num_exam_tt_v1',KEY_STAFF='num_staff_v1',KEY_SYLLABUS='num_syllabus_v1';
 const ALL_KEYS=[KEY_TEAMS,KEY_NAB_SCORES,KEY_QUIZ_SCORES,KEY_EVENTS,KEY_TIMETABLE,KEY_EXAM_TT,KEY_STAFF,KEY_SYLLABUS];
 
-let dbCache={},firebaseDb=null,firebaseMode=false,currentOpenModal=null;
+let dbCache={},firebaseDb=null,firebaseMode=false,currentOpenModal=null,firebaseReady=false;
 
 function load(key,def){
   if(dbCache[key]!==undefined)return dbCache[key];
@@ -1111,13 +1111,14 @@ function refreshHomepageStats(){
 /* Called on EVERY Firebase update — refreshes UI for visitors & admin alike */
 function rerenderIfOpen(){
   refreshHomepageStats();
-  if(!currentOpenModal)return;
+  if(!currentOpenModal) return;
   const id=currentOpenModal;
-  if(id==='timetableModal')     renderTimetableDay(currentTTDay);
-  if(id==='examTimetableModal') renderExamTimetable();
-  if(id==='staffModal')         renderStaff();
-  if(id==='syllabusModal')      renderSyllabus();
-  if(id==='programmeModal')     renderNabidhinan();
+  /* Re-render the open modal with fresh Firebase data (works even if it showed loading spinner) */
+  if(id==='timetableModal')     initTimetableModal();
+  if(id==='examTimetableModal') buildExamTimetable();
+  if(id==='staffModal')         buildStaff();
+  if(id==='syllabusModal')      buildSyllabus();
+  if(id==='programmeModal')     switchProgTab(document.querySelector('.prog-tab.active'),'nabidhinan');
 }
 
 function loadAllFromFirebase(){
@@ -1138,19 +1139,19 @@ function loadAllFromFirebase(){
       if(!loaded.has(key)){
         loaded.add(key);
         if(loaded.size===ALL_KEYS.length){
+          firebaseReady=true;
           setSyncStatus('synced');
           rerenderIfOpen();
-          /* One-time toast so visitors know data is live */
           if(!window._liveToastShown){
             window._liveToastShown=true;
-            showToast('🟢 Live data loaded from server');
+            showToast('🟢 Live data loaded');
           }
         }
       } else {
-        /* Live update pushed from admin on another device */
+        /* Live update pushed from admin — refresh for ALL visitors */
         setSyncStatus('synced');
         rerenderIfOpen();
-        showToast('🔄 Data updated by admin');
+        if(window._liveToastShown) showToast('🔄 Updated by admin');
       }
     },err=>{
       console.warn('Firebase listener error',key,err);
@@ -1271,21 +1272,65 @@ let isAdmin=false;
 const ADMIN_CODE='3291';
 let currentTTDay='sat';
 
+/* Loading HTML shown inside modals while Firebase data fetches */
+function loadingHTML(msg){
+  return `<div style="text-align:center;padding:48px 20px;">
+    <div style="font-size:36px;margin-bottom:12px;animation:float 1.5s ease-in-out infinite;">⏳</div>
+    <div style="font-size:14px;font-weight:600;color:var(--blue-royal);margin-bottom:6px;">Loading from server…</div>
+    <div style="font-size:12px;color:var(--text-light);">${msg||'Please wait a moment'}</div>
+  </div>`;
+}
+
+/* DATA-DRIVEN modals: show loader first, render real data once Firebase is ready */
 function openModal(id){
   currentOpenModal=id;
   document.getElementById(id).style.display='flex';
-  if(id==='boardModal')         initBoard();
-  if(id==='quizModal')          initQuizUI();
-  if(id==='syllabusModal')      buildSyllabus();
-  if(id==='newsModal')          buildNews();
-  if(id==='quranModal')         buildQuran();
-  if(id==='timetableModal')     initTimetableModal();
-  if(id==='examTimetableModal') buildExamTimetable();
-  if(id==='duaModal')           showDuas(document.querySelector('#duaTabs .q-tab.active'),'morning');
-  if(id==='wuduModal')          {buildWudu();setTimeout(startWudu,600);}
-  if(id==='salahModal')         {buildSalah();setTimeout(startSalah,600);}
-  if(id==='staffModal')         buildStaff();
-  if(id==='programmeModal')     switchProgTab(document.querySelector('.prog-tab.active'),'nabidhinan');
+
+  /* These modals show static content — render immediately, no Firebase needed */
+  if(id==='boardModal')  {initBoard();return;}
+  if(id==='quizModal')   {initQuizUI();return;}
+  if(id==='newsModal')   {buildNews();return;}
+  if(id==='quranModal')  {buildQuran();return;}
+  if(id==='duaModal')    {showDuas(document.querySelector('#duaTabs .q-tab.active'),'morning');return;}
+  if(id==='wuduModal')   {buildWudu();setTimeout(startWudu,600);return;}
+  if(id==='salahModal')  {buildSalah();setTimeout(startSalah,600);return;}
+  if(id==='loginModal')  return;
+
+  /* These modals show LIVE data from Firebase — wait if not ready yet */
+  const dataModals={
+    syllabusModal:  ()=>buildSyllabus(),
+    timetableModal: ()=>initTimetableModal(),
+    examTimetableModal: ()=>buildExamTimetable(),
+    staffModal:     ()=>buildStaff(),
+    programmeModal: ()=>switchProgTab(document.querySelector('.prog-tab.active'),'nabidhinan'),
+    resultModal:    ()=>{},  /* static mock data */
+    regModal:       ()=>{}   /* static form */
+  };
+
+  const renderFn = dataModals[id];
+  if(!renderFn) return;
+
+  if(firebaseReady){
+    /* Firebase already loaded — render immediately with real data */
+    renderFn();
+  } else {
+    /* Firebase still loading — show spinner, render when ready */
+    const body = document.querySelector('#'+id+' .modal-body');
+    if(body) body.innerHTML = loadingHTML('Getting latest data from server…');
+
+    /* Poll every 200ms until Firebase is ready, then render real data */
+    const waitInterval = setInterval(()=>{
+      if(firebaseReady){
+        clearInterval(waitInterval);
+        if(currentOpenModal===id) renderFn();
+      }
+      /* Give up after 8 seconds and render whatever we have */
+    }, 200);
+    setTimeout(()=>{
+      clearInterval(waitInterval);
+      if(currentOpenModal===id) renderFn();
+    }, 8000);
+  }
 }
 function closeModal(id){currentOpenModal=null;document.getElementById(id).style.display='none';}
 
